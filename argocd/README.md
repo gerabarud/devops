@@ -9,7 +9,7 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-### Forward Ports
+## Forward Ports
 ```
 k get services -n argocd
 kubectl port-forward service/argocd-server -n argocd 8080:443
@@ -48,8 +48,3 @@ argocd app rollback <appname> #Rollback to a previous version
 argocd app set <appname> #Set the application’s configuration.
 argocd app delete <appname> #Delete an Argo CD application.
 ```
-
-
-
-
-
