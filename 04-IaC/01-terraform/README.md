@@ -1,16 +1,18 @@
-## What is Terraform?
+# ABOUT TERRAFORM
+
+**What is Terraform?**
 
 Terraform is an infrastructure as code (IaC) tool that allows you to create, manage, and update infrastructure resources such as virtual machines, networks, and storage in a repeatable, scalable, and automated way.
 
-## What is a Resource?
+**What is a Resource?**
 
 Resources are the most important element in the Terraform language. Each resource block describes one or more infrastructure objects, such as virtual networks, compute instances, or higher-level components such as DNS records. Resource Blocks documents the syntax for declaring resources.
 
-## What is Provider?
+**What is Provider?**
 
 A provider is a plugin that terraform used to create and manage resources from a specific provider.
 
-## Whats is State file in terraform? What’s the importance of it ?
+**Whats is State file in terraform?**
 
 State file stores information about your infrastructure .State is useful to keep information of why and how infrastructure is created at first place.
 
@@ -18,7 +20,7 @@ State is a blueprint of real world infrastructure with some unique id and attrib
 
 The state file not only records what resources have been deployed but also what resources have dependencies on each other. This should prevent the deletion of resources where there are dependencies that have not been deleted.
 
-## What is Desired and Current State?
+**What is Desired and Current State?**
 
 In Terraform, the desired state represents the configuration of infrastructure resources that you want to achieve, as defined in your Terraform configuration files
 
