@@ -1,6 +1,12 @@
 ## Source:
 https://youtu.be/JLrR9RV9AFA
 
+# About ArgoCD
+
+- **Kubernetes-native CI/CD Tool**
+- **Uses Pull Based Model:** The pull-based model is often used in continuous integration and continuous delivery (CI/CD) workflows, where code changes are automatically built, tested, and deployed based on triggers or events, such as a new code commit or a successful build. In this case, the CI/CD system "pulls" the latest version of the code from the source code repository, rather than waiting for the code to be pushed to it.
+- **Source Control = Source of Truth**: central repository that holds the current, accurate and up-to-date version of all)
+- **Easy Deployments/Rollbacks**
 
 # Installing latest/stable version of ArgoCD
 
