@@ -3,6 +3,7 @@ DevOps Tools
 
 ## Roadmap
 
+```bash
 .
 ├── 01-linux
 │   ├── 01-basics
@@ -61,7 +62,7 @@ DevOps Tools
 │   └── 02-salt
 ├── 06-containers
 ├── 07-orchestration
-
+```
 
 ## Certifications
 
