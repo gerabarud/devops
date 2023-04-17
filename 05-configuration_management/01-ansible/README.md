@@ -8,12 +8,127 @@ Ansible is an open-source automation tool, or platform, used for IT tasks such a
 
 TODO
 
-## 01 - INSTALLATION
+## 01 - Install Ansible
 
+```bash
+sudo apt-get install ansible
+```
 
-aasdasda
+Create an ansible directory 
 
+```bash
+mkdir /srv/ansible
+cd /srv/ansible
+```
 
-### 02 - asadasd
+### SSH Key pars
+Create a key directory
+```bash
+mkdir key
+```
 
-asasfasdads
+Create a SSH key and copy to all servers
+
+```bash
+ssh-keygen -t rsa -b 4096 -C "ansible@example" -f /srv/ansible/key/id_rsa
+```
+
+On the servers you want to administrate
+```bash
+sudo adduser ansible
+sudo usermod -aG sudo ansible
+su ansible
+```
+
+Create authorized_keys file and add id_rsa.pub content
+```bash
+cd ~
+mkdir .ssh
+nano .ssh/authorized_keys
+```
+
+### Invetory file
+
+On ansible host, create an inventory file, and add to it hosts you want to administrate
+
+```bash
+mkdir inventory
+nano inventory/hosts.ini 
+```
+
+exmaple:
+
+```ini
+[webapp]
+web01 ansible_host=web01.example.com
+web02 ansible_host=web02.example.com
+
+[db]
+db01 ansible_host=web02.example.com
+
+[stack:children]
+webapp
+db
+
+[all:vars]
+ansible_private_key_file=/srv/ansible/key/id_rsa
+ansible_user=ansible
+ansible_port=22
+```
+
+### Try it
+
+A command inside de remote host:
+```bash
+ansible web01 -i hosts -m command -a hostname
+```
+Expected result:
+
+```json
+web01 | CHANGED | rc=0 >>
+web01
+```
+
+A pre-defined ansible module 
+```bash
+ansible web01 -i hosts -m ping
+```
+Expected result:
+```json
+web01 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+
+## 02 - Ad HOC tasks and Modules - Some examples
+
+### Install Services using APT module
+
+https://docs.ansible.com/ansible/latest/modules/apt_module.html
+
+```bash
+ansible all -i hosts --become -m apt -a "update_cache=yes"
+```
+``` bash
+ansible webapp -i hosts --become -m apt -a "name=apache2 state=present"
+```
+```bash
+ansible db -i hosts --become -m apt -a "name=mysql-server state=present"
+```
+
+### Restart Services using Service module
+
+https://docs.ansible.com/ansible/latest/modules/service_module.html
+
+```bash
+ansible database -i hosts -m service -a "name=mysql state=started"
+```
+
+```bash
+ansible database --become -i hosts -m service -a "name=mysql state=restarted"
+```
+
+Use Ansible to reboot the webstack
+
+ansible webstack -i hosts --become -a "reboot --reboot"
