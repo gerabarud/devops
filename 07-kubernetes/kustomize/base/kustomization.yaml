@@ -1,0 +1,17 @@
+
+resources: 
+- deployment.yaml
+- service.yaml
+
+# seting app label here, avoids to set it in deployment/services files
+commonLabels:
+  app: mykustomapp
+
+commonAnnotations:
+  app: mykustom-annontations
+
+namePrefix:
+  kustom-
+
+nameSuffix:
+  -v1
