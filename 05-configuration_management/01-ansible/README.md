@@ -122,13 +122,16 @@ ansible db -i hosts --become -m apt -a "name=mysql-server state=present"
 https://docs.ansible.com/ansible/latest/modules/service_module.html
 
 ```bash
-ansible database -i hosts -m service -a "name=mysql state=started"
+ansible db -i hosts -m service -a "name=mysql state=started"
 ```
 
 ```bash
-ansible database --become -i hosts -m service -a "name=mysql state=restarted"
+ansible db --become -i hosts -m service -a "name=mysql state=restarted"
 ```
 
-Use Ansible to reboot the webstack
+### Use Ansible to reboot the webstack
 
-ansible webstack -i hosts --become -a "reboot --reboot"
+```bash
+ansible all -i hosts --become -a "reboot --reboot"
+```
+
