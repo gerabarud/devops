@@ -14,5 +14,5 @@ top
 > `P` -> Order by **process** usage <br>
 > `M` -> Order by **memory** usage <br>
 > `k` -> Kill a process (requieres PID) <br>
->  
+> `d` -> Change refresh frequency (requieres seconds) <br> 
 
