@@ -1,12 +1,9 @@
 # Bash Scripting on Shell
 
 Index:
-
-[Basics](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#basics)
-
-[ 01 - Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#01---hello-world)
-
-[ 02 - Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#02---variables)
+1. [Basics](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#basics)
+2. [ Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#01---hello-world)
+3. [ Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#02---variables)
 
 ## Basics
 
@@ -37,7 +34,7 @@ For bash scripting, at the begining of the script file use:
 #!/bin/bash
 ```
 
-## 01 - Hello world
+## Hello world
 
 ```bash
 #!/bin/bash
@@ -59,7 +56,7 @@ Output:
 > My current working directory is: <br>
 > /home/gbarud/git/devops/01-linux/03-scripting 
 
-## 02 - Variables
+## Variables
 
 >Hint: Avoid using all uppercase letters for variable names, as system-defined variables are typically written in uppercase.
 
