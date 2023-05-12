@@ -1,9 +1,13 @@
 # Bash Scripting on Shell
 
 Index:
+
 [Basics](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#basics)
+
 [ 01 - Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#01---hello-world)
+
 [ 02 - Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#02---variables)
+
 ## Basics
 
 ### Check where bash is located
