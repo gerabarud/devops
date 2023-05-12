@@ -1,6 +1,10 @@
 # Bash Scripting on Shell
 
-## Before starting
+Index:
+[Basics](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#basics)
+[ 01 - Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#01---hello-world)
+[ 02 - Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#02---variables)
+## Basics
 
 ### Check where bash is located
 
@@ -10,7 +14,7 @@ which bash
 Output should be like
 > /usr/bin/bash
 
-Execute an script
+### Execute an script
 ```bash
 ./path_to_script/myscript.sh
 ```
