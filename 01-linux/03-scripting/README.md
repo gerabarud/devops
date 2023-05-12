@@ -2,8 +2,8 @@
 
 Index:
 1. [Basics](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#basics)
-2. [ Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#01---hello-world)
-3. [ Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#02---variables)
+2. [ Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#hello-world)
+3. [ Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#variables)
 
 ## Basics
 
