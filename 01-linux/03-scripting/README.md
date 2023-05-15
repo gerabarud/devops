@@ -1,16 +1,16 @@
-# Bash Scripting on Shell
+# Bash Scripting on Linux
 
 ### Index:
 
 1. [Hello world](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#hello-world)
 2. [Variables](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#variables)
 3. [Basic Maths](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#maths)
-4. [IF Statements](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#if-statementes)
-5. [Outputs](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#exit-codes)
+4. [IF Statements](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#if-statements)
+5. [Exit Codes](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#exit-codes)
 6. [Loops](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#loops)
    -  [While](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#while)
    -  [For](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#for)
-7. [Where to store scripts](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#loops)
+7. [Where to store scripts](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#where-to-store-scripts)
 8. [Data Streams](https://github.com/gerabarud/devops/tree/main/01-linux/03-scripting#data-streams)
    
 ### Extras
