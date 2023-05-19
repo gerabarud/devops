@@ -7,7 +7,7 @@ Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 Create a VM 
 
-![Create VM - General](https://github.com/gerabarud/devops/blob/main/proxmox/images/Create VM - General.png)
+![Create VM - General](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-General.png)
 
 
 
