@@ -56,17 +56,50 @@ Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 ![CloudInit - Regenerate](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Regenerate.png)
 
+#### Command Line Configuration
 
+1. SSH to the proxmox server
 
-ssh root@190.124.232.73
+```bash
+ssh root@pxm01
+```
 
+2.  Search the cloud image of Debian 11 from the following link: https://cloud.debian.org/images/cloud/ and copy the link of the image you want to use
+```bash
 wget https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
+```
 
+3. Enabling GUI Console Access: This command is necessary to be run to ensure the Proxmox GUI has console access to the VM.  If not, you will likely not be able to see anything through the console page.
+
+```bash
 qm set 990 --serial0 socket --vga serial0
+```
 
-qemu-img resize debian-11-genericcloud-amd64.qcow2 50G
+4. Set the disk size for your VM.
+   
+```bash
+qemu-img resize debian-11-genericcloud-amd64.qcow2 20G
+```
 
+5. Import the disk
+   
+```bash
 qm importdisk 990 debian-11-genericcloud-amd64.qcow2 local-lvm
+```
+
+6. Check in the web UI: After running the command, you should see the change added successfully within the Hardware tab of the VM. Follow the next steps:
+   - With the disk selected, you will now need to click Edit in order to add the disk
+   - Before adding, I went ahead and enabled SSD emulation, as well as checking Discard to enable thin provisioning
+   - Click Add. Now we can see the previously unused disk is successfully set up to be utilized by the VM/template
+
+![CloudInit - Unused Disk](https://github.com/gerabarud/devops/blob/main/proxmox/images/UnusedDisk.png)
+
+7. under the Options tab, you will need to modify the Boot Order. Enable `scsi0` and change its order to 2
+
+![CloudInit - Boot Order](https://github.com/gerabarud/devops/blob/main/proxmox/images/BootOrder.png)
+
+
+
 
 ssh dgcc@190.124.232.38
 
