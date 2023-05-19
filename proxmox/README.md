@@ -1,3 +1,28 @@
+
+## Resizing the VM Disk
+
+1. SSH to the proxmox server
+
+```bash
+ssh root@pxm01
+```
+
+2. Resize the VM Disk (pay attention to the VM-ID an the name of its disk)
+   
+```bash
+qm resize 899 scsi0 +20
+```
+
+3. Reboot the VM
+
+## Cloning a VM Template in Proxmox
+
+Just right click on the template and select `Clone`. Configure Your VM name, and change the Mode to Full Clone
+
+> You can view the differences between a full clone and a linked clone here: https://pve.proxmox.com/wiki/VM_Templates_and_Clones
+
+![Clone](https://github.com/gerabarud/devops/blob/main/proxmox/images/clone.png)
+
 ## Creating a VM Template in Proxmox
 
 Source: https://tcude.net/creating-a-vm-template-in-proxmox/
@@ -92,15 +117,15 @@ qm importdisk 990 debian-11-genericcloud-amd64.qcow2 local-lvm
    - Before adding, I went ahead and enabled SSD emulation, as well as checking Discard to enable thin provisioning
    - Click Add. Now we can see the previously unused disk is successfully set up to be utilized by the VM/template
 
-![CloudInit - Unused Disk](https://github.com/gerabarud/devops/blob/main/proxmox/images/UnusedDisk.png)
+![Unused Disk](https://github.com/gerabarud/devops/blob/main/proxmox/images/UnusedDisk.png)
 
 7. under the Options tab, you will need to modify the Boot Order. Enable `scsi0` and change its order to 2
 
-![CloudInit - Boot Order](https://github.com/gerabarud/devops/blob/main/proxmox/images/BootOrder.png)
+![Boot Order](https://github.com/gerabarud/devops/blob/main/proxmox/images/BootOrder.png)
 
 8. Start at boot
 
-![CloudInit - Start At Boot](https://github.com/gerabarud/devops/blob/main/proxmox/images/StartAtBoot.png)
+![Start At Boot](https://github.com/gerabarud/devops/blob/main/proxmox/images/StartAtBoot.png)
 
 #### Adding the QEMU Agent
 
@@ -134,3 +159,7 @@ cloud-init clean
 ```bash
 shutdown -h now
 ```
+
+#### Converting to a Template
+
+![Converting to a Template](https://github.com/gerabarud/devops/blob/main/proxmox/images/template.png)
