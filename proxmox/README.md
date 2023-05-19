@@ -1,11 +1,12 @@
 ## Creating a VM Template in Proxmox
 
 Source: https://tcude.net/creating-a-vm-template-in-proxmox/
+
 Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 ### Initial Steps
 
-Create a VM 
+#### Create a VM 
 
 1.  General
 
