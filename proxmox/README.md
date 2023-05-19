@@ -38,6 +38,26 @@ Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 8. Review settings and click "Finish"
 
+#### CloudInit Drive
+
+1. Add a CloudInit Drive
+
+![CloudInit - Add Drive](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Drive.png)
+
+2. Storage: Select the name of the storage pool you would like to use
+
+![CloudInit - Storage](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Storage.png)
+
+3. Settings: navigate to the "Cloud-Init" tab for the template.  Here you will be able to configure some of the default settings for the template
+
+![CloudInit - Settings](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Settings.png)
+
+4. Regenerate: Once settings configured, click the "Regenerate Image" button shown in the image above.
+
+![CloudInit - Regenerate](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Regenerate.png)
+
+
+
 ssh root@190.124.232.73
 
 wget https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
