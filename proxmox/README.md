@@ -98,13 +98,39 @@ qm importdisk 990 debian-11-genericcloud-amd64.qcow2 local-lvm
 
 ![CloudInit - Boot Order](https://github.com/gerabarud/devops/blob/main/proxmox/images/BootOrder.png)
 
+8. Start at boot
 
+![CloudInit - Start At Boot](https://github.com/gerabarud/devops/blob/main/proxmox/images/StartAtBoot.png)
 
+#### Adding the QEMU Agent
 
-ssh dgcc@190.124.232.38
+1. Power up the template/VM you have created
 
-sudo apt install qemu-guest-agent
+2. SSH to the VM 
 
-sudo reboot
+3. Install the agent
+```bash
+sudo apt update && sudo apt upgrade -y && sudo apt install qemu-guest-agent
+```
+4. Enable the agent
+   
+```bash
+sudo systemctl enable qemu-guest-agent
+```
+5. Reset the machine-id
+   
+```bash
+cat /dev/null > /etc/machine-id
+```
 
-ssh dgcc@190.124.232.38
+6. Run
+
+```bash
+cloud-init clean
+```
+
+7. Shutdown
+
+```bash
+shutdown -h now
+```
