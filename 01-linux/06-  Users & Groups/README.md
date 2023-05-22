@@ -1,10 +1,11 @@
-## Users & Groups in Linux
-
 Index
 
-1. Users
-   - 
-2. Groups 
+- [Users](#users)
+  - [Create an user account](#create-an-user-account)
+  - [Delete an user account](#delete-an-user-account)
+  - [Change password](#change-password)
+  - [List current users](#list-current-users)
+  - [List current users encrypted passwords](#list-current-users-encrypted-passwords)
 
 ## Users
 
