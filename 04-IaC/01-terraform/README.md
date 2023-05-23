@@ -82,3 +82,6 @@ terraform destroy
 
 ## Terraform and Docker
 
+## Automate local DNS with BIND and Terraform
+
+https://www.youtube.com/watch?v=eSUtsDUTzuc&pp=wgIGCgQQAhgB
