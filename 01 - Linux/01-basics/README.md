@@ -33,3 +33,7 @@ Example of a cron job that runs a script every day at 8:00 AM
 ```bash
 0 8 * * * /path/to/script.sh
 ```
+
+## alternativa a pipe: <()
+
+https://atareao.es/tutorial/scripts-en-bash/sustitucion-de-procesos-en-bash/
