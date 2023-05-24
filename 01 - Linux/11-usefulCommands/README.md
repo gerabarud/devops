@@ -1,4 +1,17 @@
-# Useful commands on Linux
+Useful commands on Linux
+
+Table of contents
+
+- [awk](#awk)
+  - [Field operations](#field-operations)
+  - [Condition-based processing:](#condition-based-processing)
+  - [Arithmetic and calculations](#arithmetic-and-calculations)
+  - [String manipulation and regular expressions](#string-manipulation-and-regular-expressions)
+  - [Control flow and variables](#control-flow-and-variables)
+- [rsync](#rsync)
+- [sed](#sed)
+  - [Search and replace](#search-and-replace)
+  - [Delete lines](#delete-lines)
 
 ## awk
 
@@ -63,6 +76,53 @@ awk '{ if ($1 ~ /pattern/) print }' file
 Uses an if statement to conditionally print "High" or "Low" based on the value of the first field
 ```bash
 awk '{ if ($1 > 10) print "High"; else print "Low" }' file
+```
+
+## rsync
+
+rsync is used for file synchronization and data transfer between systems.
+
+Here's the basic syntax of the rsync command:
+
+```bash
+rsync [options] source destination
+```
+
+Here are some commonly used options with rsync:
+- -a (or --archive): Preserves the file permissions, ownership, timestamps, and recursively copies directories.
+- -b (or --backup): Create backups of files that are being overwritten or deleted during the synchronization process. This option is useful for preserving the original versions of files before they are modified or deleted.
+- -v (or --verbose): Provides verbose output, showing detailed information about the files being transferred.
+- -r (or --recursive):
+- -u (or --update): Skips files that are already newer in the destination.
+- -n (or --dry-run): Performs a dry run, showing what would be transferred without actually copying any files.
+- -z (or --compress): Compresses data during transfer, reducing the amount of data sent over the network.
+
+Here are a few examples of using rsync:
+
+Copy a file from a local directory to a remote server:
+```bash
+rsync /path/to/local/file.txt user@remote:/path/to/destination/
+```
+
+Synchronize the contents of a local directory with a remote directory (human readable):
+```bash
+rsync -avzh /path/to/local/directory/ user@remote:/path/to/destination/
+```
+
+Copy files from a remote server to a local directory:
+
+```bash
+rsync -avz user@remote:/path/to/source/ /path/to/local/destination/
+```
+
+Exclude specific files or directories during synchronization:
+```bash
+rsync -avz --exclude='*.txt' /path/to/source/ user@remote:/path/to/destination/
+```
+
+Create backups of any files that are modified or deleted in the synchronize process.
+```bash
+rsync -avb /path/to/local/ user@remote:/path/to/remote/
 ```
 
 ## sed

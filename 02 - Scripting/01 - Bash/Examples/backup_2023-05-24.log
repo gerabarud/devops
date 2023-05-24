@@ -1,0 +1,18 @@
+sending incremental file list
+./
+
+sent 123 bytes  received 19 bytes  284,00 bytes/sec
+total size is 0  speedup is 0,00
+sending incremental file list
+test2.txt
+
+sent 159 bytes  received 35 bytes  388,00 bytes/sec
+total size is 0  speedup is 0,00
+sending incremental file list
+deleting rsync_bkp/2023-05-24/test2.txt
+cannot delete non-empty directory: rsync_bkp/2023-05-24
+cannot delete non-empty directory: rsync_bkp
+test2.txt
+
+sent 159 bytes  received 178 bytes  674,00 bytes/sec
+total size is 0  speedup is 0,00

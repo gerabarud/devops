@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #Colours
 greenColour="\e[0;32m\033[1m"
