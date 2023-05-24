@@ -97,10 +97,10 @@ helpPanel(){
     echo "\t\t${grayColour} Syncronization target path${endColour}"
     echo "\n\t${purpleColour}-h${endColour}"
     echo "\t\t${grayColour} Show this Help Panel${endColour}"
-	echo "\n${yellowColour}[*]${endColour}${grayColour} Examples:${endColour}\n"
-	echo "\t${blueColour}./backup.sh -s /path/to/source/ -d /path/to/target${endColour}"
-	echo "\t${blueColour}./backup.sh -h${endColour}\n"
-	exit 0
+    echo "\n${yellowColour}[*]${endColour}${grayColour} Examples:${endColour}\n"
+    echo "\t${blueColour}./backup.sh -s /path/to/source/ -d /path/to/target${endColour}"
+    echo "\t${blueColour}./backup.sh -h${endColour}\n"
+    exit 0
 }
 
 syncro(){
@@ -699,22 +699,22 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
 helpPanel(){
-	echo "\n${yellowColour}[*]${endColour}${grayColour} Usage: ./script.sh${endColour}"
-	echo "\n\t${purpleColour}-u${endColour}${yellowColour} <USERNAME>${endColour}"
+    echo "\n${yellowColour}[*]${endColour}${grayColour} Usage: ./script.sh${endColour}"
+    echo "\n\t${purpleColour}-u${endColour}${yellowColour} <USERNAME>${endColour}"
     echo "\t\t${grayColour} Set user username${endColour}"
-	echo "\n\t${purpleColour}-f${endColour}${yellowColour} <FIRST NAME>${endColour}"
+    echo "\n\t${purpleColour}-f${endColour}${yellowColour} <FIRST NAME>${endColour}"
     echo "\t\t${grayColour} Set user first name${endColour}"
     echo "\n\t${purpleColour}-l${endColour}${yellowColour} <LAST NAME>${endColour}"
     echo "\t\t${grayColour} Set user last name${endColour}"
     echo "\n\t${purpleColour}-s${endColour}"
     echo "\t\t${grayColour} Show list of users${endColour}"
-	echo "\n\t${purpleColour}-h${endColour}"
+    echo "\n\t${purpleColour}-h${endColour}"
     echo "\t\t${grayColour} Show this Help Panel${endColour}"
-	echo "\n${yellowColour}[*]${endColour}${grayColour} Examples:${endColour}\n"
-	echo "\t${blueColour}./script.sh -u gbarud -f Gerado -l Barud${endColour}"
-	echo "\t${blueColour}./script.sh -s${endColour}"
-	echo "\t${blueColour}./script.sh -h${endColour}\n"
-	exit 0
+    echo "\n${yellowColour}[*]${endColour}${grayColour} Examples:${endColour}\n"
+    echo "\t${blueColour}./script.sh -u gbarud -f Gerado -l Barud${endColour}"
+    echo "\t${blueColour}./script.sh -s${endColour}"
+    echo "\t${blueColour}./script.sh -h${endColour}\n"
+    exit 0
 }
 
 helpPanel
