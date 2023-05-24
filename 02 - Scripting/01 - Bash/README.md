@@ -115,8 +115,9 @@ fi
 # [-a: mateins permissions] [-v: verbose] [-b: make backups (it doesn't replace changed files)]
 # --delete: allow to delete files in the target path if it is deleted in the source path
 # --dry-run: this options is for a simulated execution
-rsync_options="-avb --backup-dir rsync_bkp/$current_date --delete"
+rsync_options="-avb --suffix=.$current_date --delete"
 
+echo -e "\n############ STARTING SYNC `date "+%d/%m/%Y-%H:%M:%S"`############\nd" >> $logfile
 $(which rsync) $rsync_options $source $target/current >> backup_$current_date.log
 }
 
