@@ -90,10 +90,10 @@ ctrl_c(){
 }
 
 helpPanel(){
-	echo "\n${yellowColour}[*]${endColour}${grayColour} Usage: ./backup.sh${endColour}"
-	echo "\n\t${purpleColour}-s${endColour}${yellowColour} <SOURCE_PATH>${endColour}"
+    echo "\n${yellowColour}[*]${endColour}${grayColour} Usage: ./backup.sh${endColour}"
+    echo "\n\t${purpleColour}-s${endColour}${yellowColour} <SOURCE_PATH>${endColour}"
     echo "\t\t${grayColour} Syncronization source path${endColour}"
-	echo "\n\t${purpleColour}-d${endColour}${yellowColour} <TARGET_PATH>${endColour}"
+    echo "\n\t${purpleColour}-d${endColour}${yellowColour} <TARGET_PATH>${endColour}"
     echo "\t\t${grayColour} Syncronization target path${endColour}"
     echo "\n\t${purpleColour}-h${endColour}"
     echo "\t\t${grayColour} Show this Help Panel${endColour}"
@@ -706,7 +706,7 @@ helpPanel(){
     echo "\t\t${grayColour} Set user first name${endColour}"
     echo "\n\t${purpleColour}-l${endColour}${yellowColour} <LAST NAME>${endColour}"
     echo "\t\t${grayColour} Set user last name${endColour}"
-	echo "\n\t${purpleColour}-s${endColour}"
+    echo "\n\t${purpleColour}-s${endColour}"
     echo "\t\t${grayColour} Show list of users${endColour}"
 	echo "\n\t${purpleColour}-h${endColour}"
     echo "\t\t${grayColour} Show this Help Panel${endColour}"
