@@ -35,6 +35,10 @@ Table of Contents
     - [`if-else` statement:](#if-else-statement)
     - [`if-elif-else` statement:](#if-elif-else-statement)
     - [Nested `if` statements::](#nested-if-statements)
+  - [While loop](#while-loop)
+  - [For loop](#for-loop)
+  - [Tuples](#tuples)
+  - [The OS Module](#the-os-module)
  
 ## Basics
 ### Installation
@@ -548,3 +552,145 @@ if x > 0:
 else:
     print("x is non-positive")
 ```
+
+### While loop
+
+Basic `while` loop
+```python
+count = 0
+
+while count < 5:
+    print("Count: " + str(count))
+    count += 1
+```
+
+Infinit loop with a break statement
+```python
+while True:
+    user_input = input("Enter a value (or 'quit' to exit): ")
+    if user_input == "quit":
+        break
+    print("You entered: " + user_input)
+```
+
+`while-else` statement
+```python
+count = 0
+
+while count < 5:
+    print("Count: " + str(count))
+    count += 1
+else:
+    print("Loop complete")
+```
+
+### For loop
+
+`for` loop with a list:
+```python
+fruits = ['apple', 'banana', 'cherry']
+
+for fruit in fruits:
+    print(fruit)
+```
+
+`for` loop with a string:
+```python
+message = "Hello, World!"
+
+for char in message:
+    print(char)
+```
+
+`for` loop with a range:
+```python
+for i in range(5):
+    print(i)
+```
+
+### Tuples
+A tuple is an **ordered collection** of elements enclosed in parentheses ( ). Tuples are similar to lists, but **they are immutable**, meaning their elements cannot be modified once defined.
+
+Creating a Tuple
+```python
+# Empty tuple
+empty_tuple = ()
+
+# Tuple with values
+fruits = ('apple', 'banana', 'cherry')
+
+# Tuple with a single value (note the trailing comma)
+single_value_tuple = (42,)
+```
+
+Accessing Elements
+```python
+print(fruits[0])  # Output: 'apple'
+print(fruits[2])  # Output: 'cherry'
+```
+
+Tuple operations
+```python
+tuple1 = (1, 2, 3)
+tuple2 = ('a', 'b', 'c')
+
+# Concatenation
+concatenated_tuple = tuple1 + tuple2
+
+# Repetition
+repeated_tuple = tuple1 * 3
+
+# Length
+print(len(tuple1))  # Output: 5
+
+# Membership
+print(2 in tuple1)  # Output: True
+
+# Iteration
+for num in tuple1:
+    print(num)
+```
+
+Tuple Unpacking
+```python
+fruits = ('apple', 'banana', 'cherry')
+
+fruit1, fruit2, fruit3 = fruits
+
+print(fruit1)  # Output: 'apple'
+print(fruit2)  # Output: 'banana'
+print(fruit3)  # Output: 'cherry'
+```
+
+### The OS Module
+The `os` module provides a way to interact with the operating system
+
+```python
+import os
+
+# File and Directory Operations
+os.getcwd()  # Returns the current working directory as a string.
+os.chdir(path)  # Changes the current working directory to the specified path.
+os.listdir(path)  # Returns a list of all files and directories in the specified path.
+os.mkdir(path)  # Creates a new directory at the specified path.
+os.remove(path)  # Removes a file at the specified path.
+os.rmdir(path)  # Removes an empty directory at the specified path.
+os.path.join(path1, path2, ...)  # Joins one or more path components intelligently.
+
+# Process Management:
+os.system(command)  # Executes the command in a subshell.
+os.popen(command)  # Opens a pipe to or from a command executed in a subshell.
+os.kill(pid, signal)  # Sends the specified signal to the process with the given process ID.
+
+# Environment Variables:
+os.environ  # A dictionary containing the current environment variables.
+os.getenv(name)  # Returns the value of the environment variable with the specified name.
+
+# Miscellaneous Functions:
+os.name  # Returns the name of the operating system.
+os.path  # A module that provides various functions for working with file paths.
+os.sep  # The separator used in file paths (e.g., '/' on Unix-based systems, '\\' on Windows).
+os.stat(path)  # Returns information about a file or directory.
+os.utime(path, times)  # Sets the access and modified times of a file.
+```
+
