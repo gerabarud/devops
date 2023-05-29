@@ -43,6 +43,13 @@ Table of Contents
     - [Handling Multiple Exceptions](#handling-multiple-exceptions)
     - [Using `else` and `finally`](#using-else-and-finally)
     - [Raising Exceptions](#raising-exceptions)
+  - [Class](#class-1)
+  - [Inheritance](#inheritance)
+  - [`pip`](#pip)
+    - [Installing Packages:](#installing-packages)
+    - [Managing Packages:](#managing-packages)
+    - [Package Index (search):](#package-index-search)
+    - [`requirements.txt`:](#requirementstxt)
   - [The OS Module](#the-os-module)
   - [Subprocess](#subprocess)
   - [File Handeling](#file-handeling)
@@ -52,12 +59,8 @@ Table of Contents
     - [File Position:](#file-position)
     - [File Iteration:](#file-iteration)
   - [Virtual Environments](#virtual-environments)
-  - [`pip`](#pip)
-    - [Installing Packages:](#installing-packages)
-    - [Managing Packages:](#managing-packages)
-    - [Package Index (search):](#package-index-search)
-    - [`requirements.txt`:](#requirementstxt)
-  - [Class](#class-1)
+
+Fuente: https://www.youtube.com/playlist?list=PLT98CRl2KxKGIazPd2nQEPbG7sQpT8LEj
 
 Create A Professional Grammar Check GUI App With OpenAI GPT API and Python
 https://www.youtube.com/watch?v=H0tADg4RodQ
@@ -751,6 +754,126 @@ def validate_age(age):
         print("Age is valid.")
 ```
 
+### Class
+
+In object-oriented programming, a class is a blueprint for creating objects (instances) that share common attributes (data) and behaviors (methods). It defines the structure and behavior of objects of that class. Here's an example:
+
+```python
+# Define a class
+class Car:
+    # Class-level attribute
+    color = "red"
+
+    # Constructor (initialize object attributes)
+    def __init__(self, make, model):
+        # Instance-level attributes
+        self.make = make
+        self.model = model
+
+    # Instance method
+    def start_engine(self):
+        print("Engine started.")
+
+    # Instance method with parameters
+    def drive(self, distance):
+        print(f"The car is driving for {distance} miles.")
+
+# Create objects (instances) of the class
+car1 = Car("Toyota", "Corolla")
+car2 = Car("Honda", "Civic")
+
+# Access attributes and call methods
+print(car1.make)       # Output: Toyota
+print(car2.color)      # Output: red
+car1.start_engine()    # Output: Engine started.
+car2.drive(10)         # Output: The car is driving for 10 miles.
+```
+
+In this example, the Car class is defined with class-level attribute color and instance-level attributes make and model. The __init__ method is the constructor that initializes the attributes of each object. The class also has instance methods start_engine and drive that define the behavior of the objects.
+
+### Inheritance
+Inheritance allows you to define a new class (derived or child class) based on an existing class (base or parent class). The derived class inherits the attributes and methods of the parent class, and it can also add its own unique attributes and methods or override the ones inherited from the parent class. Here's an example of inheritance in Python:
+
+```python
+
+# Parent class
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+    def speak(self):
+        print("Animal speaks.")
+
+# Derived class
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)  # Call the parent class constructor
+        self.breed = breed
+
+    def speak(self):
+        print("Woof!")
+
+    def fetch(self):
+        print("Dog fetches.")
+
+# Create objects of the derived class
+my_dog = Dog("Buddy", "Labrador")
+
+# Access attributes and call methods
+print(my_dog.name)     # Output: Buddy
+print(my_dog.breed)    # Output: Labrador
+my_dog.speak()         # Output: Woof!
+my_dog.fetch()         # Output: Dog fetches.
+```
+In this example, the Animal class is the parent class, and the Dog class is the derived class that inherits from Animal. The Dog class has its own constructor (__init__ method) that takes additional parameters and calls the parent class constructor using the super() function. The Dog class also overrides the speak method inherited from the Animal class and adds a new method fetch.
+
+### `pip`
+
+`pip` is the package installer for Python. 
+
+#### Installing Packages:
+
+```bash
+pip install package_name
+```
+To install a specific version of a package:
+```bash
+pip install package_name==version_number
+```
+To install packages from a requirements file:
+```bash
+pip install -r requirements.txt
+```
+
+#### Managing Packages:
+
+To upgrade a package to the latest version:
+```bash
+pip install --upgrade package_name
+```
+To uninstall a package:
+```bash
+pip uninstall package_name
+```
+To list installed packages:
+```bash
+pip list
+```
+
+#### Package Index (search):
+
+```bash
+pip search package_name
+```
+
+#### `requirements.txt`:
+
+You can create a requirements.txt file that lists the required packages for your project. This allows easy installation of all dependencies at once using pip install -r requirements.txt.
+
+```bash
+pip freeze > requirements.txt
+```
+
 ### The OS Module
 The `os` module provides a way to interact with the operating system
 
@@ -897,90 +1020,3 @@ which python3
 Output:
 > /tmp/my-project/bin/python3
 
-### `pip`
-
-`pip` is the package installer for Python. 
-
-#### Installing Packages:
-
-```bash
-pip install package_name
-```
-To install a specific version of a package:
-```bash
-pip install package_name==version_number
-```
-To install packages from a requirements file:
-```bash
-pip install -r requirements.txt
-```
-
-#### Managing Packages:
-
-To upgrade a package to the latest version:
-```bash
-pip install --upgrade package_name
-```
-To uninstall a package:
-```bash
-pip uninstall package_name
-```
-To list installed packages:
-```bash
-pip list
-```
-
-#### Package Index (search):
-
-```bash
-pip search package_name
-```
-
-#### `requirements.txt`:
-
-You can create a requirements.txt file that lists the required packages for your project. This allows easy installation of all dependencies at once using pip install -r requirements.txt.
-
-```bash
-pip freeze > requirements.txt
-```
-
-### Class
-
-In object-oriented programming, a class is a blueprint for creating objects (instances) that share common attributes (data) and behaviors (methods). It defines the structure and behavior of objects of that class. Here's an example of defining and using a class in Python:
-
-```python
-# Define a class
-class Car:
-    # Class-level attribute
-    color = "red"
-
-    # Constructor (initialize object attributes)
-    def __init__(self, make, model):
-        # Instance-level attributes
-        self.make = make
-        self.model = model
-
-    # Instance method
-    def start_engine(self):
-        print("Engine started.")
-
-    # Instance method with parameters
-    def drive(self, distance):
-        print(f"The car is driving for {distance} miles.")
-
-# Create objects (instances) of the class
-car1 = Car("Toyota", "Corolla")
-car2 = Car("Honda", "Civic")
-
-# Access attributes and call methods
-print(car1.make)       # Output: Toyota
-print(car2.color)      # Output: red
-car1.start_engine()    # Output: Engine started.
-car2.drive(10)         # Output: The car is driving for 10 miles.
-```
-
-In this example, the Car class is defined with class-level attribute color and instance-level attributes make and model. The __init__ method is the constructor that initializes the attributes of each object. The class also has instance methods start_engine and drive that define the behavior of the objects.
-
-To create objects of the class, you use the class name followed by parentheses. You can then access the attributes and call the methods of the objects using dot notation.
-
-Classes provide a way to organize and encapsulate related data and functionality. They allow you to create reusable and modular code by defining common structures and behaviors. Additionally, you can create multiple instances of a class, each with its own state and behavior.
