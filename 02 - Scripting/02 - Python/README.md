@@ -38,8 +38,30 @@ Table of Contents
   - [While loop](#while-loop)
   - [For loop](#for-loop)
   - [Tuples](#tuples)
+  - [Handling Exceptions](#handling-exceptions)
+    - [`try-except` block](#try-except-block)
+    - [Handling Multiple Exceptions](#handling-multiple-exceptions)
+    - [Using `else` and `finally`](#using-else-and-finally)
+    - [Raising Exceptions](#raising-exceptions)
   - [The OS Module](#the-os-module)
- 
+  - [Subprocess](#subprocess)
+  - [File Handeling](#file-handeling)
+    - [Opening and Closing Files](#opening-and-closing-files)
+    - [Reading from Files](#reading-from-files)
+    - [Writing to Files:](#writing-to-files)
+    - [File Position:](#file-position)
+    - [File Iteration:](#file-iteration)
+  - [Virtual Environments](#virtual-environments)
+  - [`pip`](#pip)
+    - [Installing Packages:](#installing-packages)
+    - [Managing Packages:](#managing-packages)
+    - [Package Index (search):](#package-index-search)
+    - [`requirements.txt`:](#requirementstxt)
+  - [Class](#class-1)
+
+Create A Professional Grammar Check GUI App With OpenAI GPT API and Python
+https://www.youtube.com/watch?v=H0tADg4RodQ
+
 ## Basics
 ### Installation
 
@@ -662,6 +684,73 @@ print(fruit2)  # Output: 'banana'
 print(fruit3)  # Output: 'cherry'
 ```
 
+### Handling Exceptions
+
+#### `try-except` block
+```python
+try:
+    # Code that might raise an exception
+    result = 10 / 0
+except ZeroDivisionError:
+    # Code to handle the ZeroDivisionError exception
+    print("Error: Division by zero.")
+```
+
+#### Handling Multiple Exceptions
+```python
+try:
+    # Code that might raise exceptions
+    file = open('nonexistent_file.txt', 'r')
+    result = 10 / 0
+except FileNotFoundError:
+    # Code to handle the FileNotFoundError exception
+    print("Error: File not found.")
+except ZeroDivisionError:
+    # Code to handle the ZeroDivisionError exception
+    print("Error: Division by zero.")
+```
+
+#### Using `else` and `finally`
+
+`else`: is executed if no exceptions are raised in the try block. It is typically used to define code that should run when the try block executes successfully.
+```python
+try:
+    # Code that might raise an exception
+    result = 10 / 2
+except ZeroDivisionError:
+    print("Error: Division by zero.")
+else:
+    print("Result:", result)
+```
+
+`finally` is executed regardless of whether an exception occurs or not. It is used to define cleanup code that should always run, such as closing files or releasing resources.
+```python
+try:
+    # Code that might raise an exception
+    file = open('data.txt', 'r')
+    result = int(file.readline())
+except FileNotFoundError:
+    print("Error: File not found.")
+except ValueError:
+    print("Error: Invalid data.")
+finally:
+    if 'file' in locals():
+        file.close()
+```
+
+#### Raising Exceptions
+It is possible to raise exceptions explicitly using the `raise` statement. It allows you to create and raise custom exceptions or re-raise existing exceptions.
+
+```python
+def validate_age(age):
+    if age < 0:
+        raise ValueError("Age cannot be negative.")
+    elif age > 120:
+        raise ValueError("Invalid age.")
+    else:
+        print("Age is valid.")
+```
+
 ### The OS Module
 The `os` module provides a way to interact with the operating system
 
@@ -694,3 +783,204 @@ os.stat(path)  # Returns information about a file or directory.
 os.utime(path, times)  # Sets the access and modified times of a file.
 ```
 
+### Subprocess
+The `subprocess` module provides a way to create new processes, execute external commands, and interact with the system's input and output streams
+
+Example: checking whether the SSH service (sshd) is running or not
+```python
+import subprocess
+
+def is_sshd_running():
+    try:
+        # Run the command to check the status of the SSH service
+        subprocess.run(['systemctl', 'is-active', 'sshd'], check=True)
+        return True  # Service is running
+    except subprocess.CalledProcessError:
+        return False  # Service is not running
+
+# Call the function to check the SSH service status
+if is_sshd_running():
+    print("SSH service is running.")
+else:
+    print("SSH service is not running.")
+    print("Starting it...")
+    subprocess.call(['systemctl', 'start', 'sshd'])
+```
+
+### File Handeling
+
+Example
+```python
+# Opening a file for reading
+try:
+    file = open("example.txt", "r")
+except FileNotFoundError as e:
+    print("The file was not found.")
+    print("e")
+    exit(1)
+
+# Reading the entire contents of the file
+content = file.read()
+print(content)
+
+# Closing the file
+file.close()
+
+# Opening a file for writing
+file = open("output.txt", "w")
+
+# Writing to the file
+file.write("Hello, World!")
+file.write("\n")
+file.write("This is a sample file.")
+
+# Closing the file
+file.close()
+
+```
+
+#### Opening and Closing Files
+```python
+open(filename, mode)  # Opens a file with the specified filename and mode. Modes: reading ('r'), writing ('w'), or appending ('a'), among other options. Returns a file object.
+
+file_object.close()  # Closes the file associated with the file object.
+```
+
+#### Reading from Files
+```python
+file_object.read()  # Reads the entire contents of the file as a string.
+file_object.readline()  # Reads a single line from the file.
+file_object.readlines()  # Reads all lines from the file and returns them as a list.
+```
+
+#### Writing to Files:
+```python
+file_object.write(string)  # Writes the specified string to the file.
+file_object.writelines(list_of_strings)  # Writes a list of strings to the file.
+```
+
+#### File Position:
+```python
+file_object.tell()  # Returns the current position (byte offset) in the file.
+file_object.seek(offset, from_what)  # Moves the file position to the specified offset. The from_what parameter determines the reference point (beginning of the file, current position, or end of the file).
+```
+
+#### File Iteration:
+```python
+for line in file_object: ...  # Iterates over the lines of the file.
+```
+
+### Virtual Environments
+
+A virtual environment in Python is a self-contained directory that contains its own Python interpreter and a set of installed packages. It allows you to have multiple isolated environments with different versions of Python and libraries on the same machine.
+
+Installation
+```bash
+sudo apt install python3-virtualenv
+```
+
+Creating a virtual enviroment
+```bash
+cd /tmp
+virtualenv -p /usr/bin/python3 my-project 
+```
+
+Activating a Virtual Environment:
+```bash
+source my-project/bin/activate
+```
+
+Checking
+```bash
+which python3
+```
+Output:
+> /tmp/my-project/bin/python3
+
+### `pip`
+
+`pip` is the package installer for Python. 
+
+#### Installing Packages:
+
+```bash
+pip install package_name
+```
+To install a specific version of a package:
+```bash
+pip install package_name==version_number
+```
+To install packages from a requirements file:
+```bash
+pip install -r requirements.txt
+```
+
+#### Managing Packages:
+
+To upgrade a package to the latest version:
+```bash
+pip install --upgrade package_name
+```
+To uninstall a package:
+```bash
+pip uninstall package_name
+```
+To list installed packages:
+```bash
+pip list
+```
+
+#### Package Index (search):
+
+```bash
+pip search package_name
+```
+
+#### `requirements.txt`:
+
+You can create a requirements.txt file that lists the required packages for your project. This allows easy installation of all dependencies at once using pip install -r requirements.txt.
+
+```bash
+pip freeze > requirements.txt
+```
+
+### Class
+
+In object-oriented programming, a class is a blueprint for creating objects (instances) that share common attributes (data) and behaviors (methods). It defines the structure and behavior of objects of that class. Here's an example of defining and using a class in Python:
+
+```python
+# Define a class
+class Car:
+    # Class-level attribute
+    color = "red"
+
+    # Constructor (initialize object attributes)
+    def __init__(self, make, model):
+        # Instance-level attributes
+        self.make = make
+        self.model = model
+
+    # Instance method
+    def start_engine(self):
+        print("Engine started.")
+
+    # Instance method with parameters
+    def drive(self, distance):
+        print(f"The car is driving for {distance} miles.")
+
+# Create objects (instances) of the class
+car1 = Car("Toyota", "Corolla")
+car2 = Car("Honda", "Civic")
+
+# Access attributes and call methods
+print(car1.make)       # Output: Toyota
+print(car2.color)      # Output: red
+car1.start_engine()    # Output: Engine started.
+car2.drive(10)         # Output: The car is driving for 10 miles.
+```
+
+In this example, the Car class is defined with class-level attribute color and instance-level attributes make and model. The __init__ method is the constructor that initializes the attributes of each object. The class also has instance methods start_engine and drive that define the behavior of the objects.
+
+To create objects of the class, you use the class name followed by parentheses. You can then access the attributes and call the methods of the objects using dot notation.
+
+Classes provide a way to organize and encapsulate related data and functionality. They allow you to create reusable and modular code by defining common structures and behaviors. Additionally, you can create multiple instances of a class, each with its own state and behavior.
