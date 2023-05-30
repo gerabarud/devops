@@ -26,7 +26,7 @@ In order to choosing the right AWS Region, you must consider:
 
 ### AWS shared responsibility model
 
-![Alt Text](imageURL)
+![responsibilities](https://github.com/gerabarud/devops/blob/main/03%20-%20Cloud/01-%20AWS/images/responsibilities.png)
 
 
 
