@@ -28,11 +28,16 @@ In order to choosing the right AWS Region, you must consider:
 
 ![responsibilities](https://github.com/gerabarud/devops/blob/main/03%20-%20Cloud/01-%20AWS/images/responsibilities.png)
 
+### AWS root user
 
+AWS root user credentials
 
+The AWS root user has two sets of credentials associated with it. One set of credentials is the email address and password that were used to create the account. This allows you to access the AWS Management Console. The second set of credentials is called access keys, which allow you to make programmatic requests from the AWS Command Line Interface (AWS CLI) or AWS API.
 
+Best Practices
+![userBestPractices](https://github.com/gerabarud/devops/blob/main/03%20-%20Cloud/01-%20AWS/images/userBestPractices.png)
 
-
+### AWS IAM (Identity and Access Management)
 
 
 
