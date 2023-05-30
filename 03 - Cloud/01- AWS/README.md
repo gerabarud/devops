@@ -18,6 +18,26 @@ In order to choosing the right AWS Region, you must consider:
 
 - **Services Availability:** While most AWS services are available across all regions, some services might have specific regional limitations or be initially launched in specific regions before expanding to others. 
 
+### Interacting with AWS
+
+- AWS Management Console
+- AWS CLI: https://aws.amazon.com/cli/
+- AWS SDKs: https://aws.amazon.com/developer/tools/
+
+### AWS shared responsibility model
+
+![responsibilities](https://github.com/gerabarud/devops/blob/main/03%20-%20Cloud/01-%20AWS/images/responsibilities.png)
+
+
+
+
+
+
+
+
+
+
+
 
 EC2
 -> Instances
