@@ -1,3 +1,7 @@
+GUÍA CERTIFICACIÓN AWS + SORTEO 
+https://www.youtube.com/watch?v=f5uGX-pJuVw
+
+
 ## AWS Technical Essentials
 https://explore.skillbuilder.aws/learn/course/1851
 
