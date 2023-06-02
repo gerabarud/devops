@@ -1,3 +1,26 @@
+Table of contents
+- [cd](#cd)
+- [cron](#cron)
+- [Shorcuts](#shorcuts)
+  - [Navigation Shortcuts:](#navigation-shortcuts)
+  - [Editing Shortcuts:](#editing-shortcuts)
+  - [History Shortcuts:](#history-shortcuts)
+  - [Completion Shortcuts:](#completion-shortcuts)
+- [alternativa a pipe: \<()](#alternativa-a-pipe-)
+
+## cd
+
+Go to the previous directory
+```bash
+cd -
+```
+
+Go to the home directory
+```bash
+cd ~
+```
+
+
 ## cron
 
 > **Hint:** Use "fully qualified commands (full path)" in the script when scheduling jobs with cron. You can verify the full path of a command with the command `which`. 
@@ -33,6 +56,31 @@ Example of a cron job that runs a script every day at 8:00 AM
 ```bash
 0 8 * * * /path/to/script.sh
 ```
+
+## Shorcuts
+
+### Navigation Shortcuts:
+
+    Ctrl + A: Move the cursor to the beginning of the command line.
+    Ctrl + E: Move the cursor to the end of the command line.
+    Alt + B: Move the cursor one word backward.
+    Alt + F: Move the cursor one word forward.
+
+### Editing Shortcuts:
+    
+    Ctrl + U: Clear the entire line.
+    Ctrl + K: Clear the line from the cursor position to the end.
+    Ctrl + W: Delete the word before the cursor.
+    Ctrl + Y: Paste the last deleted text.
+    Ctrl + L: Clear the terminal screen.
+
+### History Shortcuts:
+    Ctrl + R: Search the command history. Start typing to search for a previously entered command.
+    Ctrl + G: Escape from history search mode.
+    
+### Completion Shortcuts:
+    Tab: Auto-complete commands, filenames, and directories.
+    Ctrl + D: Exit the terminal (equivalent to typing exit).
 
 ## alternativa a pipe: <()
 
