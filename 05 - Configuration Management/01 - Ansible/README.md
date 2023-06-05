@@ -1,20 +1,31 @@
+Table of contents
+- [ANSIBLE](#ansible)
+  - [Installing Ansible](#installing-ansible)
+    - [SSH Key pars](#ssh-key-pars)
+    - [Invetory file](#invetory-file)
+    - [Try it](#try-it)
+  - [02 - Ad HOC tasks and Modules - Some examples](#02---ad-hoc-tasks-and-modules---some-examples)
+    - [Install Services using APT module](#install-services-using-apt-module)
+    - [Restart Services using Service module](#restart-services-using-service-module)
+    - [Use Ansible to reboot the webstack](#use-ansible-to-reboot-the-webstack)
+
 # ANSIBLE
 
 **What’s this Ansible?**
 
 Ansible is an open-source automation tool, or platform, used for IT tasks such as configuration management, application deployment, intraservice orchestration, and provisioning
 
-## INDEX
 
-TODO
 
-## 01 - Install Ansible
+ 
+
+## Installing Ansible
 
 ```bash
 sudo apt-get install ansible
 ```
 
-Create an ansible directory 
+ Create an ansible directory 
 
 ```bash
 mkdir /srv/ansible
