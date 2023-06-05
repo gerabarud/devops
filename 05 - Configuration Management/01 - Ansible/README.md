@@ -1,8 +1,9 @@
 Table of contents
 - [ANSIBLE](#ansible)
   - [Installing Ansible](#installing-ansible)
-    - [SSH Key pars](#ssh-key-pars)
-    - [Invetory file](#invetory-file)
+  - [SSH Key pars](#ssh-key-pars)
+    - [Using specific Ansible user](#using-specific-ansible-user)
+  - [Invetory file](#invetory-file)
     - [Try it](#try-it)
   - [02 - Ad HOC tasks and Modules - Some examples](#02---ad-hoc-tasks-and-modules---some-examples)
     - [Install Services using APT module](#install-services-using-apt-module)
@@ -15,42 +16,36 @@ Table of contents
 
 Ansible is an open-source automation tool, or platform, used for IT tasks such as configuration management, application deployment, intraservice orchestration, and provisioning
 
-
-
- 
-
 ## Installing Ansible
 
 ```bash
 sudo apt-get install ansible
 ```
-
  Create an ansible directory 
-
 ```bash
 mkdir /srv/ansible
 cd /srv/ansible
 ```
 
-### SSH Key pars
+## SSH Key pars
+
 Create a key directory
 ```bash
 mkdir key
 ```
-
 Create a SSH key and copy to all servers
-
 ```bash
 ssh-keygen -t rsa -b 4096 -C "ansible@example" -f /srv/ansible/key/id_rsa
+ssh-copy-id -i /srv/ansible/key/id_rsa.pub <USER>@<IP>
 ```
 
-On the servers you want to administrate
+### Using specific Ansible user 
+On the servers you want to administrate (in case that you want to use an specific user for andible)
 ```bash
 sudo adduser ansible
 sudo usermod -aG sudo ansible
 su ansible
 ```
-
 Create authorized_keys file and add id_rsa.pub content
 ```bash
 cd ~
@@ -58,7 +53,7 @@ mkdir .ssh
 nano .ssh/authorized_keys
 ```
 
-### Invetory file
+## Invetory file
 
 On ansible host, create an inventory file, and add to it hosts you want to administrate
 
