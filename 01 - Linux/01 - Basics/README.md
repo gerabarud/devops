@@ -1,4 +1,5 @@
 Table of contents
+- [bg - backgound](#bg---backgound)
 - [cd](#cd)
 - [cron](#cron)
 - [Shorcuts](#shorcuts)
@@ -7,6 +8,17 @@ Table of contents
   - [History Shortcuts:](#history-shortcuts)
   - [Completion Shortcuts:](#completion-shortcuts)
 - [alternativa a pipe: \<()](#alternativa-a-pipe-)
+
+## bg - backgound
+
+Put a program/process to the background (minimize): 
+```bash
+CTRL + z
+```
+Bring it back to the foreground:
+```bash
+fg
+```
 
 ## cd
 
