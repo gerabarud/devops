@@ -1,9 +1,9 @@
 
-Table of contents
+Table of Contents
 - [Firsts Steps](#firsts-steps)
 - [Basics](#basics)
-  - [Estados de los archivos](#estados-de-los-archivos)
-  - [Áreas de un proyecto GIT](#áreas-de-un-proyecto-git)
+  - [File States](#file-states)
+  - [GIT Project areas](#git-project-areas)
 - [Commands](#commands)
   - [usuario](#usuario)
   - [init](#init)
@@ -30,21 +30,21 @@ Table of contents
 
 ## Basics
 
-![img](git.png)
+![img](images/git.png)
 
-### Estados de los archivos
+### File States
 
-**Modified:** archivos modificados pero no commiteados.
+**Modified:** files modified but not committed.
 
-**Staged:** archivos marcados para el próximo commit.
+**Staged:** files marked for next commit.
 
-**Committed:** archivos commiteados en el repositorio. 
+**Committed:** committed files in the repository. 
 
-### Áreas de un proyecto GIT
+### GIT Project areas
 
 **Working directory:** copia de una versión del proyecto..
 
-**Staging area:** archivo generalmente contenido en tu directorio de Git, que almacena información acerca de lo que va a ir en tu próxima confirmación. Funciona como una lista o indice, indicando que archivos iran para el commit.
+**Staging area:** file usually contained in your Git directory, which stores information about what will go into your next commit. It works like a list or index, indicating which files will be committed.
 
 **Directorio de Git:** repositorio.
 

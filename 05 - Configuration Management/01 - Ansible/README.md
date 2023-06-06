@@ -4,11 +4,22 @@ Table of contents
   - [SSH Key pars](#ssh-key-pars)
     - [Using specific Ansible user](#using-specific-ansible-user)
   - [Invetory file](#invetory-file)
+  - [The Ansible configuration file](#the-ansible-configuration-file)
     - [Try it](#try-it)
-  - [02 - Ad HOC tasks and Modules - Some examples](#02---ad-hoc-tasks-and-modules---some-examples)
-    - [Install Services using APT module](#install-services-using-apt-module)
-    - [Restart Services using Service module](#restart-services-using-service-module)
-    - [Use Ansible to reboot the webstack](#use-ansible-to-reboot-the-webstack)
+  - [Ad HOC tasks and Modules - Some examples](#ad-hoc-tasks-and-modules---some-examples)
+    - [Gathering facts](#gathering-facts)
+    - [Installing Services using APT module](#installing-services-using-apt-module)
+    - [Restarting Services using Service module](#restarting-services-using-service-module)
+    - [Using Ansible to reboot the webstack](#using-ansible-to-reboot-the-webstack)
+  - [Playbooks](#playbooks)
+    - [Basic examples](#basic-examples)
+      - [Playbook for installing APACHE](#playbook-for-installing-apache)
+      - [Playbook for removing APACHE](#playbook-for-removing-apache)
+    - [The `when` Conditional](#the-when-conditional)
+      - [Checking OS distribution and release](#checking-os-distribution-and-release)
+
+Web UI for Ansible
+https://www.youtube.com/watch?v=NyOSoLn5T5U
 
 # ANSIBLE
 
@@ -19,7 +30,8 @@ Ansible is an open-source automation tool, or platform, used for IT tasks such a
 ## Installing Ansible
 
 ```bash
-sudo apt-get install ansible
+sudo apt update
+sudo apt install ansible
 ```
  Create an ansible directory 
 ```bash
@@ -61,7 +73,6 @@ On ansible host, create an inventory file, and add to it hosts you want to admin
 mkdir inventory
 nano inventory/hosts.ini 
 ```
-
 exmaple:
 
 ```ini
@@ -75,21 +86,29 @@ db01 ansible_host=web02.example.com
 [stack:children]
 webapp
 db
+```
 
-[all:vars]
-ansible_private_key_file=/srv/ansible/key/id_rsa
-ansible_user=ansible
-ansible_port=22
+## The Ansible configuration file 
+
+On your working directory, create an Ansbile Config File that will overrides some options
+```bash
+nano ansible.cfg
+```
+Content:
+```ini
+[defaults]
+inventory = inventory/hosts.ini
+private_key_file = key/id_rsa
+remote_user = root
 ```
 
 ### Try it
 
-A command inside de remote host:
+Execute `hostname` command inside the remote hosts:
 ```bash
-ansible web01 -i hosts -m command -a hostname
+ansible web01 -m command -a hostname
 ```
 Expected result:
-
 ```json
 web01 | CHANGED | rc=0 >>
 web01
@@ -97,7 +116,7 @@ web01
 
 A pre-defined ansible module 
 ```bash
-ansible web01 -i hosts -m ping
+ansible web01 -m ping
 ```
 Expected result:
 ```json
@@ -107,37 +126,160 @@ web01 | SUCCESS => {
 }
 ```
 
-## 02 - Ad HOC tasks and Modules - Some examples
+List all the configured hosts
+```bash
+ansible all --list-hosts
+```
 
-### Install Services using APT module
+## Ad HOC tasks and Modules - Some examples
+
+### Gathering facts 
+Gathering facts in Ansible refers to the process of collecting information about the target hosts. Facts are pieces of information about the host's system, such as hardware details, operating system, IP addresses, and more.
+
+```bash
+ansible web01 -m gather_facts
+```
+
+Example: Grabbing system distribution
+```bash
+ansible web01 -m gather_facts | grep ansible_distribution
+```
+Outut:
+> "ansible_distribution": "Debian", <br>
+> "ansible_distribution_file_parsed": true, <br>
+> "ansible_distribution_file_path": "/etc/os-release", <br>
+> "ansible_distribution_file_variety": "Debian", <br>
+> "ansible_distribution_major_version": "11", <br>
+> "ansible_distribution_release": "bullseye", <br>
+> "ansible_distribution_version": "11",
+
+### Installing Services using APT module
 
 https://docs.ansible.com/ansible/latest/modules/apt_module.html
 
+Updating cache
 ```bash
-ansible all -i hosts --become -m apt -a "update_cache=yes"
+ansible all --become -m apt -a "update_cache=yes"
 ```
+Instaling a package
 ``` bash
-ansible webapp -i hosts --become -m apt -a "name=apache2 state=present"
+ansible webapp --become -m apt -a "name=apache2 state=present"
 ```
+Upgrading a package
 ```bash
-ansible db -i hosts --become -m apt -a "name=mysql-server state=present"
+ansible db --become -m apt -a "name=mysql-server state=latest"
+```
+Dist upgrading
+```bash
+ansible all --become -m apt "upgrade=dist"
 ```
 
-### Restart Services using Service module
+### Restarting Services using Service module
 
 https://docs.ansible.com/ansible/latest/modules/service_module.html
 
 ```bash
-ansible db -i hosts -m service -a "name=mysql state=started"
+ansible db -m service -a "name=mysql state=started"
 ```
 
 ```bash
-ansible db --become -i hosts -m service -a "name=mysql state=restarted"
+ansible db --become -m service -a "name=mysql state=restarted"
 ```
 
-### Use Ansible to reboot the webstack
+### Using Ansible to reboot the webstack
 
 ```bash
 ansible all -i hosts --become -a "reboot --reboot"
 ```
 
+## Playbooks
+
+Creating a directory for playbook files
+```bash
+mkdir playbook
+```
+
+### Basic examples
+
+#### Playbook for installing APACHE
+```bash
+nano playbook/install_apache.yml
+```
+```yml
+---
+
+- name: Playbook for installing APACHE
+  hosts: all
+  become: true
+  tasks:
+  
+  - name: apt update
+    apt:
+      update_cache: yes
+
+  - name: Ansible apt install apache2
+    apt:
+      name: apache2
+      state: present
+```
+Running the playbook (-l for filtering only web hosts)
+```bash
+ansible-playbook playbook/install_apache.yml -l web*
+```
+
+#### Playbook for removing APACHE
+```bash
+nano playbook/remove_apache.yml
+```
+```yml
+---
+
+- name: Playbook for removing APACHE
+  hosts: all
+  become: true
+  tasks:
+
+      
+  - name: Ansible apt remove apache2
+    apt:
+      name: apache2
+      state: absent
+```
+Running the playbook (-l for filtering only web hosts)
+```bash
+ansible-playbook playbook/remove_apache.yml -l web*
+```
+
+### The `when` Conditional
+
+#### Checking OS distribution and release
+
+```yml
+---
+
+- name: Playbook for installing APACHE
+  hosts: all
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2
+    apt:
+      name: apache2
+      state: present
+    when: ansible_distribution == 'Debian' and ansible_distribution_release == 'bullseye'
+```
+Cheking two distribution at the same time
+```yml
+---
+
+- name: Playbook for installing APACHE
+  hosts: all
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2
+    apt:
+      name: apache2
+      state: present
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+```
