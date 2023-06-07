@@ -316,3 +316,19 @@ ansible-playbook playbook/variables.yml -e "apache_package=apache2 php_packageli
 ```
 
 ### Targeting Specific Nodes
+```bash
+---
+
+- name: Playbook for installing APACHE and PHP module for apache
+  hosts: webapp
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2 and php module for apache
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: present
+      update_cache: yes
+```
