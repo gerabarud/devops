@@ -19,6 +19,20 @@ Table of contents
       - [Checking OS distribution and release](#checking-os-distribution-and-release)
     - [Variables in Playbooks](#variables-in-playbooks)
     - [Targeting Specific Nodes](#targeting-specific-nodes)
+    - [Tags](#tags)
+    - [Managing Files](#managing-files)
+      - [`copy` module](#copy-module)
+      - [`unarchive` module](#unarchive-module)
+        - [`tar.gz` example](#targz-example)
+        - [`zip` example: Installing Terraform from remote source](#zip-example-installing-terraform-from-remote-source)
+      - [`lineinfile` module](#lineinfile-module)
+        - [Adding and removing lines in a file](#adding-and-removing-lines-in-a-file)
+        - [Modifying an line in a file](#modifying-an-line-in-a-file)
+    - [Services](#services)
+      - [Handlers](#handlers)
+    - [User Managament](#user-managament)
+      - [Managament examples: `create`, `modify`, `change password`, `remove`](#managament-examples-create-modify-change-password-remove)
+      - [Creating a user with SSH key](#creating-a-user-with-ssh-key)
 
 Web UI for Ansible
 https://www.youtube.com/watch?v=NyOSoLn5T5U
@@ -208,8 +222,6 @@ mkdir playbook
 nano playbook/install_apache.yml
 ```
 ```yml
----
-
 - name: Playbook for installing APACHE and PHP module for apache
   hosts: all
   become: true
@@ -233,8 +245,6 @@ ansible-playbook playbook/install_apache.yml -l web*
 nano playbook/remove_apache.yml
 ```
 ```yml
----
-
 - name: Playbook for removing APACHE
   hosts: all
   become: true
@@ -256,8 +266,6 @@ ansible-playbook playbook/remove_apache.yml -l web*
 #### Checking OS distribution and release
 
 ```yml
----
-
 - name: Playbook for installing APACHE
   hosts: all
   become: true
@@ -273,8 +281,6 @@ ansible-playbook playbook/remove_apache.yml -l web*
 ```
 Cheking two distribution at the same time
 ```yml
----
-
 - name: Playbook for installing APACHE
   hosts: all
   become: true
@@ -295,8 +301,6 @@ Playbook for installing APACHE and PHP module
 nano playbook/variables.yml
 ```
 ```yml
----
-
 - name: Playbook for installing APACHE and PHP module for apache
   hosts: all
   become: true
@@ -316,9 +320,7 @@ ansible-playbook playbook/variables.yml -e "apache_package=apache2 php_packageli
 ```
 
 ### Targeting Specific Nodes
-```bash
----
-
+```yaml
 - name: Playbook for installing APACHE and PHP module for apache
   hosts: webapp
   become: true
@@ -331,4 +333,263 @@ ansible-playbook playbook/variables.yml -e "apache_package=apache2 php_packageli
         - libapache2-mod-php
       state: present
       update_cache: yes
+```
+
+### Tags
+
+```bash
+nano playbook/tags.yml
+```
+```yaml
+- name: Playbook for installing APACHE and PHP module for apache
+  hosts: webapp
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2 and php module for apache
+    tags: apache,apache2,php,debian
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: present
+      update_cache: yes
+      when: ansible_distribution == 'Debian'
+
+  - name: Ansible apt install apache2 and php module for apache
+    tags: apache,apache2,ubuntu
+    apt:
+      name: 
+        - apache2
+      state: present
+      update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+```
+Listing tags available
+```bash
+ansible-playbook --list-tags playbook/tags.yml
+```
+Output:
+> playbook: playbook/tags.yml
+>
+>  play #1 (webapp): Playbook for installing APACHE and PHP module for apache	TAGS: [] <br>
+>      TASK TAGS: [apache, apache2, debian, php, ubuntu]
+
+Runnig tasks with specifics tags
+```bash
+ansible-playbook playbook/tags.yml --tags debian
+```
+```bash
+ansible-playbook playbook/tags.yml --tags ubuntu
+```
+
+Skiping tasks with specific tags
+```bash
+ansible-playbook playbook/tags.yml --skip-tags php
+```
+>> Hint: The `always` tag in Ansible is a special tag that ensures a task is always executed, regardless of any other tag filtering or conditions.
+
+### Managing Files
+
+Create a new directory for files and create a new file
+```bash
+mkdir files
+nano files/test.txt
+```
+
+#### `copy` module 
+```yml
+- name: Example playbook
+  hosts: all
+  tasks:
+    - name: Copy file to remote host
+      copy:
+        src: files/test.txt
+        dest: /path/on/remote/test.txt
+        owner: root
+        group: root
+        mode: 0644
+```
+
+#### `unarchive` module
+##### `tar.gz` example
+```yml
+- name: Example playbook
+  hosts: all
+  tasks:
+    - name: Unarchive file on remote host
+      unarchive:
+        src: /path/to/archive.tar.gz
+        dest: /path/on/remote/
+        remote_src: yes
+```
+##### `zip` example: Installing Terraform from remote source
+```yml
+- hosts: workstations
+  become: true
+  tasks:
+
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip
+      remote_src: yes
+      dest: /usr/local/bin
+      owner: root
+      group: root
+      mode: 0755
+```
+
+#### `lineinfile` module
+##### Adding and removing lines in a file
+```yml
+- name: Example playbook
+  hosts: all
+  tasks:
+    - name: Add a line to a file
+      lineinfile:
+        path: /path/to/file.txt
+        line: "Some line to add"
+        state: present
+
+    - name: Remove a line from a file
+      lineinfile:
+        path: /path/to/file.txt
+        line: "Line to remove"
+        state: absent
+```
+##### Modifying an line in a file
+```yml
+- name: Example playbook
+  hosts: all
+  tasks:
+    - name: Modify a line in a file
+      lineinfile:
+        path: /path/to/file.txt
+        regexp: '^old_line='
+        line: 'new_line=value'
+```
+
+### Services
+The `service` module allows you to `start`, `stop`, `restart`, `enable`, or `disable` services on the target hosts.
+
+```yml
+- name: Example playbook
+  hosts: all
+  tasks:
+    - name: Ensure service is started
+      service:
+        name: myservice
+        state: started
+
+    - name: Ensure service is stopped
+      service:
+        name: myservice
+        state: stopped
+
+    - name: Ensure service is restarted
+      service:
+        name: myservice
+        state: restarted
+
+    - name: Ensure service is enabled on boot
+      service:
+        name: myservice
+        enabled: yes
+
+    - name: Ensure service is disabled on boot
+      service:
+        name: myservice
+        enabled: no
+    
+    - name: Ensure service is started and enabled on boot
+      service:
+        name: myservice
+        state: started
+        enabled: yes
+```
+
+#### Handlers
+`handlers` are tasks that are executed in response to a notification from another task. They are typically used to perform actions such as service restarts or configuration reloads after certain changes have been made.
+
+Example: Changing Apache admin email and restarting service
+```yml
+- name: Changing Apache admin email and restarting service
+  hosts: all
+  become: true
+  tasks:
+    - name: Update Apache config file
+      lineinfile:
+        path: /etc/apache2/apache2.conf
+        regexp: '^ServerAdmin'
+        line: 'ServerAdmin new_admin@example.com'
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+```
+
+### User Managament
+
+#### Managament examples: `create`, `modify`, `change password`, `remove`
+```yml
+- name: User Management
+  hosts: all
+  become: true
+  tasks:
+    - name: Create a user
+      user:
+        name: john
+        password: "{{ 'password' | password_hash('sha512') }}"
+        state: present
+
+    - name: Modify user properties
+      user:
+        name: john
+        shell: /bin/bash
+        groups: developers
+        append: yes
+
+    - name: Change user password
+      user_password:
+        name: john
+        password: "{{ 'newpassword' | password_hash('sha512') }}"
+        update_password: always
+
+    - name: Remove a user
+      user:
+        name: john
+        state: absent
+```
+
+#### Creating a user with SSH key
+Creating a directory where to store the password
+```bash
+
+```
+
+```yml
+- name: Create User with SSH Key
+  hosts: all
+  become: true  
+  tasks:
+    - name: Create user gerardo con sudo
+      user:
+        name: gbarud
+        comment: Gerardo Barud
+        shell: /bin/bash
+        create_home: yes
+        home: /home/gbarud
+        group: sudo
+    - name: Set public key gbarud
+      ansible.posix.authorized_key:
+        user: gbarud
+        state: present
+        key: "{{ lookup('file', '/home/dgcc/servicios-dgcc/ansible/key/id_rsa_gerardo.pub') }}"
 ```
