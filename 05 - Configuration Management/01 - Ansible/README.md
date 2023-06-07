@@ -33,6 +33,7 @@ Table of contents
     - [User Managament](#user-managament)
       - [Managament examples: `create`, `modify`, `change password`, `remove`](#managament-examples-create-modify-change-password-remove)
       - [Creating a user with SSH key](#creating-a-user-with-ssh-key)
+    - [Boostrap](#boostrap)
 
 Web UI for Ansible
 https://www.youtube.com/watch?v=NyOSoLn5T5U
@@ -571,7 +572,7 @@ Example: Changing Apache admin email and restarting service
 #### Creating a user with SSH key
 Creating a directory where to store the password
 ```bash
-
+mkdir files/ssh_keys
 ```
 
 ```yml
@@ -579,6 +580,7 @@ Creating a directory where to store the password
   hosts: all
   become: true  
   tasks:
+  
     - name: Create user gerardo con sudo
       user:
         name: gbarud
@@ -587,9 +589,42 @@ Creating a directory where to store the password
         create_home: yes
         home: /home/gbarud
         group: sudo
+
     - name: Set public key gbarud
-      ansible.posix.authorized_key:
+      authorized_key:
         user: gbarud
         state: present
-        key: "{{ lookup('file', '/home/dgcc/servicios-dgcc/ansible/key/id_rsa_gerardo.pub') }}"
+        key: "{{ lookup('file', 'files/ssh_keys/gbarud.pub') }}"
+```
+
+### Boostrap
+Bootstrap in the context of Ansible typically refers to the initial setup and configuration of a target system or group of systems. It involves tasks such as installing the required dependencies, setting up SSH access, and preparing the system for further configuration management.
+
+Generic example:
+```yml
+- name: Bootstrap
+  hosts: target_hosts
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Update system packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install required dependencies
+      package:
+        name: ['python3', 'python3-pip']
+
+    - name: Configure SSH access for Ansible
+      authorized_key:
+        user: ansible_user
+        key: "{{ lookup('file', '/path/to/ansible_public_key.pub') }}"
+        state: present
+
+    - name: Perform initial system configuration
+      # Add your tasks here
+
+    - name: Run additional playbooks or roles
+      # Include tasks or roles to further configure the system
 ```
