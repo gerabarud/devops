@@ -601,6 +601,9 @@ mkdir files/ssh_keys
 Bootstrap in the context of Ansible typically refers to the initial setup and configuration of a target system or group of systems. It involves tasks such as installing the required dependencies, setting up SSH access, and preparing the system for further configuration management.
 
 Generic example:
+```bash
+nano playbook/boostrap.yml
+```
 ```yml
 - name: Bootstrap
   hosts: target_hosts
@@ -627,4 +630,7 @@ Generic example:
 
     - name: Run additional playbooks or roles
       # Include tasks or roles to further configure the system
+```
+```bash
+ansible-playbook playbook/boostrap.yml
 ```
