@@ -13,10 +13,12 @@ Table of contents
     - [Using Ansible to reboot the webstack](#using-ansible-to-reboot-the-webstack)
   - [Playbooks](#playbooks)
     - [Basic examples](#basic-examples)
-      - [Playbook for installing APACHE](#playbook-for-installing-apache)
+      - [Playbook for installing APACHE and PHP module](#playbook-for-installing-apache-and-php-module)
       - [Playbook for removing APACHE](#playbook-for-removing-apache)
     - [The `when` Conditional](#the-when-conditional)
       - [Checking OS distribution and release](#checking-os-distribution-and-release)
+    - [Variables in Playbooks](#variables-in-playbooks)
+    - [Targeting Specific Nodes](#targeting-specific-nodes)
 
 Web UI for Ansible
 https://www.youtube.com/watch?v=NyOSoLn5T5U
@@ -201,26 +203,25 @@ mkdir playbook
 
 ### Basic examples
 
-#### Playbook for installing APACHE
+#### Playbook for installing APACHE and PHP module
 ```bash
 nano playbook/install_apache.yml
 ```
 ```yml
 ---
 
-- name: Playbook for installing APACHE
+- name: Playbook for installing APACHE and PHP module for apache
   hosts: all
   become: true
   tasks:
   
-  - name: apt update
+  - name: Ansible apt install apache2 and php module for apache
     apt:
-      update_cache: yes
-
-  - name: Ansible apt install apache2
-    apt:
-      name: apache2
+      name: 
+        - apache2
+        - libapache2-mod-php
       state: present
+      update_cache: yes
 ```
 Running the playbook (-l for filtering only web hosts)
 ```bash
@@ -266,6 +267,8 @@ ansible-playbook playbook/remove_apache.yml -l web*
     apt:
       name: apache2
       state: present
+      update_cache: yes
+
     when: ansible_distribution == 'Debian' and ansible_distribution_release == 'bullseye'
 ```
 Cheking two distribution at the same time
@@ -281,5 +284,35 @@ Cheking two distribution at the same time
     apt:
       name: apache2
       state: present
+      update_cache: yes
     when: ansible_distribution in ["Debian", "Ubuntu"]
 ```
+
+### Variables in Playbooks
+
+Playbook for installing APACHE and PHP module
+```bash
+nano playbook/variables.yml
+```
+```yml
+---
+
+- name: Playbook for installing APACHE and PHP module for apache
+  hosts: all
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2 and php module for apache
+    apt:
+      name: 
+        - "{{ apache_package }}"
+        - "{{ php_package }}"
+      state: present
+      update_cache: yes
+```
+Running the playbook
+```bash
+ansible-playbook playbook/variables.yml -e "apache_package=apache2 php_packagelibapache2-mod-php"
+```
+
+### Targeting Specific Nodes
