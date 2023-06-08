@@ -1,0 +1,23 @@
+- name: Playbook for installing APACHE and PHP module for apache
+  hosts: webapp
+  become: true
+  tasks:
+  
+  - name: Ansible apt install apache2 and php module for apache
+    tags: apache,apache2,php,debian
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: present
+      update_cache: yes
+      when: ansible_distribution == 'Debian'
+
+  - name: Ansible apt install apache2 and php module for apache
+    tags: apache,apache2,ubuntu
+    apt:
+      name: 
+        - apache2
+      state: present
+      update_cache: yes
+      when: ansible_distribution == 'Ubuntu'

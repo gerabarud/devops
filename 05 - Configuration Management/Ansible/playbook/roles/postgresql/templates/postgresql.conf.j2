@@ -1,0 +1,55 @@
+# PostgreSQL configuration file
+
+#-----------------------------------------------------------
+# CONNECTIONS AND AUTHENTICATION
+#-----------------------------------------------------------
+
+# Connection settings
+listen_addresses = 'localhost'     # Comma-separated list of addresses
+port = 5432                        # Port number
+
+# Authentication settings
+# ...
+
+#-----------------------------------------------------------
+# RESOURCE USAGE
+#-----------------------------------------------------------
+
+# Memory settings
+shared_buffers = 128MB             # Recommended setting: 25% of available RAM
+work_mem = 4MB                     # Recommended setting: 1/64th of shared_buffers
+
+# Disk settings
+# ...
+
+#-----------------------------------------------------------
+# QUERY TUNING
+#-----------------------------------------------------------
+
+# Planner settings
+effective_cache_size = 4GB         # Recommended setting: 50% of available RAM
+random_page_cost = 1.1             # Recommended setting: 1.1 for spinning disks, 1.0 for SSD
+
+# Statistics settings
+# ...
+
+#-----------------------------------------------------------
+# LOGGING
+#-----------------------------------------------------------
+
+# Logging settings
+# ...
+
+#-----------------------------------------------------------
+# REPLICATION
+#-----------------------------------------------------------
+
+# Replication settings
+# ...
+
+#-----------------------------------------------------------
+# OTHER SETTINGS
+#-----------------------------------------------------------
+
+# Miscellaneous settings
+# ...

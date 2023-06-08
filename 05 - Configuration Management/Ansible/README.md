@@ -34,9 +34,8 @@ Table of contents
       - [Managament examples: `create`, `modify`, `change password`, `remove`](#managament-examples-create-modify-change-password-remove)
       - [Creating a user with SSH key](#creating-a-user-with-ssh-key)
     - [Boostrap](#boostrap)
-
-Web UI for Ansible
-https://www.youtube.com/watch?v=NyOSoLn5T5U
+  - [Roles](#roles)
+    - [Example: Role for installing PostgreSQL](#example-role-for-installing-postgresql)
 
 # ANSIBLE
 
@@ -64,7 +63,7 @@ mkdir key
 ```
 Create a SSH key and copy to all servers
 ```bash
-ssh-keygen -t rsa -b 4096 -C "ansible@example" -f /srv/ansible/key/id_rsa
+ssh-keygen -t rsa -b 4096 -C "ansible@example" -f key/id_rsa
 ssh-copy-id -i /srv/ansible/key/id_rsa.pub <USER>@<IP>
 ```
 
@@ -116,7 +115,7 @@ Content:
 [defaults]
 inventory = inventory/hosts.ini
 private_key_file = key/id_rsa
-remote_user = root
+remote_user = ansible
 ```
 
 ### Try it
@@ -315,7 +314,7 @@ nano playbook/variables.yml
       state: present
       update_cache: yes
 ```
-Running the playbook
+Running the playbook with env as arguments
 ```bash
 ansible-playbook playbook/variables.yml -e "apache_package=apache2 php_packagelibapache2-mod-php"
 ```
@@ -634,3 +633,132 @@ nano playbook/boostrap.yml
 ```bash
 ansible-playbook playbook/boostrap.yml
 ```
+
+## Roles
+
+**Roles in Ansible are a way to organize and encapsulate related tasks, variables, templates, and other files into reusable units.** They provide a structured approach to organizing playbooks and make it easier to manage complex configurations and deployments.
+
+Roles follow a predefined directory structure that allows you to separate different aspects of your configuration and keep things modular. The recommended structure for a role directory is as follows:
+
+```bash
+myrole/
+├── tasks/
+│   ├── main.yml
+│   └── other_tasks.yml
+├── handlers/
+│   └── main.yml
+├── templates/
+│   └── template.j2
+├── files/
+│   └── myfile.txt
+├── vars/
+│   └── main.yml
+├── defaults/
+│   └── main.yml
+├── meta/
+│   └── main.yml
+└── README.md
+```
+
+Let's explore each directory in more detail:
+
+- `tasks/`: Contains YAML files with the main tasks of the role. The `main.yml` file is the entry point for the role and includes all the tasks to be executed.
+
+- `handlers/`: Contains YAML files with the handlers, which are tasks triggered by notifications from other tasks. The `main.yml` file lists all the handlers defined for the role.
+
+- `templates/`: Contains Jinja2 templates that can be used to generate configuration files. These templates can reference variables defined in the role or passed from the playbook.
+
+- `files/`: Stores static files that need to be transferred to the target hosts. These files are typically used by tasks in the role.
+
+- `vars/`: Contains YAML files with variables specific to the role. These variables can be accessed and used within the role's tasks and templates.
+
+- `defaults/`: Stores YAML files with default variable values. These values can be overridden by defining variables in the playbook or inventory.
+
+- `meta/`: Contains metadata for the role, including its name, author, and any role dependencies.
+
+- `README.md`: Provides documentation and instructions for using the role.
+
+To use a role in a playbook, you can include it using the `roles` keyword:
+
+```yaml
+- name: My Playbook
+  hosts: target_hosts
+  roles:
+    - myrole
+```
+
+### Example: Role for installing PostgreSQL
+
+Here's an example of a role for installing PostgreSQL using Ansible:
+
+1. Create the role directory structure:
+```bash
+mkdir -p playbook/roles
+mkdir playbook/roles/postgresql
+cd playbook/roles/postgresql
+mkdir tasks handlers vars defaults templates
+```
+
+2. Create the `tasks/main.yml` file with the following content:
+```yaml
+- name: Install PostgreSQL packages
+  apt:
+    name: "{{ postgresql_package }}"
+    state: present
+
+- name: Copy PostgreSQL configuration file
+  template:
+    src: postgresql.conf.j2
+    dest: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: Copy PostgreSQL pg_hba.conf file
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: Start PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+```
+
+3. Create the `handlers/main.yml` file with the following content:
+```yaml
+- name: Restart PostgreSQL service
+  service:
+    name: postgresql
+    state: restarted
+```
+
+4. Create the `vars/main.yml` file with the following content:
+```yaml
+postgresql_package: postgresql-12
+postgresql_version: 12
+```
+
+5. Create the `defaults/main.yml` file with any default variables you want to define, such as:
+```yaml
+postgresql_package: postgresql-12
+postgresql_version: 12
+```
+
+6. Create the template files `templates/postgresql.conf.j2` and `templates/pg_hba.conf.j2` with the appropriate configuration for PostgreSQL.
+
+7. Update your playbook to use the `postgresql` role:
+```yaml
+- name: Install PostgreSQL
+  hosts: target_hosts
+  roles:
+    - postgresql
+```
+
+In this example, the role installs the PostgreSQL packages, copies the configuration files using templates, and starts the PostgreSQL service. The role uses variables for the package name and version, allowing flexibility in the installation. It also includes a handler to restart the service when the configuration files are changed.
+
+> Note: This example assumes the target hosts are running a Debian-based distribution. You may need to adjust the package name and package manager tasks for other distributions.

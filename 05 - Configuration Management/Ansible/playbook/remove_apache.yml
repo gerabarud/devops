@@ -1,0 +1,10 @@
+- name: Playbook for removing APACHE
+  hosts: all
+  become: true
+  tasks:
+
+      
+  - name: Ansible apt remove apache2
+    apt:
+      name: apache2
+      state: absent

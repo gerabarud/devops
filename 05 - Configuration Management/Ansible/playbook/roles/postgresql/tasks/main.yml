@@ -1,0 +1,26 @@
+- name: Install PostgreSQL packages
+  apt:
+    name: "{{ postgresql_package }}"
+    state: present
+
+- name: Copy PostgreSQL configuration file
+  template:
+    src: postgresql.conf.j2
+    dest: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: Copy PostgreSQL pg_hba.conf file
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: Start PostgreSQL service
+  service:
+    name: postgresql
+    state: started
+    enabled: true
