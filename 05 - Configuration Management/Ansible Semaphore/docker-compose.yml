@@ -1,14 +1,3 @@
-# Ansible-Semaphore
-Web UI for Ansible: 
-https://www.youtube.com/watch?v=NyOSoLn5T5U
-
-## Installing
-
-### Docker
-
-Creating a `docker-compose.yml`
-
-```yml
 services:
   
   postgres:
@@ -54,9 +43,3 @@ services:
       - postgres # for postgres, change to: postgres
 volumes:
   semaphore-postgres: # to use postgres, switch to: semaphore-postgres
-```
-
-Run the following command to start Semaphore with configured database:
-```bash
-docker compose up
-```

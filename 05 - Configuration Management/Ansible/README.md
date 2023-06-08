@@ -575,12 +575,12 @@ mkdir files/ssh_keys
 ```
 
 ```yml
-- name: Create User with SSH Key
+- name: Create Users with SSH Key
   hosts: all
   become: true  
   tasks:
   
-    - name: Create user gerardo con sudo
+    - name: Create user gbarud con sudo
       user:
         name: gbarud
         comment: Gerardo Barud
