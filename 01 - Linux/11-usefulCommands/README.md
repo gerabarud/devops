@@ -12,6 +12,10 @@ Table of contents
 - [sed](#sed)
   - [Search and replace](#search-and-replace)
   - [Delete lines](#delete-lines)
+- [tee](#tee)
+  - [Redirect output to a file:](#redirect-output-to-a-file)
+  - [Append output to an existing file:](#append-output-to-an-existing-file)
+  - [Write output to multiple files:](#write-output-to-multiple-files)
 
 ## awk
 
@@ -155,3 +159,44 @@ Deletes lines matching the specified pattern
 ```bash
 sed '/pattern/d' file
 ```
+
+## tee
+The `tee` command in Linux is used to read from standard input and write to both standard output and one or more files simultaneously. 
+
+The basic syntax of the `tee` command is as follows:
+
+```bash
+command | tee [OPTION]... [FILE]...
+```
+
+Here's how the `tee` command works:
+
+1. It reads the input from the preceding command or script via the standard input (stdin).
+2. It writes the input to the standard output (stdout), which is usually displayed on the terminal.
+3. It also writes the input to the specified file(s) simultaneously.
+
+Some commonly used options with the `tee` command include:
+
+- `-a` or `--append`: Appends the output to the specified file(s) instead of overwriting them.
+- `-i` or `--ignore-interrupts`: Ignores interrupt signals, such as `Ctrl+C`, and continues writing to the files.
+- `-p` or `--output-error`: Returns an exit status of 0 even if write errors occur.
+
+Here are a few examples to illustrate the usage of the `tee` command:
+
+### Redirect output to a file:
+   ```bash
+   command | tee output.txt
+   ```
+   This command runs a command and saves its output to both the terminal and the file `output.txt`.
+
+### Append output to an existing file:
+   ```bash
+   command | tee -a output.txt
+   ```
+   This command appends the output of a command to an existing file named `output.txt` while also displaying it on the terminal.
+
+### Write output to multiple files:
+   ```bash
+   command | tee file1.txt file2.txt
+   ```
+   This command saves the output of a command to both `file1.txt` and `file2.txt`, in addition to displaying it on the terminal.
