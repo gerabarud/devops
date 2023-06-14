@@ -1,4 +1,171 @@
 
+Table of Contents
+- [Backup](#backup)
+- [Command-Line:](#command-line)
+  - [VM: `qm` command](#vm-qm-command)
+    - [Basics](#basics)
+    - [Configuring VM options](#configuring-vm-options)
+  - [Containers: `pct` command](#containers-pct-command)
+    - [Basics](#basics-1)
+    - [Configuring Containtes options](#configuring-containtes-options)
+- [Integrated Firewall](#integrated-firewall)
+  - [Add a Firewall to allow Access to the web console at Datacenter Level](#add-a-firewall-to-allow-access-to-the-web-console-at-datacenter-level)
+  - [Add a Firewall to allow Access to PING at Datacenter Level](#add-a-firewall-to-allow-access-to-ping-at-datacenter-level)
+  - [Add a Firewall to allow Access to SSH at Datacenter Level](#add-a-firewall-to-allow-access-to-ssh-at-datacenter-level)
+- [Resizing the VM Disk](#resizing-the-vm-disk)
+- [Cloning a VM Template in Proxmox](#cloning-a-vm-template-in-proxmox)
+- [Creating a VM Template in Proxmox](#creating-a-vm-template-in-proxmox)
+  - [Initial Steps](#initial-steps)
+    - [Create a VM](#create-a-vm)
+    - [CloudInit Drive](#cloudinit-drive)
+    - [Command Line Configuration](#command-line-configuration)
+    - [Adding the QEMU Agent](#adding-the-qemu-agent)
+    - [Converting to a Template](#converting-to-a-template)
+
+## Backup
+Go to `Datacenter->Backup`, hit on `Add` and confiugure:
+
+`General` Tab:
+![backup-general](images/backup.png)
+
+`Retention` Tab
+![backup-retention](images/retention.png)
+
+`Note` Tab
+![backup-note](images/note.png)
+
+## Command-Line: 
+
+Firts, SSH to the node.
+
+### VM: `qm` command
+
+#### Basics
+
+List VMs
+```bash
+qm list
+```
+
+Start a VM
+```bash
+qm start 100
+```
+
+Shutdown a VM
+```bash
+qm shutdown 100
+```
+
+Stop a VM (like pressing the botton)
+```bash
+qm stop 100
+```
+
+Reboot a VM
+```bash
+qm reboot 100
+```
+
+Reset a VM (like pressing the botton)
+```bash
+qm reset 100
+```
+
+#### Configuring VM options
+
+List Options that can be set
+```bash
+qm config 100
+```
+
+Enable `Start on boot`
+```bash
+qm set --onboot 1 100
+```
+
+Change RAM
+```bash
+qm set --memory 2048 100
+```
+
+### Containers: `pct` command
+
+#### Basics
+
+List Containers
+```bash
+pct list
+```
+
+Start a Container
+```bash
+pct start 100
+```
+
+Shutdown a Container
+```bash
+pct shutdown 100
+```
+
+Stop a Container (like pressing the botton)
+```bash
+pct stop 100
+```
+
+Reboot a Container
+```bash
+pct reboot 100
+```
+
+Reset a Container (like pressing the botton)
+```bash
+pct reset 100
+```
+
+#### Configuring Containtes options
+
+List Options that can be set
+```bash
+pct config 100
+```
+
+Enable `Start on boot`
+```bash
+pct set 100 -onboot 1
+```
+
+Change RAM
+```bash
+pct set 100 -memory 2048
+```
+
+## Integrated Firewall
+
+> Hint: Do not enable the Firewall before configuring it. Enabling it prematurely may block all access and restrict your ability to connect.
+
+There are different levels of where to apply a Firewall in Proxmox:
+1. Datacenter 
+2. Node
+3. Host 
+
+### Add a Firewall to allow Access to the web console at Datacenter Level
+Go to `Datacenter->Firewall`, hit on `Add` and confiugure:
+![firewall-console](images/firewall-console.png)
+
+### Add a Firewall to allow Access to PING at Datacenter Level
+Go to `Datacenter->Firewall`, hit on `Add` and confiugure:
+![firewall-ping](images/firewall-ping.png)
+
+### Add a Firewall to allow Access to SSH at Datacenter Level
+Go to `Datacenter->Firewall`, hit on `Add` and confiugure:
+![firewall-ssh](images/firewall-ssh.png)
+
+Once Configured all Firewall rules, enable it from:
+Go to `Datacenter->Firewall->Options`:
+![firewall-enable](images/firewall-enable.png)
+
+
 ## Resizing the VM Disk
 
 1. SSH to the proxmox server
@@ -21,7 +188,7 @@ Just right click on the template and select `Clone`. Configure Your VM name, and
 
 > You can view the differences between a full clone and a linked clone here: https://pve.proxmox.com/wiki/VM_Templates_and_Clones
 
-![Clone](https://github.com/gerabarud/devops/blob/main/proxmox/images/clone.png)
+![Clone](images/clone.png)
 
 ## Creating a VM Template in Proxmox
 
