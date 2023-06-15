@@ -53,3 +53,10 @@ provider "proxmox" {
 
 }
 ```
+
+## Initiate the project
+```bash
+terraform init
+```
+
+## 
