@@ -202,31 +202,31 @@ Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 1.  General
 
-![Create VM - General](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-General.png)
+![Create VM - General](images/CreateVM-General.png)
 
 2.  OS: select "Do not use any media". All other options can remain their default values.
 
-![Create VM - OS](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-OS.png)
+![Create VM - OS](images/CreateVM-OS.png)
 
 3. System: enable the "Qemu Agent" checkbox.  The guest agent provides additional functionality between the VM and Proxmox, itself.
 
-![Create VM - System](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-System.png)
+![Create VM - System](images/CreateVM-System.png)
 
 4. Disks: delete the default scsi0 disk created by Proxmox.  We will instead create our own farther along in the tutorial.
 
-![Create VM - Disks](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-Disks.png) 
+![Create VM - Disks](images/CreateVM-Disks.png) 
 
 5. CPU
 
-![Create VM - Disks](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-CPU.png) 
+![Create VM - Disks](images/CreateVM-CPU.png) 
 
 6. RAM
 
-![Create VM - Disks](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-RAM.png) 
+![Create VM - Disks](images/CreateVM-RAM.png) 
 
 7. RAM
 
-![Create VM - Network](https://github.com/gerabarud/devops/blob/main/proxmox/images/CreateVM-Network.png) 
+![Create VM - Network](images/CreateVM-Network.png) 
 
 8. Review settings and click "Finish"
 
@@ -234,19 +234,19 @@ Source: https://www.youtube.com/watch?v=MJgIm03Jxdo
 
 1. Add a CloudInit Drive
 
-![CloudInit - Add Drive](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Drive.png)
+![CloudInit - Add Drive](images/CloudInit-Drive.png)
 
 2. Storage: Select the name of the storage pool you would like to use
 
-![CloudInit - Storage](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Storage.png)
+![CloudInit - Storage](images/CloudInit-Storage.png)
 
 3. Settings: navigate to the "Cloud-Init" tab for the template.  Here you will be able to configure some of the default settings for the template
 
-![CloudInit - Settings](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Settings.png)
+![CloudInit - Settings](images/CloudInit-Settings.png)
 
 4. Regenerate: Once settings configured, click the "Regenerate Image" button shown in the image above.
 
-![CloudInit - Regenerate](https://github.com/gerabarud/devops/blob/main/proxmox/images/CloudInit-Regenerate.png)
+![CloudInit - Regenerate](images/CloudInit-Regenerate.png)
 
 #### Command Line Configuration
 
@@ -289,15 +289,15 @@ qm importdisk 991 debian-12-genericcloud-amd64.qcow2 local-lvm
    - Before adding, I went ahead and enabled SSD emulation, as well as checking Discard to enable thin provisioning
    - Click Add. Now we can see the previously unused disk is successfully set up to be utilized by the VM/template
 
-![Unused Disk](https://github.com/gerabarud/devops/blob/main/proxmox/images/UnusedDisk.png)
+![Unused Disk](images/UnusedDisk.png)
 
 7. under the Options tab, you will need to modify the Boot Order. Enable `scsi0` and change its order to 2
 
-![Boot Order](https://github.com/gerabarud/devops/blob/main/proxmox/images/BootOrder.png)
+![Boot Order](images/BootOrder.png)
 
 8. Start at boot
 
-![Start At Boot](https://github.com/gerabarud/devops/blob/main/proxmox/images/StartAtBoot.png)
+![Start At Boot](images/StartAtBoot.png)
 
 #### Adding the QEMU Agent
 
