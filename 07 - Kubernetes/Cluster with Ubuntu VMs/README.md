@@ -8,6 +8,8 @@ Table of Contents
     - [Enablign Netfilter](#enablign-netfilter)
     - [Enabling IP Forward](#enabling-ip-forward)
     - [Reboot](#reboot)
+  - [Installing](#installing)
+  - [Creating a template for kubernetes nodes](#creating-a-template-for-kubernetes-nodes)
 
 ## Creating a Kubernetes Cluster 
 
@@ -116,3 +118,36 @@ sudo /etc/init.d/procps restart
 ```bash
 sudo reboot
 ```
+
+### Installing
+Update the apt package index and install packages needed to use the Kubernetes apt repository:
+```bash
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
+```
+First, we’ll add the required GPG key:
+```bash
+curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+```
+Adding repo
+```bash
+sudo echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+Installing kubeadm kubectl kubelet
+```bash
+sudo apt update && sudo apt install kubeadm kubectl kubelet
+```
+
+### Creating a template for kubernetes nodes
+
+On the node
+```bash
+sudo cloud-init clean
+sudo rm -rf /var/lib/cloud/instances
+sudo truncate -s 0 /etc/machine-id
+sudo rm /var/lib/dbus/machine-id
+sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
+sudo poweroff
+```
+
+Go to Proxmox and create a template from this VM
