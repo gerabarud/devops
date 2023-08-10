@@ -1,13 +1,17 @@
-Table of Contents
-- [Monitoring Kubernetes](#monitoring-kubernetes)
-  - [Prometheus](#prometheus)
-    - [Where to deploy](#where-to-deploy)
-    - [What to monitor](#what-to-monitor)
-    - [Service Discovery](#service-discovery)
-    - [Deployment of Prometheus](#deployment-of-prometheus)
-      - [Prometheus chart:](#prometheus-chart)
+**MONITORING KUBERNETES**
 
-# Monitoring Kubernetes
+Table of Contents
+- [Prometheus](#prometheus)
+  - [Where to deploy](#where-to-deploy)
+  - [What to monitor](#what-to-monitor)
+  - [Service Discovery](#service-discovery)
+  - [Deployment of Prometheus options](#deployment-of-prometheus-options)
+    - [Prometheus chart:](#prometheus-chart)
+  - [Installing Prometheus Chart using Helm](#installing-prometheus-chart-using-helm)
+  - [Exposing services trhoughout `port-forward`](#exposing-services-trhoughout-port-forward)
+    - [Prometheus](#prometheus-1)
+  - [Alertmanager](#alertmanager)
+  - [Grafana](#grafana)
 
 ## Prometheus
 
@@ -30,7 +34,7 @@ Prometheus use `Service Discovery` to access to the `Kubernetes API` to discover
 
 ![discovery](images/02-discovery.png)
 
-### Deployment of Prometheus
+### Deployment of Prometheus options
 
 - Manually deploy: manually create all the `deployments, services, configMaps and secrets`. It is complex, requires a lot of configuration, not the easiest solution.
 - Using a `Helm chart`: Helm is a package manager for Kubernetes: all applications and Kubernetes configs necessary for an application can be bundled into a package and easily deployed. 
@@ -60,3 +64,47 @@ The `prometheus operator` has several custom resources extended from the Kuberne
   
 ![prometheusYAML](images/04-prometheusYAML.png)
 
+### Installing Prometheus Chart using Helm
+
+Add repo
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
+
+Create namespace
+```bash
+kubectl create ns monitor
+```
+
+Show configrable values
+```bash
+helm show values prometheus-community/kube-prometheus-stack > values.yaml
+```
+
+Install
+```bash
+helm install monitor prometheus-community/kube-prometheus-stack -n monitor -f values.yaml
+```
+
+### Exposing services trhoughout `port-forward`
+
+#### Prometheus
+
+```bash
+kubectl port-forward svc/monitor-kube-prometheus-st-prometheus 9090:9090 -n monitor
+```
+ingresar a: http://127.0.0.1:9090
+
+### Alertmanager
+
+```bash
+kubectl port-forward svc/monitor-kube-prometheus-st-alertmanager 9093 -n monitor
+```
+ingresar a: http://127.0.0.1:9093
+
+### Grafana
+```bash
+kubectl port-forward svc/monitor-grafana 3000:80 -n monitor
+```
+ingresar a: http://127.0.0.1:3000
