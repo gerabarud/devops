@@ -13,6 +13,8 @@ Table of Contents
   - [Strings](#strings)
   - [Variables](#variables)
   - [Lists](#lists)
+  - [Nested Lists](#nested-lists)
+  - [Set](#set)
   - [Dictionaries](#dictionaries)
   - [Converting Data Types](#converting-data-types)
   - [Help function](#help-function)
@@ -231,6 +233,65 @@ print("apple" in fruits)  # Output: True
 # Iterating over elements
 for fruit in fruits:
     print(fruit)
+```
+
+### Nested Lists
+A nested list is a list that appears as an element within another list. It's a way of creating lists of lists, or lists with multiple dimensions. Nested lists can be used to represent matrices, tables, or other structured data.
+
+```python
+# Create a nested list
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+# Print a nested list
+for row in matrix:
+    for element in row:
+        print(element, end=' ')
+    print()  # Move to the next line after each row
+```
+
+### Set
+A set in Python is an unordered collection of unique elements. It is similar to a mathematical set and is used to store a collection of distinct values.
+
+```python
+# Creating a set using the set() constructor
+fruits = set(["apple", "banana", "orange"])
+
+# Creating a set using curly braces
+colors = {"red", "green", "blue"}
+
+# Adding elements to a set
+fruits.add("grape")
+
+# Removing an element from a set
+fruits.remove("banana")
+
+# Check if an element is in the set
+if "apple" in fruits:
+    print("Apple is in the set")
+
+# Print the set
+print(fruits)
+
+# Operations
+set1 = {1, 2, 3, 4, 5}
+set2 = {4, 5, 6, 7, 8}
+
+# Union of sets
+union = set1 | set2
+
+# Intersection of sets
+intersection = set1 & set2
+
+# Difference of sets
+difference = set1 - set2
+
+print("Union:", union)
+print("Intersection:", intersection)
+print("Difference:", difference)
 ```
 
 ### Dictionaries
