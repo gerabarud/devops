@@ -169,8 +169,12 @@ print(message.lower())  # Output: "hello, world!"
 print(message.upper())  # Output: HELLO, WORLD!
 # split
 print(message.split(","))  # Output: ["Hello", " World!"]
+# join
+print("-".join(["Hello", " World!"])) # Output: "Hello,-World!"
 # replace
 print(message.replace("Hello", "Hi"))  # Output: "Hi, World!"
+# swapcase
+print(message.swapcase()) # Output: "hELLO, wORLD!"
 ```
 
 ### Variables
