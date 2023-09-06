@@ -16,6 +16,7 @@ Table of contents
   - [Redirect output to a file:](#redirect-output-to-a-file)
   - [Append output to an existing file:](#append-output-to-an-existing-file)
   - [Write output to multiple files:](#write-output-to-multiple-files)
+- [xargs](#xargs)
 
 ## awk
 
@@ -200,3 +201,54 @@ Here are a few examples to illustrate the usage of the `tee` command:
    command | tee file1.txt file2.txt
    ```
    This command saves the output of a command to both `file1.txt` and `file2.txt`, in addition to displaying it on the terminal.
+
+## xargs
+
+Used for building and executing commands from standard input (usually the output of another command or a file). It takes the input and converts it into arguments for another command, allowing you to perform actions on multiple items efficiently.
+
+**Basic Syntax:**
+```
+xargs [options] [command]
+```
+
+**Key Options:**
+- `-I {}`: Specifies a placeholder (`{}`) to represent the input argument.
+- `-n N`: Limits the number of arguments passed to the command for each execution.
+- `-p`: Prompts before executing each command.
+- `-t`: Displays the command being executed before running it.
+- `-a FILE`: Reads input from the specified file instead of standard input.
+- `-P N`: run at most N processes at a time
+
+**Examples:**
+
+1. **Using `xargs` with `ls` to List Files:**
+   ```bash
+   find /path/to/directory -type f | xargs ls -l
+   ```
+   
+2. **Deleting Files with `find` and `xargs`:**
+   ```bash
+   find /path/to/directory -type f -name "*.txt" | xargs rm
+   ```
+   
+3. **Using a Custom Command:**
+   ```bash
+   cat file_list.txt | xargs -I {} cp {} /destination/directory/
+   ```
+
+4. **Interactive Mode:**
+   ```bash
+   find /path/to/files -type f | xargs -I {} -t -p mv {} /destination/directory/
+   ```
+   >This command interactively moves each file to the destination directory, prompting you for confirmation before each move (`-p`) and displaying the command to be executed (`-t`).
+
+5. **Specifying a Custom Delimiter:**
+   ```bash
+   echo "item1,item2,item3" | xargs -d ',' echo
+   ```
+   This command uses the `-d` option to specify a custom delimiter (`,` in this case) and then echoes each item separately.
+
+6. **Run parallel tasks**
+   ```bash
+   cat urls.txt | xargs -P 4 -n 1 wget
+   ```
