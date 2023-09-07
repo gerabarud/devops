@@ -1,7 +1,43 @@
 # Monitoring resources in Linux
 
+## `lscpu`
+
+The `lscpu` command is used to display information about the CPU.
+
+**Basic Usage:**
+```bash
+lscpu
+```
+
+This command will typically display output that includes:
+
+- CPU family and model.
+- Number of CPU cores.
+- Number of threads per core.
+- CPU clock frequency.
+- CPU vendor information.
+- CPU architecture (e.g., x86_64).
+
+## `lsmem`
+
+The `lsmem` command is used to display information about the system's physical and usable memory, including NUMA (Non-Uniform Memory Access) nodes. It provides details about the total memory, free memory, memory ranges, and memory policies.
+
+**Basic Usage:**
+```bash
+lsmem
+```
+
+**Common Options:**
+
+- `-b`, `--online`: Show only online CPUs.
+- `-c`, `--offline`: Show only offline CPUs.
+- `-p`, `--online-core`: Show only online CPU cores.
+- `-d`, `--online-socket`: Show only online CPU sockets.
+- `-e`, `--online-node`: Show only online NUMA nodes.
+- `-x`, `--extended[=list]`: Show an extended readable format with additional information.
+
 ## `lsof`
-The `lsof` (List Open Files) command in Linux is a powerful utility used to list all open files and processes currently running on a system. It provides detailed information about which processes have files or network sockets open, what files are open, and other useful details.
+The `lsof` (List Open Files) command is used to list all open files and processes currently running on a system. It provides detailed information about which processes have files or network sockets open, what files are open, and other useful details.
 
 **Basic Usage:**
 ```bash
@@ -158,3 +194,38 @@ wa: Amount of time the CPU spends waiting for I/O to complete.
 - `si`: Amount of time spent servicing software interrupts.
 - `st`: Amount of time lost due to running virtual machines (“steal time”).
 
+## `w`
+
+The `w` command in Linux is used to display information about currently logged-in users and what they are doing on the system. It provides details about the users, their terminal sessions, login times, and running processes. Here's how to use the `w` command:
+
+**Basic Usage:**
+```bash
+w
+```
+
+Displays a information about uptime and connected users
+
+1. **USER**: The username of the logged-in user.
+2. **TTY**: The terminal type (e.g., "pts/0" for a pseudo-terminal, "tty1" for a physical terminal).
+3. **FROM**: The remote hostname or IP address from which the user is logged in. If it's a local login, you'll see the IP address "0.0.0.0."
+4. **LOGIN@**: The login time, showing the time the user logged in.
+5. **IDLE**: The idle time, indicating how long the user has been idle.
+6. **JCPU**: The total CPU time used by the user's processes (in the format hh:mm:ss).
+7. **PCPU**: The CPU time used by the user's current process (in the format hh:mm:ss).
+8. **WHAT**: The command or process name the user is running.
+
+Here's an example of what the output might look like:
+
+```plaintext
+ 11:05:22 up 5 days,  1:20,  3 users,  load average: 0.08, 0.07, 0.06
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+john     pts/0    192.168.1.100    10:30   5:15m  0.02s  0.02s sshd: john [priv]
+jane     pts/1    192.168.1.101    09:45   0.00s  0.14s  0.02s bash
+smith    pts/2    192.168.1.102    09:00   2:15   0.08s  0.08s vim file.txt
+```
+
+**Common Options:**
+
+- `-h`: Suppress the header row, showing only the user information.
+- `-s`: Display only a summary of the current users and load average without details.
+- `-u`: Show extended information, including the user's process details.

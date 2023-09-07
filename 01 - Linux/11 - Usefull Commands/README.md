@@ -2,23 +2,25 @@ Useful commands on Linux
 
 Table of contents
 
-- [awk](#awk)
+- [`awk`](#awk)
   - [Field operations](#field-operations)
   - [Condition-based processing:](#condition-based-processing)
   - [Arithmetic and calculations](#arithmetic-and-calculations)
   - [String manipulation and regular expressions](#string-manipulation-and-regular-expressions)
   - [Control flow and variables](#control-flow-and-variables)
-- [rsync](#rsync)
-- [sed](#sed)
+- [`dd`](#dd)
+- [`diff`](#diff)
+- [`rsync`](#rsync)
+- [`sed`](#sed)
   - [Search and replace](#search-and-replace)
   - [Delete lines](#delete-lines)
-- [tee](#tee)
+- [`tee`](#tee)
   - [Redirect output to a file:](#redirect-output-to-a-file)
   - [Append output to an existing file:](#append-output-to-an-existing-file)
   - [Write output to multiple files:](#write-output-to-multiple-files)
-- [xargs](#xargs)
+- [`xargs`](#xargs)
 
-## awk
+## `awk`
 
 The `awk` command is a versatile text-processing tool used to extract and manipulate data from text files or streams based on specified patterns and actions. `awk` operates on a line-by-line basis, splitting each line into fields and performing actions on those fields.
 
@@ -83,7 +85,122 @@ Uses an if statement to conditionally print "High" or "Low" based on the value o
 awk '{ if ($1 > 10) print "High"; else print "Low" }' file
 ```
 
-## rsync
+## `dd`
+
+Used for copying and converting files and data streams. It is often referred to as "disk dump" because it can be used for low-level copying and manipulation of data, including the creation of disk images.
+
+**Basic Usage:**
+```bash
+dd [options] if=input_file of=output_file
+```
+
+- `options`: Various options that customize the behavior of `dd`.
+- `if`: Specifies the input file or data source.
+- `of`: Specifies the output file or destination.
+
+**Common Options:**
+
+- `bs=BYTES`: Specifies the block size for data transfer (e.g., `bs=1M` for 1 megabyte).
+- `count=BLOCKS`: Limits the number of blocks to copy or convert.
+- `iflag=FLAGS`: Sets input flags (e.g., `iflag=direct` for direct I/O).
+- `oflag=FLAGS`: Sets output flags (e.g., `oflag=direct` for direct I/O).
+- `status=WHEN`: Controls when to display the status of the operation (e.g., `status=progress` for progress updates).
+- `seek=BLOCKS`: Skips the specified number of blocks in the output file before copying data.
+- `skip=BLOCKS`: Skips the specified number of blocks in the input file before copying data.
+- `conv=CONVERSION`: Performs specified conversions on the data as it is copied (e.g., `conv=sync` for synchronous write).
+
+**Usage Examples:**
+
+1. **Create a Disk Image from a Device:**
+   ```bash
+   sudo dd if=/dev/sdX of=disk_image.img bs=4M
+   ```
+   
+2. **Copy a File:**
+   ```bash
+   dd if=input_file.txt of=output_file.txt bs=1024
+   ```
+   
+3. **Zero Out a Disk:**
+   ```bash
+   sudo dd if=/dev/zero of=/dev/sdX bs=4M
+   ```
+   Be extremely cautious when using this command, as it will overwrite the entire disk with zeros, effectively erasing all data.
+
+4. **Monitor Progress of a Copy Operation:**
+   ```bash
+   dd if=input_file of=output_file bs=1M status=progress
+   ```
+   The `status=progress` option displays progress updates during the copy operation.
+
+5. **Convert a File from One Format to Another:**
+   ```bash
+   dd if=input.bin of=output.iso conv=sync
+   ```
+   This example converts `input.bin` to `output.iso` and ensures that the output file is synchronized.
+
+## `diff`
+
+The `diff` command is used to compare and find differences between two text files or directories. 
+
+**Basic Usage for Comparing Two Text Files:**
+```bash
+diff file1.txt file2.txt
+```
+
+**Common Options:**
+
+- `-q`, `--brief`: Show only whether the files differ, not the details of the differences.
+- `-i`, `--ignore-case`: Ignore differences in case when comparing text files.
+- `-r`, `--recursive`: Compare directories recursively.
+- `-u`, `--unified`: Output a unified diff format, which includes a few lines of context for each difference.
+- `-w`, `--ignore-all-space`: Ignore white space when comparing text files.
+- `-B`, `--ignore-blank-lines`: Ignore changes that just insert or delete blank lines.
+- `-y`, `--side-by-side`: Display the differences side by side.
+
+**Usage Examples:**
+
+1. **Comparing Two Files and Displaying Differences:**
+   ```bash
+   diff file1.txt file2.txt
+   ```
+
+2. **Comparing Two Directories Recursively:**
+   ```bash
+   diff -r directory1/ directory2/
+   ```
+
+3. **Generating a Unified Diff:**
+   ```bash
+   diff -u file1.txt file2.txt
+   ```
+
+4. **Ignoring Case in Comparison:**
+   ```bash
+   diff -i file1.txt file2.txt
+   ```
+
+5. **Ignoring All White Space:**
+   ```bash
+   diff -w file1.txt file2.txt
+   ```
+
+6. **Comparing Directories and Showing Side-by-Side Differences:**
+   ```bash
+   diff -r -y directory1/ directory2/
+   ```
+
+7. **Checking for Existence of Differences (Quiet Mode):**
+   ```bash
+   diff -q file1.txt file2.txt
+   ```
+
+8. **Ignoring Blank Lines:**
+   ```bash
+   diff -B file1.txt file2.txt
+   ```
+
+## `rsync`
 
 rsync is used for file synchronization and data transfer between systems.
 
@@ -130,7 +247,7 @@ Create backups of any files that are modified or deleted in the synchronize proc
 rsync -avb /path/to/local/ user@remote:/path/to/remote/
 ```
 
-## sed
+## `sed`
 
 The sed command, short for "stream editor," is used to perform various operations on text streams, such as searching, replacing, inserting, and deleting text based on specified patterns or rules.
 
@@ -161,7 +278,7 @@ Deletes lines matching the specified pattern
 sed '/pattern/d' file
 ```
 
-## tee
+## `tee`
 The `tee` command in Linux is used to read from standard input and write to both standard output and one or more files simultaneously. 
 
 The basic syntax of the `tee` command is as follows:
@@ -202,7 +319,7 @@ Here are a few examples to illustrate the usage of the `tee` command:
    ```
    This command saves the output of a command to both `file1.txt` and `file2.txt`, in addition to displaying it on the terminal.
 
-## xargs
+## `xargs`
 
 Used for building and executing commands from standard input (usually the output of another command or a file). It takes the input and converts it into arguments for another command, allowing you to perform actions on multiple items efficiently.
 
