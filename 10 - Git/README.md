@@ -6,13 +6,15 @@ Table of Contents
   - [GIT Project areas](#git-project-areas)
 - [Commands](#commands)
   - [usuario](#usuario)
-  - [init](#init)
-  - [status](#status)
-  - [add](#add)
-  - [commit](#commit)
-  - [log](#log)
-  - [restore/checkout](#restorecheckout)
-  - [diff](#diff)
+  - [`init`](#init)
+  - [`status`](#status)
+  - [`add`](#add)
+  - [`commit`](#commit)
+  - [`log`](#log)
+  - [`restore/checkout`](#restorecheckout)
+  - [`reset`](#reset)
+  - [`stash`](#stash)
+  - [`diff`](#diff)
   - [ignore](#ignore)
 - [Branches](#branches)
   - [list branch](#list-branch)
@@ -58,18 +60,18 @@ Indicar nombre del usuario actual que va a trabajar en el proyecto
 ```bash
 git config --global user.name "Nombre"
 ```
-### init
+### `init`
 Inicializar un Proyecto Nuevo:
 	Crea una carpeta .git dentro del **Working directory**, con confguraciones propias de git
 ```bash
 git init
 ```
-### status
+### `status`
 Info acerca de branch actual, commits realizados y archivos en **Staging area**
 ```bash
 git status
 ```
-### add
+### `add`
 Agregar archivo al **Staging area**
 ```bash
 git add cambiar_host.sh
@@ -78,7 +80,7 @@ Agregar directorio completo (con subdirectorios) al **Staging area**. Ignora los
 ```bash
 git add .
 ```
-### commit
+### `commit`
 Tomar los archivos del **Staging area** y commitearlos al repositorio local
 ```bash
 git commit
@@ -86,12 +88,12 @@ git commit
 ```bash
 git commit -m "Mensaje del commit"
 ```
-### log
+### `log`
 Listar commit realizados
 ```bash
 git log
 ```
-### restore/checkout
+### `restore/checkout`
 Revertir archivos modificados. Listar los archivos que cambiaron:
 ```bash
 git status
@@ -104,7 +106,80 @@ o
 ```bash
 git checkout -- nombre_archivo
 ```
-### diff
+
+### `reset`
+Used to move the HEAD (the currently checked-out commit) and the branch pointer to a different commit.
+`git reset` is often used to undo commits, move branches to different commits, or unstage changes.
+
+1. **`git reset --soft`**: This mode moves the branch pointer and the HEAD to a different commit while keeping your changes in the staging area. It effectively "uncommits" the changes, allowing you to make further adjustments before creating a new commit. For example:
+   
+    ```bash
+    git reset --soft HEAD~1
+    ```
+
+2. **`git reset --mixed` (default mode)**: This mode is similar to `--soft`, but it also unstages the changes. Your changes are preserved in your working directory, and you can modify them further if needed. For example:
+
+    ```bash
+    git reset HEAD~1
+    ```
+
+3. **`git reset --hard`**: This is the most aggressive mode of `git reset`. It moves the branch pointer and the HEAD to a different commit, discards any changes in both the staging area and working directory, and reverts your project to the state of the specified commit. 
+For example:
+
+    ```bash
+    git reset --hard HEAD~1
+    ```
+
+4. **`git reset <commit>`**: You can specify a particular commit (either by commit hash, branch name, or reference) to which you want to reset the branch and HEAD. This allows you to move the branch to a specific commit without necessarily using the `--soft`, `--mixed`, or `--hard` options.
+
+### `stash`
+In Git, the `git stash` command is used to temporarily save changes that you've made to your working directory but do not want to commit yet. It's a handy feature for situations where you're in the middle of working on something, but you need to switch to a different branch or work on another task without committing your changes. `git stash` allows you to store your changes, switch branches, and then later reapply those changes.
+
+Here's how `git stash` works:
+
+1. **Stash Changes**: You can use `git stash save` to stash your changes. Optionally, you can provide a message to describe the stash. For example:
+
+    ```bash
+    git stash save "Work in progress on feature X"
+    ```
+
+2. **Switch Branch**: After stashing your changes, you can switch to a different branch using the `git checkout` command. This allows you to work on another task or make changes in a different context.
+
+    ```bash
+    git checkout other-branch
+    ```
+
+3. **Reapply Stashed Changes**: When you're ready to continue working on the changes you stashed, you can reapply them to your working directory. Use the `git stash apply` command followed by the stash reference, which can be the stash number or a unique identifier.
+
+    ```bash
+    git stash apply stash@{0}
+    ```
+
+    If you want to remove the changes from the stash after applying them, you can use `git stash pop`:
+
+    ```bash
+    git stash pop stash@{0}
+    ```
+
+4. **List Stashes**: You can view the list of stashes with `git stash list`. This shows you all your stashed changes and their descriptions.
+
+    ```bash
+    git stash list
+    ```
+
+5. **Delete Stash**: If you no longer need a specific stash, you can delete it using `git stash drop`:
+
+    ```bash
+    git stash drop stash@{0}
+    ```
+
+6. **Clear All Stashes**: To remove all stashes, you can use `git stash clear`:
+
+    ```bash
+    git stash clear
+    ```
+    
+### `diff`
 Ver cambios hechos en un archivo, comparando el archivo en el repositorio con el modificado
 ```bash
 git diff nombre_archivo
@@ -129,7 +204,7 @@ git commit -m "Agregar archivo .gitignore"
 ```
 
 ## Branches
-![img](branches.png)
+![img](images/branches.png)
 
 ### list branch
 Bbranch locales:
