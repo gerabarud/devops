@@ -306,9 +306,23 @@ qm importdisk 991 debian-12-genericcloud-amd64.qcow2 local-lvm
 2. SSH to the VM 
 
 3. Install the agent
+
 ```bash
 sudo apt update && sudo apt upgrade -y && sudo apt install qemu-guest-agent
 ```
+
+Set Time Zone
+```bash
+timedatectl  set-timezone America/Argentina/Buenos_Aires
+```
+
+Configure locales
+```bash
+dpkg-reconfigure locales
+en_US.UTF-8
+es_AR.UTF-8 UTF-8
+```
+
 4. Enable the agent
    
 ```bash
