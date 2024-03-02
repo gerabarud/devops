@@ -74,8 +74,89 @@ La habilitación de MFA en la cuenta de usuario raíz de AWS es una práctica re
 
 ### AWS IAM (Identity and Access Management)
 
+**IAM**
 
+AWS Identity and Access Management (IAM) es un servicio de AWS que lo ayuda a administrar el acceso a sus recursos y cuenta de AWS. También proporciona una vista centralizada de quién y qué está permitido en la cuenta de AWS (autenticación), y quién y qué tiene permisos para utilizar y trabajar con sus recursos de AWS (autorización).
 
+**Características de IAM**
+
+- IAM es global y no es específica de ninguna región. 
+- IAM se integra en muchos servicios de AWS de forma predeterminada.
+- Puede establecer políticas de contraseñas en IAM
+- IAM admite MFA.
+- IAM admite la identidad federada, que permite a los usuarios que ya tienen contraseñas en otro lugar obtener acceso temporal a su cuenta de AWS.
+- El servicio se ofrece sin cargo adicional.
+
+**Usuario de IAM**
+
+Un usuario de IAM representa a la persona o el servicio que interactúa con AWS. 
+
+**Credenciales de usuario de IAM**
+
+Un usuario de IAM consta de un nombre y un conjunto de credenciales. Al crear un usuario, puede proporcionarle los siguientes tipos de acceso:
+
+- Acceso a la consola de administración de AWS
+- Acceso programático a AWS Command Line Interface (AWS CLI) y a la interfaz de programación de la aplicación de AWS (API de AWS)
+
+**Grupos de IAM**
+
+Un grupo de IAM es una colección de usuarios. Todos los usuarios del grupo heredan los permisos asignados al grupo. 
+
+**Políticas de IAM**
+
+Para administrar el acceso y proporcionar permisos a los servicios y recursos de AWS, crea políticas de IAM y las adjunta a los usuarios, grupos y roles de IAM.
+
+En el ejemplo siguiente, se proporciona acceso de administrador a través de una política basada en la identidad de IAM.
+
+```json
+{
+"Version": "2012-10-17",
+"Statement": [{
+"Effect": "Allow",
+"Action": "*",
+"Resource": "*"
+}]
+}
+```
+
+- El elemento Version (Versión) define la versión del lenguaje de la política. Especifica las reglas de sintaxis del lenguaje que AWS necesita para procesar una política. Para utilizar todas las características de política disponibles, incluya "Version": "2012-10-17" antes del elemento "Statement" de sus políticas.
+- El elemento Effect (Efecto) especifica si la instrucción permite o deniega el acceso. 
+- El elemento Action (Acción) describe el tipo de acción que se debe permitir o denegar. 
+- El elemento Resource (Recurso) especifica el objeto o los objetos que cubre la instrucción de política. 
+
+En este ejempplo ws lo que llamamos “política de administrador”.
+
+En el siguiente ejemplo, se muestra una política de IAM más pormenorizada.
+
+```json
+{
+"Version": "2012-10-17",
+"Statement": [{
+"Effect": "Allow",
+"Action": [
+"iam: ChangePassword",
+"iam: GetUser"
+]
+"Resource": "arn:aws:iam::123456789012:user/${aws:username}"
+}]
+}
+```
+
+Esta política permite al usuario de IAM cambiar su propia contraseña de IAM (iam:ChangePassword) y obtener información sobre su propio usuario (iam:GetUser). Solo permite al usuario acceder a sus propias credenciales porque el recurso restringe el acceso con la sustitución de variables ${aws:username}.
+
+### Roles
+
+1. **IAM Roles (Identity and Access Management)**: Estos roles son utilizados para delegar permisos a entidades dentro o fuera de tu cuenta de AWS. Por ejemplo, puedes crear un IAM Role para permitir que una instancia de EC2 acceda a determinados recursos de S3 sin necesidad de utilizar credenciales de acceso permanentes.
+
+2. **EC2 Instance Roles**: Estos roles están diseñados específicamente para las instancias de EC2 y permiten que las aplicaciones que se ejecutan en esas instancias accedan a otros servicios de AWS de manera segura, sin necesidad de utilizar credenciales de seguridad almacenadas en la instancia.
+
+3. **Service Roles**: Estos roles son utilizados por los servicios de AWS para acceder a otros recursos dentro de tu cuenta de AWS. Por ejemplo, cuando configuras un bucket de S3 para hospedar un sitio web estático, puedes asignar un rol de servicio a ese bucket para que tenga acceso a los permisos necesarios para servir el contenido web.
+
+4. **Cross-Account Roles**: Estos roles permiten a una entidad en una cuenta de AWS (llamada "cuenta principal") delegar acceso a otra cuenta de AWS (llamada "cuenta secundaria"). Esto es útil cuando necesitas que una aplicación o servicio en una cuenta acceda a recursos en otra cuenta de AWS.
+
+5. **AWS Organizations Roles**: En el contexto de AWS Organizations, los roles se utilizan para delegar permisos de administración a las cuentas miembro dentro de una organización de AWS.
+
+6. **Custom Roles**: Además de los roles predefinidos mencionados anteriormente, puedes crear roles personalizados según las necesidades específicas de tu aplicación o entorno en AWS.
 
 
 
