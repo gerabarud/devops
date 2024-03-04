@@ -65,6 +65,14 @@ https://www.youtube.com/watch?v=f5uGX-pJuVw
       - [Almacenamiento de bloque](#almacenamiento-de-bloque)
       - [Almacenamiento de objetos](#almacenamiento-de-objetos)
       - [Relación con los sistemas de almacenamiento tradicionales](#relación-con-los-sistemas-de-almacenamiento-tradicionales)
+    - [Almacenamiento de instancias de Amazon EC2 y Amazon Elastic Block Store](#almacenamiento-de-instancias-de-amazon-ec2-y-amazon-elastic-block-store)
+      - [Almacén de instancias de Amazon EC2](#almacén-de-instancias-de-amazon-ec2)
+      - [Amazon Elastic Block Storage (Amazon EBS)](#amazon-elastic-block-storage-amazon-ebs)
+        - [Escalado de los volúmenes de Amazon EBS](#escalado-de-los-volúmenes-de-amazon-ebs)
+        - [Casos de uso de Amazon EBS](#casos-de-uso-de-amazon-ebs)
+        - [Tipos de volúmenes de Amazon EBS](#tipos-de-volúmenes-de-amazon-ebs)
+        - [Ventajas de Amazon EBS](#ventajas-de-amazon-ebs)
+        - [Instantáneas de Amazon EBS](#instantáneas-de-amazon-ebs)
 
 
 # AWS Technical Essentials
@@ -695,3 +703,80 @@ Con el almacenamiento de objetos, puede almacenar casi cualquier tipo de datos, 
 
 - El almacenamiento en bloque en la nube es análogo al almacenamiento de conexión directa (DAS) o a una red de área de almacenamiento (SAN).
 - Los sistemas de almacenamiento de archivos suelen ser compatibles con un servidor de almacenamiento adjunto a la red (NAS).
+
+
+### Almacenamiento de instancias de Amazon EC2 y Amazon Elastic Block Store
+
+#### Almacén de instancias de Amazon EC2
+
+Un almacén de instancias de Amazon EC2 proporciona almacenamiento temporal a nivel de bloque para una instancia. Este almacenamiento se encuentra en discos que se adjuntan físicamente al equipo host. Si elimina la instancia, también se elimina el almacén de instancias. 
+
+El almacén de instancias es ideal si aloja aplicaciones que replican los datos en otras instancias EC2. 
+
+#### Amazon Elastic Block Storage (Amazon EBS)
+
+Amazon EBS es un dispositivo de almacenamiento a nivel de bloque que puede adjuntar a una instancia de Amazon EC2. Los volúmenes de EBS son esencialmente unidades de un tamaño configurado por el usuario adjuntas a una instancia EC2.
+
+- La mayoría de los volúmenes de Amazon EBS solo se pueden conectar a un ordenador a la vez. 
+- Puede desconectar un volumen de EBS de una instancia EC2 y adjuntarlo a otra instancia EC2 de la misma zona de disponibilidad.
+- La unidad externa es independiente del ordenador. 
+- Está limitado al tamaño de la unidad externa, ya que hay un límite fijo para la escalabilidad que puede tener. 
+
+##### Escalado de los volúmenes de Amazon EBS
+
+Puede escalar los volúmenes de Amazon EBS de dos formas.
+
+- Es posible aumentar el tamaño del volumen, siempre y cuando no supere el límite de tamaño máximo. Para los volúmenes de EBS, la cantidad máxima de almacenamiento que puede tener es 16 TB. 
+- Puede adjuntar varios volúmenes a una única instancia de Amazon EC2. 
+
+##### Casos de uso de Amazon EBS
+
+Amazon EBS resulta útil cuando debe recuperar datos rápidamente y conservarlos a largo plazo:
+
+- Sistemas operativos: volúmenes de arranque y volúmenes raíz para almacenar un sistema operativo. 
+- Bases de datos
+- Aplicaciones empresariales
+- Aplicaciones de gran rendimiento: se refiere a las aplicaciones que realizan lecturas y escrituras extensas y continuas.
+
+##### Tipos de volúmenes de Amazon EBS
+
+Los volúmenes de Amazon EBS se organizan en dos categorías principales: discos de estado sólido (SSD) y discos duros (HDD). Las SSD proporcionan un alto rendimiento para la entrada y salida (E/S) aleatorias, mientras que las HDD proporcionan un alto rendimiento para la E/S secuenciales. AWS ofrece dos tipos de cada una.
+
+El siguiente gráfico puede ayudarlo a decidir qué volumen de EBS es la opción correcta para su carga de trabajo.
+
+| Tipos de volumen | Descripción | Casos de uso | Tamaño de volumen | IOPS máximas | Rendimiento máximo |
+|------------------|-------------|--------------|-------------------|--------------|--------------------|
+| IOPS SSD aprovisionada por EBS | Es la SSD de mayor rendimiento diseñada para las cargas de trabajo transaccionales sensibles a la latencia. | Bases de datos relacionales y NoSQL con E/S intensivas | Entre 4 GB y 16 TB | 64000 | 1000 MB/s |
+SSD de uso general de EBS	Es una SSD de uso general que equilibra el precio y el rendimiento para una amplia variedad de cargas de trabajo transaccionales. 	Volúmenes de arranque, aplicaciones interactivas de baja latencia, desarrollo y prueba 	Entre 1 GB y 16 TB	16 000	250 MB/s
+HDD optimizada para rendimiento
+	Es una HDD de bajo costo diseñada para las cargas de trabajo con rendimiento intensivo a las que se accede con frecuencia.
+	Big data, almacenamiento de datos, procesamiento de archivos
+	Entre 500 GB y
+16 TB
+	500
+	500 MB/s
+HDD fría
+	Es la HDD de menor costo diseñada para las cargas de trabajo a las que se accede con menor frecuencia.
+	Datos más fríos que requieren menos escaneos por día
+	Entre 500 GB y
+16 TB
+	250
+	250 MB/s
+
+##### Ventajas de Amazon EBS
+
+- Alta disponibilidad
+- Persistencia de datos
+- Cifrado de datos
+- Flexibilidad
+- Copias de seguridad
+
+##### Instantáneas de Amazon EBS
+
+Dado que los volúmenes de EBS se componen de los datos de su instancia de Amazon EC2, debe realizar copias de seguridad de estos volúmenes, denominadas “instantáneas”.
+
+Las instantáneas de EBS son copias de seguridad progresivas que solo guardan los bloques del volumen que han cambiado después de la instantánea más reciente. 
+
+Cuando realiza una instantánea de cualquiera de los volúmenes de EBS, las copias de seguridad se almacenan de forma redundante en varias zonas de disponibilidad mediante Amazon S3. AWS gestiona este aspecto del almacenamiento de la copia de seguridad en Amazon S3, por lo que no tendrá que interactuar con Amazon S3 para trabajar con sus instantáneas de EBS. Las administra en la consola de Amazon EBS, que forma parte de la consola Amazon EC2.
+
+Las instantáneas de EBS se pueden utilizar para crear varios volúmenes nuevos, tanto si se encuentran en la misma zona de disponibilidad como en otra. 
