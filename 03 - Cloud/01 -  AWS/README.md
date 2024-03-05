@@ -73,6 +73,36 @@ https://www.youtube.com/watch?v=f5uGX-pJuVw
         - [Tipos de volúmenes de Amazon EBS](#tipos-de-volúmenes-de-amazon-ebs)
         - [Ventajas de Amazon EBS](#ventajas-de-amazon-ebs)
         - [Instantáneas de Amazon EBS](#instantáneas-de-amazon-ebs)
+    - [Almacenamiento de objetos con Amazon Simple Storage Service](#almacenamiento-de-objetos-con-amazon-simple-storage-service)
+      - [Amazon S3](#amazon-s3)
+        - [Conceptos de Amazon S3](#conceptos-de-amazon-s3)
+        - [Casos de uso de Amazon S3](#casos-de-uso-de-amazon-s3)
+        - [Elección de la opción de conectividad adecuada para los recursos](#elección-de-la-opción-de-conectividad-adecuada-para-los-recursos)
+          - [Políticas de IAM](#políticas-de-iam-1)
+          - [Políticas de bucket de S3](#políticas-de-bucket-de-s3)
+        - [Cifrado de Amazon S3](#cifrado-de-amazon-s3)
+      - [Control de versiones de Amazon S3](#control-de-versiones-de-amazon-s3)
+        - [Estados del control de versiones](#estados-del-control-de-versiones)
+      - [Las seis clases de almacenamiento de Amazon S3](#las-seis-clases-de-almacenamiento-de-amazon-s3)
+      - [Automatización de las transiciones de niveles con la administración del ciclo de vida de los objetos](#automatización-de-las-transiciones-de-niveles-con-la-administración-del-ciclo-de-vida-de-los-objetos)
+    - [Amazon Elastic File System (Amazon EFS) y Amazon FSx](#amazon-elastic-file-system-amazon-efs-y-amazon-fsx)
+  - [Bases de datos](#bases-de-datos)
+    - [Bases de datos en AWS](#bases-de-datos-en-aws)
+      - [Bases de datos relacionales](#bases-de-datos-relacionales)
+      - [Sistema de administración de bases de datos relacionales](#sistema-de-administración-de-bases-de-datos-relacionales)
+      - [Ventajas de la base de datos relacional](#ventajas-de-la-base-de-datos-relacional)
+      - [Casos de uso de las bases de datos relacionales](#casos-de-uso-de-las-bases-de-datos-relacionales)
+      - [Elección entre las bases de datos no administradas y las bases de datos administradas](#elección-entre-las-bases-de-datos-no-administradas-y-las-bases-de-datos-administradas)
+        - [Base de datos no administrada](#base-de-datos-no-administrada)
+        - [Base de datos administrada](#base-de-datos-administrada)
+    - [Amazon Relational Database Service - Amazon RDS](#amazon-relational-database-service---amazon-rds)
+      - [Instancias de base de datos](#instancias-de-base-de-datos)
+      - [Amazon RDS en Amazon Virtual Private Cloud](#amazon-rds-en-amazon-virtual-private-cloud)
+      - [Protección de Amazon RDS con AWS Identity and Access Management (IAM)](#protección-de-amazon-rds-con-aws-identity-and-access-management-iam)
+      - [Copia de seguridad de los datos](#copia-de-seguridad-de-los-datos)
+        - [Copias de seguridad automáticas](#copias-de-seguridad-automáticas)
+        - [Instantáneas manuales](#instantáneas-manuales)
+      - [Redundancia con Amazon RDS Multi-AZ](#redundancia-con-amazon-rds-multi-az)
 
 
 # AWS Technical Essentials
@@ -726,7 +756,7 @@ Amazon EBS es un dispositivo de almacenamiento a nivel de bloque que puede adjun
 
 Puede escalar los volúmenes de Amazon EBS de dos formas.
 
-- Es posible aumentar el tamaño del volumen, siempre y cuando no supere el límite de tamaño máximo. Para los volúmenes de EBS, la cantidad máxima de almacenamiento que puede tener es 16 TB. 
+- Es posible aumentar el tamaño del volumen hasta 16 TB. 
 - Puede adjuntar varios volúmenes a una única instancia de Amazon EC2. 
 
 ##### Casos de uso de Amazon EBS
@@ -747,21 +777,9 @@ El siguiente gráfico puede ayudarlo a decidir qué volumen de EBS es la opción
 | Tipos de volumen | Descripción | Casos de uso | Tamaño de volumen | IOPS máximas | Rendimiento máximo |
 |------------------|-------------|--------------|-------------------|--------------|--------------------|
 | IOPS SSD aprovisionada por EBS | Es la SSD de mayor rendimiento diseñada para las cargas de trabajo transaccionales sensibles a la latencia. | Bases de datos relacionales y NoSQL con E/S intensivas | Entre 4 GB y 16 TB | 64000 | 1000 MB/s |
-SSD de uso general de EBS	Es una SSD de uso general que equilibra el precio y el rendimiento para una amplia variedad de cargas de trabajo transaccionales. 	Volúmenes de arranque, aplicaciones interactivas de baja latencia, desarrollo y prueba 	Entre 1 GB y 16 TB	16 000	250 MB/s
-HDD optimizada para rendimiento
-	Es una HDD de bajo costo diseñada para las cargas de trabajo con rendimiento intensivo a las que se accede con frecuencia.
-	Big data, almacenamiento de datos, procesamiento de archivos
-	Entre 500 GB y
-16 TB
-	500
-	500 MB/s
-HDD fría
-	Es la HDD de menor costo diseñada para las cargas de trabajo a las que se accede con menor frecuencia.
-	Datos más fríos que requieren menos escaneos por día
-	Entre 500 GB y
-16 TB
-	250
-	250 MB/s
+| SSD de uso general de EBS |	Es una SSD de uso general que equilibra el precio y el rendimiento | Volúmenes de arranque, aplicaciones interactivas de baja latencia, desarrollo y prueba | Entre 1 GB y 16 TB | 16000 | 250 MB/s |
+| HDD optimizada para rendimiento | Es una HDD de bajo costo diseñada para las cargas de trabajo con rendimiento intensivo a las que se accede con frecuencia. | Big data, almacenamiento de datos, procesamiento de archivos |	Entre 500 GB y 16 TB | 500 | 500 MB/s 
+| HDD fría | Es la HDD de menor costo diseñada para las cargas de trabajo a las que se accede con menor frecuencia. |	Datos más fríos que requieren menos escaneos por día | Entre 500 GB y 16 TB | 250 |	250 MB/s |
 
 ##### Ventajas de Amazon EBS
 
@@ -780,3 +798,270 @@ Las instantáneas de EBS son copias de seguridad progresivas que solo guardan lo
 Cuando realiza una instantánea de cualquiera de los volúmenes de EBS, las copias de seguridad se almacenan de forma redundante en varias zonas de disponibilidad mediante Amazon S3. AWS gestiona este aspecto del almacenamiento de la copia de seguridad en Amazon S3, por lo que no tendrá que interactuar con Amazon S3 para trabajar con sus instantáneas de EBS. Las administra en la consola de Amazon EBS, que forma parte de la consola Amazon EC2.
 
 Las instantáneas de EBS se pueden utilizar para crear varios volúmenes nuevos, tanto si se encuentran en la misma zona de disponibilidad como en otra. 
+
+### Almacenamiento de objetos con Amazon Simple Storage Service
+
+#### Amazon S3
+
+A diferencia de Amazon Elastic Block Store (Amazon EBS), Amazon Simple Storage Service (Amazon S3) es una solución de almacenamiento independiente que no está vinculada al cómputo. Le permite recuperar sus datos desde cualquier lugar de la Web. 
+
+Amazon S3 es un servicio de almacenamiento de objetos. El almacenamiento de objetos almacena los datos en una estructura plana, al utilizar identificadores únicos para buscar objetos cuando se solicitan. Un objeto es un archivo combinado con metadatos. Puede almacenar tantos de estos objetos como quiera. 
+
+##### Conceptos de Amazon S3
+
+En Amazon S3, almacena los objetos en contenedores denominados “buckets” con dos detalles: la región de AWS en la que desea que se ubique y el del bucket.
+
+Cuando elige una región para el bucket, todos los objetos que coloque en el bucket se almacenarán de forma redundante en varios dispositivos, en varias zonas de disponibilidad. 
+
+Cuando elige un nombre de bucket, debe ser único en todas las cuentas de AWS. 
+
+Ejemplo:
+
+```url
+http://doc.s3.amazonaws.com/2006-03-01/AmazonS3.html
+```
+
+- Nombre del bucket: **doc**
+- Proveedor de servicios: **s3**
+- Nombre del servicio **amazonaws**
+- Carpeta: **2006-03-01**
+- Objeto dentro de la carpeta: **AmazonS3.html**. El nombre del objeto se conoce a menudo como “**nombre de clave**”.
+
+Puede haber carpetas dentro de los buckets para ayudarlo a organizar los objetos. Sin embargo, recuerde que ninguna jerarquía de archivos real lo admite en el backend. 
+
+##### Casos de uso de Amazon S3
+
+AResumen algunas de las formas más comunes de utilizar Amazon S3:
+
+- Copia de seguridad y almacenamiento
+- Alojamiento multimedia: Debido a que puede almacenar objetos de hasta 5 TB.
+- Entrega de software: alojar las aplicaciones de software que los clientes pueden descargar.
+- Lagos de datos
+- Sitios web estáticos
+- Contenido estático
+
+##### Elección de la opción de conectividad adecuada para los recursos
+
+Solo el usuario o la cuenta de AWS que creó el recurso puede ver todos los recursos de S3, como los buckets, las carpetas y los objetos.
+
+Si decide que quiere que todos los usuarios en Internet vean sus fotos, puede elegir hacer públicos los buckets, las carpetas y los objetos. 
+
+Amazon S3 proporciona dos características principales de administración de acceso: las políticas de IAM y las políticas de bucket de S3.
+
+###### Políticas de IAM
+
+Debe utilizar las políticas de IAM para los buckets privados en las dos situaciones siguientes:
+
+- Tiene muchos buckets con requisitos de permisos diferentes. En lugar de definir muchas políticas de bucket de S3 diferentes, puede utilizar las políticas de IAM.
+- Quiere que todas las políticas se encuentren en una ubicación centralizada. 
+  
+###### Políticas de bucket de S3
+
+Las políticas de bucket de S3 especifican qué acciones se permiten o deniegan en el bucket.
+
+Por ejemplo, si tiene un bucket llamado “employeebucket”, puede adjuntarle una política de bucket de S3 que permita a otra cuenta de AWS colocar objetos en ese bucket.
+
+Alternativamente, si quiere permitir que los lectores anónimos lean los objetos de employeebucket, puede aplicar una política a ese bucket que permita a cualquier persona leer los objetos del bucket por medio de `Effect":Allow on the "Action:["s3:GetObject"]`.
+
+Este es un ejemplo de cómo se vería la política de bucket de S3.
+```json
+{
+"Version":"2012-10-17",
+"Statement":[{
+"Sid":"PublicRead",
+"Effect":"Allow",
+"Principal": "*",
+"Action":["s3:GetObject"],
+"Resource":["arn:aws:s3:::employeebucket/*"]
+}]
+}
+```
+
+
+Las políticas de bucket de S3 solo se pueden colocar en buckets y no se pueden utilizar para carpetas u objetos.
+
+Debe utilizar las políticas de bucket de S3 en las siguientes situaciones:
+
+- Necesita una forma sencilla de acceder a S3 entre cuentas, sin utilizar roles de IAM.
+- Sus políticas de IAM se topan con el límite de tamaño definido. Las políticas de bucket de S3 tienen un límite de tamaño mayor.
+
+##### Cifrado de Amazon S3
+
+Para proteger los datos en reposo, puede utilizar el cifrado de la siguiente manera:
+
+- Cifrado del lado del servidor: Permite a Amazon S3 cifrar el objeto antes de guardarlo
+- Cifrado del lado del cliente: Puede cifrar los datos del lado del cliente y, a continuación, subir los datos cifrados a Amazon S3.
+
+Para el cifrado en tránsito, puede utilizar el cifrado del lado del cliente o la Capa de conexión segura (SSL).
+
+#### Control de versiones de Amazon S3
+
+El control de versiones conserva varias versiones de un único objeto en el mismo bucket. De este modo, se conservan las versiones anteriores de un objeto sin utilizar nombres diferentes, lo que ayuda a recuperar los archivos de eliminaciones accidentales, sobrescrituras accidentales o errores de aplicaciones.
+
+Si habilita el control de versiones para un bucket, Amazon S3 genera automáticamente un ID de versión único para el objeto. .
+
+##### Estados del control de versiones
+
+Los buckets pueden presentar uno de los tres estados siguientes:
+
+- Sin versión (predeterminado)
+- Control de versiones habilitado
+- Control de versiones suspendido: Se suspende el control de versiones para los objetos nuevos. 
+
+Para reducir el monto de la factura de Amazon S3, es posible que quiera eliminar las versiones anteriores de los objetos cuando ya no sean necesarios.
+
+#### Las seis clases de almacenamiento de Amazon S3
+
+1. Amazon S3 Standard: de uso general
+2. Amazon S3 Inelligent-Tiering: Amazon S3 monitorea patrones de acceso y trasladas los objetos a la capa más rentable de acuerdo a la frecuencia de acceso
+3. Amazon S3 Infrequent Access: Objenos de poca frecuencia de acceso pero de alto rendimiento
+4. Amazon S3 One Zone - Infrequent Access: 20% más barato, se almacenan en una única AZ y son de poca frecuencia. 
+5. Amazon S3 Glacier: Seguro y económico
+6. Amazon S3 Glacier Deep Archive: Acceso de 1 o 2 veces al año. El más económico
+
+#### Automatización de las transiciones de niveles con la administración del ciclo de vida de los objetos
+
+Al definir una configuración de política de ciclo de vida para un objeto o un grupo de objetos, puede elegir automatizar dos acciones: acciones de transición y de vencimiento.
+
+- Las acciones de transición definen cuándo los objetos deben pasar a otra clase de almacenamiento.
+- Las acciones de vencimiento definen cuándo vencen los objetos y cuándo deben eliminarse de forma permanente.
+
+
+Los siguientes casos de uso son buenas opciones para la administración del ciclo de vida:
+
+- Registros periódicos: Si sube los registros periódicos a un bucket, es posible que la aplicación los necesite durante 1 semana o 1 mes. Después de ese periodo, quizá quiera eliminarlos.
+- Datos con cambios en la frecuencia de acceso: A algunos documentos se accede con frecuencia durante un periodo limitado. Posteriormente, se obtendrá acceso a ellos con poca frecuencia. En algún momento, es posible que no necesite acceso en tiempo real a estos datos, pero la organización o las normativas pueden requerir el archivado durante un periodo específico. Transcurrido dicho periodo, podrá eliminarlos.
+
+### Amazon Elastic File System (Amazon EFS) y Amazon FSx
+
+Para el almacenamiento de archivos que se puede montar en varias instancias EC2, puede utilizar Amazon Elastic File System (Amazon EFS) o Amazon FSx. En la siguiente tabla, se proporciona más información sobre cada servicio.
+
+| Servicio | Descripción |
+|----------|-------------|
+| Amazon Elastic File System (Amazon EFS)	| Sistema de archivos NFS completamente administrado |
+| Amazon FSx for Windows File Server |	Servidor de archivos completamente administrado integrado en Windows Server que admite el protocolo SMB	| 
+| Amazon FSx for Lustre |	Sistema de archivos de Lustre completamente administrado que se integra en S3 |
+
+Estas son algunas características importantes de Amazon EFS y Amazon FSx que debe conocer al compararlos con otros servicios:
+- Ofrecen almacenamiento de archivos.
+- Usted paga por lo que utiliza (no tiene que aprovisionar el almacenamiento por adelantado).
+- Amazon EFS y Amazon FSx se pueden montar en varias instancias EC2.
+
+## Bases de datos
+
+### Bases de datos en AWS
+
+#### Bases de datos relacionales
+
+Una base de datos relacional organiza los datos en tablas. Los datos de una tabla se pueden vincular a los datos de otras tablas para crear relaciones; a eso se debe la parte relacional del nombre.
+
+Una tabla almacena los datos en filas y columnas.
+
+Las tablas, las filas, las columnas y las relaciones entre ellas se conocen como “esquema lógico”. Con las bases de datos relacionales, el esquema es fijo.
+
+#### Sistema de administración de bases de datos relacionales
+
+Un sistema de administración de bases de datos relacionales (RDBMS) le permite crear, actualizar y administrar una base de datos relacional. 
+
+- MySQL
+- PostgreSQL
+- Oracle
+- SQL server
+- Amazon Aurora
+
+#### Ventajas de la base de datos relacional
+
+La base de datos relacional ofrece una serie de ventajas, incluidas las siguientes:
+
+- Uniones: Puede unir tablas, lo que le permite comprender mejor las relaciones entre los datos.
+- Redundancia reducida: Puede almacenar los datos en una tabla y referenciarlos desde otras tablas en lugar de guardar los mismos datos en distintos lugares.
+- Familiaridad
+- Precisión
+
+#### Casos de uso de las bases de datos relacionales
+
+- Aplicaciones que tienen un esquema sólido que no cambia a menudo
+- Aplicaciones que requieren almacenamiento persistente y adoptan el principio ACID, 
+
+#### Elección entre las bases de datos no administradas y las bases de datos administradas
+
+##### Base de datos no administrada
+
+En esta opción, AWS es responsable y tiene control del hardware y la infraestructura subyacente, y usted es responsable y tiene control de la administración del host y la base de datos.
+
+##### Base de datos administrada
+
+AWS se encarga de la configuración de la instancia EC2 y de la base de datos, y proporcionan sistemas de alta disponibilidad, escalabilidad, parches y copias de seguridad. Sin embargo, en este modelo, sigue siendo responsable del ajuste de la base de datos, la optimización de las consultas y, por supuesto, de garantizar la seguridad de los datos de los clientes. 
+
+### Amazon Relational Database Service - Amazon RDS
+
+Amazon RDS permite a los clientes crear y administrar bases de datos relacionales en la nube sin la carga operativa de la administración de bases de datos tradicional. 
+
+Amazon RDS es compatible con la mayoría de los sistemas de administración de bases de datos relacionales populares
+
+La opción de motor nativo en la nube, Amazon Aurora, es una base de datos compatible con MySQL y PostgreSQL creada para la nube. Es más duradera, ofrece mayor disponibilidad y proporciona un rendimiento más rápido que la versión de Amazon RDS de MySQL y PostgreSQL.
+
+#### Instancias de base de datos
+
+La parte de cómputo se denomina “instancia de base de datos” y ejecuta el motor de base de datos. Una instancia de base de datos puede contener varias bases de datos con el mismo motor, y cada base de datos puede contener varias tablas.
+
+Debajo de la instancia de base de datos, hay una instancia EC2. Sin embargo, esta instancia se administra a través de la consola de Amazon RDS en lugar de la consola de Amazon EC2. Amazon RDS admite las tres familias de instancias siguientes:
+
+- Estándar
+- Optimizadas para memoria
+- De rendimiento ampliable, con la capacidad de aumentar hasta el uso completo de la CPU
+
+Una instancia de base de datos utiliza los volúmenes de Amazon Elastic Block Store (EBS) como capa de almacenamiento. Puede elegir entre los siguientes tipos de almacenamiento de volumen de Amazon EBS:
+
+- De uso general (SSD)
+- IOPS provisionadas (SSD)
+- Almacenamiento magnético (no recomendado)
+
+#### Amazon RDS en Amazon Virtual Private Cloud
+
+Al crear una instancia de base de datos, selecciona Amazon Virtual Private Cloud (VPC) en la que se ubicarán las bases de datos. A continuación, selecciona las subredes en las que quiere que se coloquen las instancias de base de datos. Esto se denomina “grupo de subred de base de datos”. Para crear un grupo de subred de base de datos, especifica lo siguiente:
+
+- Las zonas de disponibilidad (AZ)
+- Las subredes de la AZ donde se colocan las instancias de base de datos
+
+las subredes que añada deben ser privadas para que no tengan una ruta hacia la puerta de enlace de Internet. 
+
+El acceso a la instancia de base de datos se puede restringir aún más mediante las listas de control de acceso a la red (ACL de red) y los grupos de seguridad.
+
+El uso de estos controles proporciona capas de seguridad para su infraestructura. Se refuerza que solo las instancias de backend tengan acceso a la base de datos.
+
+#### Protección de Amazon RDS con AWS Identity and Access Management (IAM)
+
+Las ACL de red y los grupos de seguridad ayudan a los usuarios a ordenar el flujo de tráfico. Si quiere restringir las acciones y los recursos a los que pueden acceder otras personas, puede utilizar las políticas de IAM.
+
+#### Copia de seguridad de los datos
+
+Para realizar copias de seguridad periódicas de su instancia de RDS, puede utilizar estas opciones:
+
+- Copias de seguridad automáticas
+- Instantáneas manuales
+
+##### Copias de seguridad automáticas
+Las copias de seguridad automatizadas están activadas de forma predeterminada. Al crear la instancia de base de datos, establece un periodo de copia de seguridad.
+
+Puede retener las copias de seguridad automatizadas entre 0 y 35 días. 
+
+La configuración de 0 días desactiva las copias de seguridad automáticas. 
+
+La recuperación a un momento dado crea una nueva instancia de base de datos mediante los datos restaurados de un momento específico. 
+
+##### Instantáneas manuales
+Las instantáneas manuales son similares a tomar instantáneas de Amazon EBS, excepto que las administra en la consola de Amazon RDS. Son copias de seguridad que puede iniciar en cualquier momento. Existen hasta que las elimina. 
+
+#### Redundancia con Amazon RDS Multi-AZ
+
+Cuando habilita Amazon RDS Multi-AZ, Amazon RDS crea una copia redundante de la base de datos en otra AZ. 
+
+La copia principal de la base de datos proporciona acceso a los datos para que las aplicaciones puedan consultar y mostrar la información. Los datos de la copia principal se replican de forma sincrónica en la copia en espera. La copia en espera no se considera una base de datos activa, y las aplicaciones no la consultan.
+
+Si surge un problema de disponibilidad, por ejemplo, si la base de datos primaria pierde conectividad, Amazon RDS desencadena una conmutación por error automática.
+
+Para asegurarse de que no pierde la configuración de Multi-AZ, se crea una nueva base de datos en espera mediante una de estas opciones:
+
+- Retirar la base de datos primaria anterior a modo de espera si sigue en funcionamiento
+- Poner en funcionamiento una nueva instancia de base de datos en espera
