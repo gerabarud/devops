@@ -103,6 +103,11 @@ https://www.youtube.com/watch?v=f5uGX-pJuVw
         - [Copias de seguridad automáticas](#copias-de-seguridad-automáticas)
         - [Instantáneas manuales](#instantáneas-manuales)
       - [Redundancia con Amazon RDS Multi-AZ](#redundancia-con-amazon-rds-multi-az)
+    - [Amazon DynamoDB](#amazon-dynamodb)
+      - [Introducción a Amazon DynamoDB](#introducción-a-amazon-dynamodb)
+      - [Componentes principales de Amazon DynamoDB](#componentes-principales-de-amazon-dynamodb)
+    - [Elección del servicio de base de datos correcto](#elección-del-servicio-de-base-de-datos-correcto)
+      - [Servicios de bases de datos de AWS](#servicios-de-bases-de-datos-de-aws)
 
 
 # AWS Technical Essentials
@@ -1065,3 +1070,39 @@ Para asegurarse de que no pierde la configuración de Multi-AZ, se crea una nuev
 
 - Retirar la base de datos primaria anterior a modo de espera si sigue en funcionamiento
 - Poner en funcionamiento una nueva instancia de base de datos en espera
+
+### Amazon DynamoDB
+
+#### Introducción a Amazon DynamoDB
+
+Amazon DynamoDB es un servicio de base de datos NoSQL serverless completamente administrado.
+
+Con DynamoDB, puede crear tablas de bases de datos que pueden almacenar y recuperar cualquier cantidad de datos y atender cualquier nivel de tráfico de solicitudes. Puede escalar verticalmente o reducir verticalmente la capacidad de rendimiento de sus tablas sin tiempo de inactividad ni degradación del rendimiento.
+
+DynamoDB distribuye automáticamente los datos y el tráfico de las tablas en un número suficiente de servidores para gestionar los requisitos de rendimiento y almacenamiento, al tiempo que mantiene un rendimiento uniforme y rápido. Todos los datos se almacenan en discos de estado sólido (SSD) y se replican automáticamente en varias zonas de disponibilidad de una región de AWS.
+
+#### Componentes principales de Amazon DynamoDB
+
+En DynamoDB se trabaja principalmente con tablas, elementos y atributos. Una tabla es una colección de elementos, y cada elemento es una colección de atributos. DynamoDB utiliza claves principales para identificar de forma exclusiva cada elemento de una tabla y los índices secundarios a fin de proporcionar mayor flexibilidad en las consultas.
+
+Los siguientes son los componentes básicos de DynamoDB:
+
+- Tablas: DynamoDB almacena los datos en tablas. Una tabla es un conjunto de datos.
+- Elementos: Cada tabla contiene cero o más elementos. Un elemento es un grupo de atributos que es único entre todos los demás elementos. En DynamoDB, no hay límite para el número de elementos que puede almacenar en una tabla.
+- Atributos: Cada elemento se compone de uno o más atributos. Un atributo es un componente fundamental de los datos que no es necesario dividir más.
+
+### Elección del servicio de base de datos correcto
+
+#### Servicios de bases de datos de AWS
+
+|Tipo de base de datos |	Casos de uso	|Servicio de AWS|
+|-|-|-|
+|Relacional |	Aplicaciones tradicionales, ERP, CRM, comercio electrónico | Amazon RDS, Amazon Aurora,
+Amazon Redshift |
+| De clave-valor | Aplicaciones web de gran tráfico, sistemas de comercio electrónico, aplicaciones de juegos |	Amazon DynamoDB |
+| En memoria | Almacenamiento en caché, administración de sesiones, tablas de posiciones de videojuegos, aplicaciones geoespaciales |	Amazon ElastiCache for Memcached, Amazon ElastiCache for Redis |
+| De documento | Administración de contenido, catálogos, perfiles de usuarios |	Amazon DocumentDB (compatible con MongoDB) |
+| De columna ancha | Aplicaciones industriales de gran escala para el mantenimiento de equipos, la administración de flotas y la optimización de rutas |	Amazon Keyspaces (para Apache Cassandra) |
+| De gráficos |	Detección de fraude, redes sociales, motores de recomendación |	Amazon Neptune |
+| De serie temporal |	Aplicaciones de IoT, DevOps, telemetría industrial | Amazon Timestream |
+| De libro mayor | Sistemas de registro, cadena de suministro, registros, transacciones bancarias | Amazon QLDB |
