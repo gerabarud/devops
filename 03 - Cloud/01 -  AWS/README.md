@@ -108,6 +108,31 @@ https://www.youtube.com/watch?v=f5uGX-pJuVw
       - [Componentes principales de Amazon DynamoDB](#componentes-principales-de-amazon-dynamodb)
     - [Elección del servicio de base de datos correcto](#elección-del-servicio-de-base-de-datos-correcto)
       - [Servicios de bases de datos de AWS](#servicios-de-bases-de-datos-de-aws)
+  - [Administración de aplicaciones](#administración-de-aplicaciones)
+    - [Monitoreo](#monitoreo)
+      - [Propósito del monitoreo](#propósito-del-monitoreo)
+      - [Uso de métricas para resolver problemas](#uso-de-métricas-para-resolver-problemas)
+      - [Tipos de métricas](#tipos-de-métricas)
+      - [Ventajas del monitoreo](#ventajas-del-monitoreo)
+      - [Visibilidad](#visibilidad)
+    - [Amazon CloudWatch](#amazon-cloudwatch)
+      - [Cómo funciona CloudWatch](#cómo-funciona-cloudwatch)
+      - [Métricas de CloudWatch](#métricas-de-cloudwatch)
+      - [Métricas personalizadas](#métricas-personalizadas)
+      - [Paneles de CloudWatch](#paneles-de-cloudwatch)
+      - [Amazon CloudWatch Logs](#amazon-cloudwatch-logs)
+      - [Terminología de CloudWatch Logs](#terminología-de-cloudwatch-logs)
+      - [Alarmas de CloudWatch](#alarmas-de-cloudwatch)
+    - [Optimización de soluciones](#optimización-de-soluciones)
+      - [Disponibilidad](#disponibilidad)
+        - [Mejora de la disponibilidad de la aplicación](#mejora-de-la-disponibilidad-de-la-aplicación)
+        - [Segunda zona de disponibilidad](#segunda-zona-de-disponibilidad)
+      - [Replicación, redirección y alta disponibilidad](#replicación-redirección-y-alta-disponibilidad)
+        - [Proceso de replicación](#proceso-de-replicación)
+        - [Redireccionamiento de clientes](#redireccionamiento-de-clientes)
+        - [Tipos de alta disponibilidad](#tipos-de-alta-disponibilidad)
+    - [Enrutamiento de tráfico con Amazon Elastic Load Balancing](#enrutamiento-de-tráfico-con-amazon-elastic-load-balancing)
+    - [Equilibradores de carga](#equilibradores-de-carga)
 
 
 # AWS Technical Essentials
@@ -1106,3 +1131,277 @@ Amazon Redshift |
 | De gráficos |	Detección de fraude, redes sociales, motores de recomendación |	Amazon Neptune |
 | De serie temporal |	Aplicaciones de IoT, DevOps, telemetría industrial | Amazon Timestream |
 | De libro mayor | Sistemas de registro, cadena de suministro, registros, transacciones bancarias | Amazon QLDB |
+
+## Administración de aplicaciones
+
+### Monitoreo
+
+#### Propósito del monitoreo
+
+Necesita una forma de recopilar y analizar los datos del estado operativo y el uso de los recursos. El acto de recopilar, analizar y utilizar los datos para tomar decisiones o responder preguntas sobre los recursos y sistemas de TI se denomina “monitoreo”.
+
+Puede utilizar los datos que recopila para detectar los problemas operativos causados por eventos.
+
+#### Uso de métricas para resolver problemas
+
+Las métricas que se recopilan y analizan a lo largo del tiempo se convierten en estadísticas, como la utilización promedio de la CPU a lo largo del tiempo que muestra un pico.
+
+Una forma de evaluar el estado de una instancia de Amazon EC2 es mediante la utilización de la CPU. Al analizar la utilización de la CPU, realice un proceso que exceda un umbral específico durante un periodo inusual. Utilice ese evento anormal como señal para resolver el problema de forma manual o automática mediante acciones, como escalar la instancia.
+
+Otros ejemplos de métricas que tienen las instancias EC2 son la utilización de la red, el rendimiento del disco, la utilización de la memoria y los registros creados por las aplicaciones que se ejecutan además de Amazon EC2.
+
+#### Tipos de métricas
+
+Los distintos recursos de AWS crean distintos tipos de métricas. Un bucket de Amazon S3 no tendría la utilización de la CPU como lo hace una instancia EC2. En cambio, Amazon S3 crea métricas relacionadas con los objetos almacenados en un bucket, como el tamaño total o el número de objetos de un bucket. Amazon S3 también ofrece métricas relacionadas con las solicitudes realizadas al bucket, como leer o escribir objetos.
+
+Amazon RDS crea métricas, como las conexiones de base de datos, la utilización de la CPU de una instancia o el consumo de espacio en disco. 
+
+#### Ventajas del monitoreo
+
+- Responder a los problemas operativos de forma proactiva antes de que los usuarios finales los noten. 
+- Controlar las métricas, como la tasa de respuesta a los errores y la latencia de solicitudes. 
+- Realizar acciones de forma automática o manual para evitar que se produzca la interrupción.
+- Mejorar el rendimiento y la fiabilidad de sus recursos. 
+- Reconocer las amenazas y los eventos de seguridad. 
+- Tomar decisiones controladas por datos. El monitoreo controla el estado operativo de la TI e impulsa las decisiones empresariales.
+- Crer soluciones más rentables. Mediante el monitoreo, puede ver los recursos que se están infrautilizando y el tamaño correcto de los recursos para su uso. 
+  
+#### Visibilidad
+
+Amazon CloudWatch es un servicio de monitoreo y observabilidad que recopila datos como los mencionados en este módulo. 
+
+Puede utilizar CloudWatch para lo siguiente:
+
+- Detectar comportamientos anómalos en sus entornos
+- Establecer alarmas para que le avisen cuando algo no está bien
+- Visualizar registros y métricas con la consola de administración de AWS
+- Realizar acciones automatizadas, como el escalado
+- Solucionar problemas
+- Descubrir información para mantener sus aplicaciones con buen estado
+
+### Amazon CloudWatch
+
+#### Cómo funciona CloudWatch
+
+Con CloudWatch, todo lo que necesita para comenzar es una cuenta de AWS. Es un servicio administrado que puede utilizar para monitorear, sin administrar la infraestructura subyacente.
+
+Muchos servicios de AWS envían métricas automáticamente de forma gratuita a CloudWatch a una velocidad de un punto de datos por métrica e intervalo de 5 minutos. Se conoce como “monitoreo básico”.
+
+#### Métricas de CloudWatch
+
+Cada métrica de CloudWatch tiene una marca temporal y está organizada en contenedores denominados “espacios de nombres”. 
+
+Los servicios de AWS que envían datos a CloudWatch adjuntan dimensiones a cada métrica. Una dimensión es un par nombre-valor que forma parte de la identidad de la métrica. Puede utilizar dimensiones para filtrar los resultados que devuelve CloudWatch. 
+
+#### Métricas personalizadas
+
+Las métricas personalizadas le permiten publicar sus propias métricas en CloudWatch.
+
+A continuación, se presentan otros ejemplos de métricas personalizadas:
+
+- Tiempos de carga de páginas web
+- Tasas de errores de solicitud
+- Número de procesos o subprocesos de la instancia
+- Cantidad de trabajo realizado por la aplicación
+
+Puede comenzar a utilizar métricas personalizadas al enviar la métrica mediante programación a CloudWatch con la API PutMetricData.
+
+#### Paneles de CloudWatch
+
+Los paneles son páginas de inicio que se pueden personalizar y se utilizan para la visualización de datos de una o más métricas mediante el uso de widgets, como un gráfico o un texto.
+
+Puede extraer datos de distintas regiones en un único panel para crear una vista global de la arquitectura.
+
+Puede utilizar herramientas externas o personalizadas para capturar y analizar las métricas de CloudWatch mediante la API GetMetricData.
+
+Puede controlar quién tiene acceso para ver o administrar los paneles de CloudWatch mediante las políticas de AWS IAM que se asocian a los usuarios, los grupos o los roles de IAM.
+
+#### Amazon CloudWatch Logs
+
+CloudWatch también puede ser el lugar centralizado para almacenar y analizar los registros mediante Amazon CloudWatch Logs.
+
+Algunos servicios están configurados para enviar datos de registro a CloudWatch Logs con el mínimo esfuerzo, como AWS Lambda. Con AWS Lambda, todo lo que necesita hacer es otorgar a la función de Lambda los permisos de IAM correctos para publicar registros en CloudWatch Logs. Otros servicios requieren una mayor configuración. Por ejemplo, si quiere enviar los registros de aplicaciones desde una instancia EC2 a CloudWatch Logs, primero debe instalar y configurar el agente de CloudWatch Logs en la instancia EC2.
+
+El agente incluye los siguientes componentes:
+
+- Complemento a AWS Command Line Interface (AWS CLI) que envía los datos de registro a CloudWatch Logs
+- Script que inicia el proceso para enviar los datos a CloudWatch Logs
+- Trabajo cron que garantiza que el daemon esté siempre en ejecución
+
+#### Terminología de CloudWatch Logs
+
+- Evento de registro: Actividad registrada por la aplicación o el recurso que se está monitoreando y tiene una marca temporal y un mensaje de evento.
+
+- Flujo de registro: Los eventos de registro se agrupan en flujos de registro, es decir secuencias de eventos de registro que pertenecen al mismo recurso que se está monitoreando. 
+
+- Grupos de registros: Los flujos de registro se organizan en grupos de registros. Un grupo de registros se compone de flujos de registro que comparten la misma configuración de retención y permisos. 
+
+#### Alarmas de CloudWatch
+
+Puede crear alarmas de CloudWatch para iniciar acciones automáticamente en función de los cambios de estado sostenidos de sus métricas. 
+
+Primero debe decidir para qué métrica quiere configurar una alarma y, a continuación, definir el umbral que activará la alarma. A continuación, definirá el periodo del umbral. 
+
+Una alarma tiene tres estados posibles.
+
+- OK
+- ALARM: La métrica está fuera del umbral definido. 
+- INSUFFICIENT_DATA: La alarma acaba de iniciarse, la métrica no está disponible, o no hay suficientes datos disponibles para que la métrica defina el estado de la alarma.
+
+### Optimización de soluciones
+
+#### Disponibilidad
+
+La disponibilidad de un sistema se expresa típicamente como porcentaje del tiempo de actividad en un año determinado o en una cantidad de nueves. En la tabla, puede ver una lista de los porcentajes de disponibilidad según el tiempo de inactividad anual, así como su notación en nueves.
+
+| Disponibilidad (%) | Tiempo de inactividad (por año) |
+|--------------------|---------------------------------|
+| 90 % (un nueve) | 36,53 días |
+| 99 % (dos nueves) |	3,65 días |
+| 99,9 % (tres nueves)	| 8,77 horas |
+| 99,95 % (tres nueves y medio) |	4,38 horas |
+| 99,99 % (cuatro nueves) |	52,60 minutos |
+| 99,995 % (cuatro nueves y medio) | 	26,30 minutos |
+| 99,999 % (cinco nueves) |	5,26 minutos |
+
+Para aumentar la disponibilidad, necesita redundancia. Suele significar más infraestructura: más centros de datos, servidores, bases de datos y replicación de datos. 
+
+##### Mejora de la disponibilidad de la aplicación
+
+Una forma de resolver este problema de punto de error único es añadir un servidor.
+
+##### Segunda zona de disponibilidad
+
+La ubicación física de un servidor es importante. Deben tenerse en cuenta los problemas de hardware. Podría encontrarse en el servidor físico, el bastidor, el centro de datos o incluso en la zona de disponibilidad que aloja la máquina virtual. Para solucionar el problema de la ubicación física, puede implementar una segunda instancia EC2 en una zona de disponibilidad diferente. 
+
+#### Replicación, redirección y alta disponibilidad
+
+##### Proceso de replicación
+
+El primer desafío de tener varias instancias EC2 es que necesita crear un proceso para replicar los archivos de configuración, la aplicación de parches en el software y la aplicación en las instancias. El mejor método es automatizar donde sea posible.
+
+##### Redireccionamiento de clientes
+
+La opción más común es utilizar un sistema de nombres de dominio (DNS) en el que el cliente utiliza un registro que apunta a la dirección IP de todos los servidores disponibles. Sin embargo, el tiempo que lleva actualizar la lista de direcciones IP y que los clientes se den cuenta de este cambio, a veces llamado “propagación”, suele ser la razón por la que no siempre se utiliza este método.
+
+Otra opción es utilizar un equilibrador de carga, que se ocupa de las comprobaciones de estado y de la distribución de la carga en cada servidor.
+
+##### Tipos de alta disponibilidad
+El último desafío que debe afrontar cuando tiene más de un servidor es el tipo de disponibilidad que necesita: activo-pasivo o activo-activo.
+
+- **Activo-pasivo:** Solo una de las dos instancias está disponible a la vez. 
+- **Active-activo:** Al tener ambos servidores disponibles, el segundo servidor puede tomar parte de la carga de la aplicación, lo que permite que todo el sistema tome más carga. Sin embargo, si la aplicación funciona con estado, habría un problema si la sesión del cliente no está disponible en ambos servidores. Las aplicaciones sin estado funcionan mejor para los sistemas activo-activo.
+
+### Enrutamiento de tráfico con Amazon Elastic Load Balancing
+
+### Equilibradores de carga
+
+El equilibrio de carga hace referencia al proceso de distribución de tareas entre un conjunto de recursos. En el caso de la aplicación de directorio de empleados, los recursos son instancias EC2 que alojan la aplicación, y las tareas son las solicitudes que se envían. Puede utilizar un equilibrador de carga para distribuir las solicitudes en todos los servidores que alojan la aplicación.
+
+Para ello, primero tiene que habilitar al equilibrador de carga a fin de que tome todo el tráfico y lo redirija a los servidores backend en función de un algoritmo. El algoritmo más popular es el de turno rotativo, que envía el tráfico a cada servidor uno tras otro.
+
+Una solicitud típica de una aplicación comienza en el navegador de un cliente. La solicitud se envía a un equilibrador de carga. A continuación, se envía a una de las instancias EC2 que aloja la aplicación. El tráfico de retorno regresa a través del equilibrador de carga y vuelve al navegador del cliente. Como puede ver, el equilibrador de carga se encuentra directamente en la ruta del tráfico.
+
+Aunque es posible instalar su propia solución de equilibrio de carga de software en las instancias EC2, AWS le proporciona un servicio denominado “Elastic Load Balancing”.
+
+Características de ELB
+
+El servicio ELB proporciona una gran ventaja sobre el uso de su propia solución para equilibrar la carga; principalmente, no tiene que administrarlo ni operarlo. Puede distribuir el tráfico de las aplicaciones entrantes en las instancias EC2, los contenedores, las direcciones IP y las funciones de AWS Lambda. Otras características clave incluyen las siguientes:
+
+    Dado que ELB puede equilibrar la carga en direcciones IP, puede funcionar en modo híbrido, lo que significa que también equilibra la carga de los servidores en las instalaciones.
+    ELB ofrece alta disponibilidad. La única opción que debe garantizar es que el equilibrador de carga se implemente en varias zonas de disponibilidad.
+    En términos de escalabilidad, ELB se escala automáticamente para satisfacer la demanda del tráfico entrante. Gestiona el tráfico entrante y lo envía a su aplicación de backend.
+
+Comprobaciones de estado
+
+Es fundamental tomar tiempo para definir una comprobación de estado adecuada. Verificar únicamente que el puerto de una aplicación esté abierto no significa que la aplicación esté funcionando. Tampoco significa que simplemente hacer una llamada a la página de inicio de una aplicación sea la forma correcta.
+
+Por ejemplo, la aplicación de directorio de empleados depende de una base de datos y de Amazon S3. La comprobación de estado debe validar todos los elementos. Una forma de hacerlo sería crear una página web de monitoreo, como “/monitor”, que llame a la base de datos para asegurarse de que se pueda conectar y obtener datos, además de llamar a Amazon S3. A continuación, dirige la comprobación de estado del equilibrador de carga a la página “/monitor”.
+Image6.jpg
+
+Tras determinar la disponibilidad de una nueva instancia EC2, el equilibrador de carga comienza a enviarle tráfico. Si ELB determina que una instancia EC2 ya no funciona, deja de enviarle tráfico y avisa a EC2 Auto Scaling. La responsabilidad de EC2 Auto Scaling es eliminarla del grupo y reemplazarla por una nueva instancia EC2. El tráfico solo se envía a la nueva instancia si supera la comprobación de estado.
+
+Si ocurre una acción de reducción vertical que EC2 Auto Scaling debe llevar a cabo debido a una política de escalado, informa a ELB que las instancias EC2 se terminarán. ELB puede impedir que EC2 Auto Scaling termine una instancia EC2 hasta que finalicen todas las conexiones a la instancia, al tiempo que evita cualquier nueva conexión. Esta característica se denomina “Connection Draining”.
+
+Componentes de ELB
+
+El servicio ELB está formado por tres componentes principales. Elija los marcadores de imagen para obtener más información sobre lasreglas, los agentes de escucha y los grupos de destino.
+
+Equilibrador de carga de aplicaciones
+
+Estas son algunas de las características principales del Equilibrador de carga de aplicaciones.
+
+ALB dirige el tráfico en función de los datos de las solicitudes. ALB toma decisiones de enrutamiento basadas en el protocolo HTTP, como la ruta URL (/upload) y el host, los encabezados y el método HTTP, y la dirección IP de origen del cliente. De este modo, se habilita el enrutamiento pormenorizado a los grupos de destino.
+
+ALB envía respuestas directamente al cliente. ALB tiene la capacidad de responder directamente al cliente con una respuesta fija, como una página HTML personalizada. También puede enviar un redireccionamiento al cliente, lo que resulta útil cuando debe redirigir a un sitio web específico o redirigir una solicitud de HTTP a HTTPS, de modo que se elimina ese trabajo de los servidores de backend.
+
+ALB utiliza la descarga TLS. Al hablar de HTTPS y evitar el trabajo de los servidores de backend, ALB entiende el tráfico HTTPS. Para que pase el tráfico HTTPS a través de ALB, se proporciona un certificado SSL al importar un certificado mediante los servicios de IAM o AWS Certificate Manager (ACM) o al crear uno de forma gratuita con ACM. Esto garantiza que el tráfico entre el cliente y ALB esté cifrado.
+
+ALB autentica a los usuarios. Con respecto al tema de la seguridad, ALB puede autenticar a los usuarios antes de que se les permita atravesar el equilibrador de carga. ALB utiliza el protocolo OpenID Connect y se integra en otros servicios de AWS para admitir los protocolos, como SAML, LDAP, Microsoft Active Directory, etc.
+
+ALB protege el tráfico. A fin de evitar que el tráfico llegue al equilibrador de carga, puede configurar un grupo de seguridad para especificar los intervalos de direcciones IP admitidos.
+
+ALB utiliza el algoritmo de enrutamiento de turno rotativo. ALB garantiza que cada servidor reciba el mismo número de solicitudes en general. Este tipo de enrutamiento funciona para la mayoría de las aplicaciones.
+
+ALB utiliza el algoritmo de enrutamiento de solicitudes menos pendiente. Si las solicitudes al backend varían en complejidad donde una solicitud puede necesitar mucho más tiempo de CPU que otra, el algoritmo de solicitud menos pendiente es más adecuado. También es el algoritmo de enrutamiento adecuado para utilizar si los destinos varían en las capacidades de procesamiento. Una solicitud pendiente se produce cuando se envía una solicitud al servidor de backend y aún no se ha recibido una respuesta.
+
+Por ejemplo, si las instancias EC2 de un grupo de destino no tienen el mismo tamaño, la utilización de la CPU de un servidor será mayor que la otra si se envía el mismo número de solicitudes a cada servidor mediante el algoritmo de enrutamiento de turno rotativo. Ese mismo servidor también tendrá más solicitudes pendientes. El uso del algoritmo de enrutamiento de solicitudes menos pendiente garantizaría un uso equitativo en todos los destinos.
+
+ALB utiliza sesiones rápidas. Si las solicitudes deben enviarse al mismo servidor de backend porque la aplicación funciona con estado, utilice la característica de sesión rápida. Esta característica utiliza una cookie HTTP para recordar en las conexiones a qué servidor enviar el tráfico.
+
+Por último, ALB es específico para el tráfico HTTP y HTTPS. Si la aplicación utiliza un protocolo diferente, considere el equilibrador de carga de red.
+
+Equilibrador de carga de red
+
+Estas son algunas de las características principales del equilibrador de carga de red.
+
+El equilibrador de carga de red admite los protocolos TCP, UDP y TLS. HTTPS utiliza TCP y TLS como protocolos. Sin embargo, NLB funciona en la capa de conexión, por lo que no entiende qué es una solicitud HTTPS. Significa que todas las características necesarias para comprender el protocolo HTTP y HTTPS, como las reglas de enrutamiento basadas en ese protocolo, la autenticación y el algoritmo de enrutamiento de la solicitud menos pendiente, no están disponibles con NLB.
+
+NLB utiliza un algoritmo de enrutamiento hash de flujo. El algoritmo se basa en lo siguiente:
+
+    Protocolo
+    Dirección IP de origen y puerto de origen
+    Dirección IP de destino y puerto de destino
+    Número de secuencia TCP
+
+Si todos los parámetros son iguales, los paquetes se envían exactamente al mismo destino. Si alguno de ellos es diferente en los siguientes paquetes, la solicitud podría enviarse a otro destino.
+
+NLB ofrece sesiones rápidas. A diferencia de ALB, estas sesiones se basan en la dirección IP de origen del cliente, en lugar de en una cookie.
+
+NLB admite la reasignación de TLS. NLB entiende el protocolo TLS. También puede reasignar TLS desde los servidores backend, de forma similar al funcionamiento de ALB.
+
+NLB gestiona millones de solicitudes por segundo. Si bien ALB también puede admitir este número de solicitudes, tiene que escalarse para alcanzar ese número. Eso lleva tiempo. NLB puede gestionar instantáneamente millones de solicitudes por segundo.
+
+NLB admite las direcciones IP estáticas y elásticas. En algunas situaciones, un cliente de aplicación tiene que enviar solicitudes directamente a la dirección IP del equilibrador de carga en lugar de utilizar DNS. Por ejemplo, esto resulta útil si la aplicación no puede utilizar DNS o si los clientes que se conectan requieren reglas de firewall basadas en direcciones IP. En este caso, NLB es el tipo correcto de equilibrador de carga que se debe utilizar.
+
+El procesamiento de lenguaje natural conserva la dirección IP de origen. NLB conserva la dirección IP de origen del cliente al enviar el tráfico al backend. Con ALB, si observa la dirección IP de origen de las solicitudes, encontrará la dirección IP del equilibrador de carga. Mientras esté con NLB, vería la dirección IP real del cliente, requerida por la aplicación de backend en algunos casos.
+
+Selección entre los tipos de ELB
+
+La selección entre los tipos de servicio ELB se realiza al definir qué característica es necesaria para la aplicación. En la tabla, se presenta una lista de las características principales de los equilibradores de carga.
+Característica	Equilibrador de carga de aplicaciones	Equilibrador de carga de red
+Protocolos 	HTTP, HTTPS	TCP, UDP, TLS
+Connection Draining (retardo de anulación del registro) 	√	
+Direcciones IP como destinos
+	√
+	√
+Dirección IP elástica e IP estática
+	
+	√
+Preservación de la dirección IP de origen
+	
+	
+√
+Enrutamiento basado en la dirección IP de origen, la ruta, el host, los encabezados HTTP, el método HTTP y la cadena de consultas
+	√
+	
+Redireccionamientos
+	√
+	
+Respuesta fija
+	√
+	
+Autenticación de usuarios
+	√
+	
+
