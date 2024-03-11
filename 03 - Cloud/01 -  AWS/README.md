@@ -132,7 +132,27 @@ https://www.youtube.com/watch?v=f5uGX-pJuVw
         - [Redireccionamiento de clientes](#redireccionamiento-de-clientes)
         - [Tipos de alta disponibilidad](#tipos-de-alta-disponibilidad)
     - [Enrutamiento de tráfico con Amazon Elastic Load Balancing](#enrutamiento-de-tráfico-con-amazon-elastic-load-balancing)
-    - [Equilibradores de carga](#equilibradores-de-carga)
+      - [Equilibradores de carga](#equilibradores-de-carga)
+      - [Amazon ELB](#amazon-elb)
+        - [Características de ELB](#características-de-elb)
+        - [Comprobaciones de estado](#comprobaciones-de-estado)
+        - [Componentes de ELB](#componentes-de-elb)
+          - [ALB: Equilibrador de carga de aplicaciones](#alb-equilibrador-de-carga-de-aplicaciones)
+          - [NLB: Equilibrador de carga de red](#nlb-equilibrador-de-carga-de-red)
+      - [Selección entre los tipos de ELB](#selección-entre-los-tipos-de-elb)
+    - [Amazon EC2 Auto Scaling](#amazon-ec2-auto-scaling)
+      - [Escalado vertical](#escalado-vertical)
+      - [Escalado horizontal](#escalado-horizontal)
+      - [ELB con EC2 Auto Scaling](#elb-con-ec2-auto-scaling)
+      - [Amazon EC2 Auto Scaling](#amazon-ec2-auto-scaling-1)
+        - [Configuración de los componentes de EC2 Auto Scaling](#configuración-de-los-componentes-de-ec2-auto-scaling)
+        - [Plantillas de lanzamiento](#plantillas-de-lanzamiento)
+        - [Grupos de EC2 Auto Scaling](#grupos-de-ec2-auto-scaling)
+        - [Disponibilidad con EC2 Auto Scaling](#disponibilidad-con-ec2-auto-scaling)
+        - [Automatización con políticas de escalado](#automatización-con-políticas-de-escalado)
+          - [Política de escalado simple](#política-de-escalado-simple)
+          - [Política de escalado por pasos](#política-de-escalado-por-pasos)
+          - [Política de escalado de seguimiento de destino](#política-de-escalado-de-seguimiento-de-destino)
 
 
 # AWS Technical Essentials
@@ -1294,114 +1314,176 @@ El último desafío que debe afrontar cuando tiene más de un servidor es el tip
 
 ### Enrutamiento de tráfico con Amazon Elastic Load Balancing
 
-### Equilibradores de carga
+#### Equilibradores de carga
 
-El equilibrio de carga hace referencia al proceso de distribución de tareas entre un conjunto de recursos. En el caso de la aplicación de directorio de empleados, los recursos son instancias EC2 que alojan la aplicación, y las tareas son las solicitudes que se envían. Puede utilizar un equilibrador de carga para distribuir las solicitudes en todos los servidores que alojan la aplicación.
+El equilibrio de carga hace referencia al proceso de distribución de tareas entre un conjunto de recursos. 
 
-Para ello, primero tiene que habilitar al equilibrador de carga a fin de que tome todo el tráfico y lo redirija a los servidores backend en función de un algoritmo. El algoritmo más popular es el de turno rotativo, que envía el tráfico a cada servidor uno tras otro.
+Para implemetarlo, primero tiene que habilitar al equilibrador de carga a fin de que tome todo el tráfico y lo redirija a los servidores backend en función de un algoritmo. 
 
-Una solicitud típica de una aplicación comienza en el navegador de un cliente. La solicitud se envía a un equilibrador de carga. A continuación, se envía a una de las instancias EC2 que aloja la aplicación. El tráfico de retorno regresa a través del equilibrador de carga y vuelve al navegador del cliente. Como puede ver, el equilibrador de carga se encuentra directamente en la ruta del tráfico.
+**AWS le proporciona un servicio denominado “Elastic Load Balancing”.**
 
-Aunque es posible instalar su propia solución de equilibrio de carga de software en las instancias EC2, AWS le proporciona un servicio denominado “Elastic Load Balancing”.
+#### Amazon ELB
 
-Características de ELB
+##### Características de ELB
 
-El servicio ELB proporciona una gran ventaja sobre el uso de su propia solución para equilibrar la carga; principalmente, no tiene que administrarlo ni operarlo. Puede distribuir el tráfico de las aplicaciones entrantes en las instancias EC2, los contenedores, las direcciones IP y las funciones de AWS Lambda. Otras características clave incluyen las siguientes:
+El servicio ELB proporciona una gran ventaja sobre el uso de su propia solución para equilibrar la carga; principalmente, no tiene que administrarlo ni operarlo. 
 
-    Dado que ELB puede equilibrar la carga en direcciones IP, puede funcionar en modo híbrido, lo que significa que también equilibra la carga de los servidores en las instalaciones.
-    ELB ofrece alta disponibilidad. La única opción que debe garantizar es que el equilibrador de carga se implemente en varias zonas de disponibilidad.
-    En términos de escalabilidad, ELB se escala automáticamente para satisfacer la demanda del tráfico entrante. Gestiona el tráfico entrante y lo envía a su aplicación de backend.
+- Puede distribuir el tráfico de las aplicaciones entrantes en las instancias EC2, los contenedores, las direcciones IP y las funciones de AWS Lambda.
+- Puede funcionar en modo híbrido, lo que significa que también equilibra la carga de los servidores en las instalaciones.
+- ELB ofrece alta disponibilidad. La única opción que debe garantizar es que el equilibrador de carga se implemente en varias zonas de disponibilidad.
+- ELB se escala automáticamente para satisfacer la demanda del tráfico entrante. 
 
-Comprobaciones de estado
+##### Comprobaciones de estado
 
-Es fundamental tomar tiempo para definir una comprobación de estado adecuada. Verificar únicamente que el puerto de una aplicación esté abierto no significa que la aplicación esté funcionando. Tampoco significa que simplemente hacer una llamada a la página de inicio de una aplicación sea la forma correcta.
+Tras determinar la disponibilidad de una nueva instancia EC2, el equilibrador de carga comienza a enviarle tráfico. Si ELB determina que una instancia EC2 ya no funciona, deja de enviarle tráfico y avisa a EC2 Auto Scaling. La responsabilidad de EC2 Auto Scaling es eliminarla del grupo y reemplazarla por una nueva instancia EC2. 
 
-Por ejemplo, la aplicación de directorio de empleados depende de una base de datos y de Amazon S3. La comprobación de estado debe validar todos los elementos. Una forma de hacerlo sería crear una página web de monitoreo, como “/monitor”, que llame a la base de datos para asegurarse de que se pueda conectar y obtener datos, además de llamar a Amazon S3. A continuación, dirige la comprobación de estado del equilibrador de carga a la página “/monitor”.
-Image6.jpg
+ELB puede impedir que EC2 Auto Scaling termine una instancia EC2 hasta que finalicen todas las conexiones a la instancia, al tiempo que evita cualquier nueva conexión. Esta característica se denomina “Connection Draining”.
 
-Tras determinar la disponibilidad de una nueva instancia EC2, el equilibrador de carga comienza a enviarle tráfico. Si ELB determina que una instancia EC2 ya no funciona, deja de enviarle tráfico y avisa a EC2 Auto Scaling. La responsabilidad de EC2 Auto Scaling es eliminarla del grupo y reemplazarla por una nueva instancia EC2. El tráfico solo se envía a la nueva instancia si supera la comprobación de estado.
+##### Componentes de ELB
 
-Si ocurre una acción de reducción vertical que EC2 Auto Scaling debe llevar a cabo debido a una política de escalado, informa a ELB que las instancias EC2 se terminarán. ELB puede impedir que EC2 Auto Scaling termine una instancia EC2 hasta que finalicen todas las conexiones a la instancia, al tiempo que evita cualquier nueva conexión. Esta característica se denomina “Connection Draining”.
+El servicio ELB está formado por tres componentes principales. 
+- reglas
+- agentes de escucha (puerto/protocolo)
+- grupos de destino
 
-Componentes de ELB
+###### ALB: Equilibrador de carga de aplicaciones
 
-El servicio ELB está formado por tres componentes principales. Elija los marcadores de imagen para obtener más información sobre lasreglas, los agentes de escucha y los grupos de destino.
+Características principales del Equilibrador de carga de aplicaciones:
 
-Equilibrador de carga de aplicaciones
+- ALB dirige el tráfico en función de los datos de las solicitudes (protocolo HTTP, ruta URL, el host, encabezados y método HTTP, y la dirección IP de origen). 
 
-Estas son algunas de las características principales del Equilibrador de carga de aplicaciones.
+- ALB envía respuestas directamente al cliente. 
 
-ALB dirige el tráfico en función de los datos de las solicitudes. ALB toma decisiones de enrutamiento basadas en el protocolo HTTP, como la ruta URL (/upload) y el host, los encabezados y el método HTTP, y la dirección IP de origen del cliente. De este modo, se habilita el enrutamiento pormenorizado a los grupos de destino.
+- ALB utiliza la descarga TLS. 
 
-ALB envía respuestas directamente al cliente. ALB tiene la capacidad de responder directamente al cliente con una respuesta fija, como una página HTML personalizada. También puede enviar un redireccionamiento al cliente, lo que resulta útil cuando debe redirigir a un sitio web específico o redirigir una solicitud de HTTP a HTTPS, de modo que se elimina ese trabajo de los servidores de backend.
+- ALB autentica a los usuarios. ALB utiliza el protocolo OpenID Connect y se integra en otros servicios de AWS para admitir los protocolos, como SAML, LDAP, Microsoft Active Directory, etc.
 
-ALB utiliza la descarga TLS. Al hablar de HTTPS y evitar el trabajo de los servidores de backend, ALB entiende el tráfico HTTPS. Para que pase el tráfico HTTPS a través de ALB, se proporciona un certificado SSL al importar un certificado mediante los servicios de IAM o AWS Certificate Manager (ACM) o al crear uno de forma gratuita con ACM. Esto garantiza que el tráfico entre el cliente y ALB esté cifrado.
+- ALB protege el tráfico. 
+  
+- ALB utiliza el algoritmo de enrutamiento de turno rotativo.
 
-ALB autentica a los usuarios. Con respecto al tema de la seguridad, ALB puede autenticar a los usuarios antes de que se les permita atravesar el equilibrador de carga. ALB utiliza el protocolo OpenID Connect y se integra en otros servicios de AWS para admitir los protocolos, como SAML, LDAP, Microsoft Active Directory, etc.
+- ALB utiliza el algoritmo de enrutamiento de solicitudes menos pendiente. Si las solicitudes al backend varían en complejidad donde una solicitud puede necesitar mucho más tiempo de CPU que otra, el algoritmo de solicitud menos pendiente es más adecuado. 
 
-ALB protege el tráfico. A fin de evitar que el tráfico llegue al equilibrador de carga, puede configurar un grupo de seguridad para especificar los intervalos de direcciones IP admitidos.
+- ALB utiliza sesiones rápidas. Esta característica utiliza una cookie HTTP para recordar en las conexiones a qué servidor enviar el tráfico.
 
-ALB utiliza el algoritmo de enrutamiento de turno rotativo. ALB garantiza que cada servidor reciba el mismo número de solicitudes en general. Este tipo de enrutamiento funciona para la mayoría de las aplicaciones.
+- ALB es específico para el tráfico HTTP y HTTPS.
 
-ALB utiliza el algoritmo de enrutamiento de solicitudes menos pendiente. Si las solicitudes al backend varían en complejidad donde una solicitud puede necesitar mucho más tiempo de CPU que otra, el algoritmo de solicitud menos pendiente es más adecuado. También es el algoritmo de enrutamiento adecuado para utilizar si los destinos varían en las capacidades de procesamiento. Una solicitud pendiente se produce cuando se envía una solicitud al servidor de backend y aún no se ha recibido una respuesta.
+###### NLB: Equilibrador de carga de red
 
-Por ejemplo, si las instancias EC2 de un grupo de destino no tienen el mismo tamaño, la utilización de la CPU de un servidor será mayor que la otra si se envía el mismo número de solicitudes a cada servidor mediante el algoritmo de enrutamiento de turno rotativo. Ese mismo servidor también tendrá más solicitudes pendientes. El uso del algoritmo de enrutamiento de solicitudes menos pendiente garantizaría un uso equitativo en todos los destinos.
+**Características principales del equilibrador de carga de red**
 
-ALB utiliza sesiones rápidas. Si las solicitudes deben enviarse al mismo servidor de backend porque la aplicación funciona con estado, utilice la característica de sesión rápida. Esta característica utiliza una cookie HTTP para recordar en las conexiones a qué servidor enviar el tráfico.
+- El equilibrador de carga de red admite los protocolos TCP, UDP y TLS. HTTPS utiliza TCP y TLS como protocolos. Sin embargo, NLB funciona en la capa de conexión, por lo que no entiende qué es una solicitud HTTPS. 
 
-Por último, ALB es específico para el tráfico HTTP y HTTPS. Si la aplicación utiliza un protocolo diferente, considere el equilibrador de carga de red.
+- NLB utiliza un algoritmo de enrutamiento hash de flujo. El algoritmo se basa en lo siguiente:
 
-Equilibrador de carga de red
+  - Protocolo
+  - Dirección IP de origen y puerto de origen
+  - Dirección IP de destino y puerto de destino
+  - Número de secuencia TCP
 
-Estas son algunas de las características principales del equilibrador de carga de red.
+- NLB ofrece sesiones rápidas. A diferencia de ALB, estas sesiones se basan en la dirección IP de origen del cliente, en lugar de en una cookie.
 
-El equilibrador de carga de red admite los protocolos TCP, UDP y TLS. HTTPS utiliza TCP y TLS como protocolos. Sin embargo, NLB funciona en la capa de conexión, por lo que no entiende qué es una solicitud HTTPS. Significa que todas las características necesarias para comprender el protocolo HTTP y HTTPS, como las reglas de enrutamiento basadas en ese protocolo, la autenticación y el algoritmo de enrutamiento de la solicitud menos pendiente, no están disponibles con NLB.
+- NLB admite la reasignación de TLS. NLB entiende el protocolo TLS. También puede reasignar TLS desde los servidores backend, de forma similar al funcionamiento de ALB.
 
-NLB utiliza un algoritmo de enrutamiento hash de flujo. El algoritmo se basa en lo siguiente:
+- NLB gestiona millones de solicitudes por segundo sin necesidad de escaalar.
 
-    Protocolo
-    Dirección IP de origen y puerto de origen
-    Dirección IP de destino y puerto de destino
-    Número de secuencia TCP
+- NLB admite las direcciones IP estáticas y elásticas. En algunas situaciones, un cliente de aplicación tiene que enviar solicitudes directamente a la dirección IP del equilibrador de carga en lugar de utilizar DNS.
+  
+- El procesamiento de lenguaje natural conserva la dirección IP de origen. NLB conserva la dirección IP de origen del cliente al enviar el tráfico al backend. 
+  
+#### Selección entre los tipos de ELB
 
-Si todos los parámetros son iguales, los paquetes se envían exactamente al mismo destino. Si alguno de ellos es diferente en los siguientes paquetes, la solicitud podría enviarse a otro destino.
+| Característica |	Equilibrador de carga de aplicaciones |	Equilibrador de carga de red |
+|-----------|-------------|---------|
+| Protocolos |	HTTP, HTTPS	|TCP, UDP, TLS|
+| Connection Draining (retardo de anulación del registro) |	√	 | |
+| Direcciones IP como destinos |	√ |  	√ |
+| Dirección IP elástica e IP estática | | √| 
+| Preservación de la dirección IP de origen | | √ |
+| Enrutamiento basado en la dirección IP de origen, la ruta, el host, los encabezados HTTP, el método HTTP y la cadena de consultas |	√ | |
+| Redireccionamientos | √ | |
+| Respuesta fija |	√ | |
+| Autenticación de usuarios| 	√ | | 
 
-NLB ofrece sesiones rápidas. A diferencia de ALB, estas sesiones se basan en la dirección IP de origen del cliente, en lugar de en una cookie.
+### Amazon EC2 Auto Scaling
 
-NLB admite la reasignación de TLS. NLB entiende el protocolo TLS. También puede reasignar TLS desde los servidores backend, de forma similar al funcionamiento de ALB.
+#### Escalado vertical
 
-NLB gestiona millones de solicitudes por segundo. Si bien ALB también puede admitir este número de solicitudes, tiene que escalarse para alcanzar ese número. Eso lleva tiempo. NLB puede gestionar instantáneamente millones de solicitudes por segundo.
+Con el sistema activo-pasivo, necesita el escalado vertical. Implica aumentar el tamaño del servidor. Con las instancias EC2, se selecciona un tipo más grande u otro tipo de instancias. Esto solo se puede hacer mientras la instancia se encuentra en estado detenido.
 
-NLB admite las direcciones IP estáticas y elásticas. En algunas situaciones, un cliente de aplicación tiene que enviar solicitudes directamente a la dirección IP del equilibrador de carga en lugar de utilizar DNS. Por ejemplo, esto resulta útil si la aplicación no puede utilizar DNS o si los clientes que se conectan requieren reglas de firewall basadas en direcciones IP. En este caso, NLB es el tipo correcto de equilibrador de carga que se debe utilizar.
+Se aplican los siguientes pasos:
 
-El procesamiento de lenguaje natural conserva la dirección IP de origen. NLB conserva la dirección IP de origen del cliente al enviar el tráfico al backend. Con ALB, si observa la dirección IP de origen de las solicitudes, encontrará la dirección IP del equilibrador de carga. Mientras esté con NLB, vería la dirección IP real del cliente, requerida por la aplicación de backend en algunos casos.
+- Se detiene la instancia pasiva. 
+- Se cambia el tamaño o el tipo de instancia y, a continuación, se vuelve a iniciar dicha instancia.
+- Se cambia el tráfico a la instancia pasiva, activándola.
+- Se detiene la instancia, se cambia el tamaño y se inicia la instancia activa anterior, ya que ambas instancias deben coincidir.
 
-Selección entre los tipos de ELB
+Cuando se reduce el número de solicitudes, se debe realizar la misma operación. En realidad es mucho trabajo manual. Otra desventaja es que un servidor solo puede escalarse verticalmente hasta cierto límite. 
 
-La selección entre los tipos de servicio ELB se realiza al definir qué característica es necesaria para la aplicación. En la tabla, se presenta una lista de las características principales de los equilibradores de carga.
-Característica	Equilibrador de carga de aplicaciones	Equilibrador de carga de red
-Protocolos 	HTTP, HTTPS	TCP, UDP, TLS
-Connection Draining (retardo de anulación del registro) 	√	
-Direcciones IP como destinos
-	√
-	√
-Dirección IP elástica e IP estática
-	
-	√
-Preservación de la dirección IP de origen
-	
-	
-√
-Enrutamiento basado en la dirección IP de origen, la ruta, el host, los encabezados HTTP, el método HTTP y la cadena de consultas
-	√
-	
-Redireccionamientos
-	√
-	
-Respuesta fija
-	√
-	
-Autenticación de usuarios
-	√
-	
+Aquí es donde el sistema activo-activo puede ayudar. Cuando hay demasiadas solicitudes, este sistema se puede escalar horizontalmente al añadir más servidores.
 
+#### Escalado horizontal
+
+El servicio Amazon EC2 Auto Scaling puede encargarse de crear y eliminar automáticamente las instancias EC2 basadas en métricas de Amazon CloudWatch.
+
+#### ELB con EC2 Auto Scaling
+
+El servicio ELB se integra a la perfección en EC2 Auto Scaling. Tan pronto como se añade una nueva instancia EC2 al grupo de Auto Scaling EC2 o se elimina de él, se notifica a ELB.
+
+El monitoreo es una parte importante de los equilibradores de carga, ya que deben dirigir el tráfico solo a instancias EC2 con buen estado. Por eso, ELB admite dos tipos de comprobaciones de estado.
+
+- Establecer una conexión con una instancia EC2 de backend mediante TCP y marcar la instancia como disponible si la conexión se realiza correctamente
+- Realizar una solicitud HTTP o HTTPS a una página web especificada y validar que se devuelve un código de respuesta HTTP
+
+#### Amazon EC2 Auto Scaling
+
+El servicio Amazon EC2 Auto Scaling añade y elimina la capacidad para mantener un rendimiento estable y predecible al menor costo posible. 
+
+##### Configuración de los componentes de EC2 Auto Scaling
+
+Los tres componentes principales de EC2 Auto Scaling son los siguientes:
+
+- Configuración o plantilla de lanzamiento: ¿Qué recurso debe escalarse automáticamente?
+- Grupo de Auto Scaling EC2: ¿Dónde deben implementarse los recursos?
+- Políticas de escalado: ¿Cuándo deben añadirse o eliminarse los recursos?
+
+##### Plantillas de lanzamiento
+
+EC2 Auto Scaling también requiere la misma información de una instancia EC2 para crear la instancia EC2 en su nombre cuando tenga que escalarse. Esta información se almacena en una plantilla de lanzamiento.
+
+Puede utilizar una plantilla de lanzamiento para lanzar manualmente una instancia EC2. También puede utilizarla con EC2 Auto Scaling. Asimismo, admite el control de versiones.
+
+Puede crear una plantilla de lanzamiento de una de estas tres formas.
+
+- La forma más rápida para crear una plantilla es utilizar una instancia EC2 actual. La totalidad de la configuración ya está definida.
+- Otra opción es crear una plantilla a partir de una actual o de una versión anterior de una plantilla de lanzamiento.
+- La última opción es crear una plantilla desde cero. Deberán definirse las siguientes opciones: ID de la AMI, tipo de instancias, par de claves, grupo de seguridad, almacenamiento y etiquetas de recursos.
+
+##### Grupos de EC2 Auto Scaling
+
+Un grupo de Auto Scaling lo ayuda a definir dónde EC2 Auto Scaling implementa sus recursos. Aquí es donde especifica Amazon VPC y las subredes en las que se debe lanzar la instancia EC2. 
+
+Con los grupos de Auto Scaling, puede especificar el tipo de compra para las instancias EC2. 
+
+Para especificar cuántas instancias debe lanzar EC2 Auto Scaling, dispone de tres configuraciones de capacidad para configurar el tamaño del grupo.
+
+- Mínima: se refiere al número mínimo de instancias que se ejecutan en el grupo de Auto Scaling 
+- Máxima: indica el número máximo de instancias que se ejecutan en el grupo de Auto Scaling
+- Capacidad deseada: indica la cantidad de instancias que debe haber en el grupo de Auto Scaling.
+
+##### Disponibilidad con EC2 Auto Scaling
+
+Si prefiere utilizar EC2 Auto Scaling para la administración de flotas, puede configurar las tres configuraciones en el mismo número, por ejemplo cuatro. EC2 Auto Scaling garantizará que si una instancia EC2 pasa a tener mal estado, la reemplaza para garantizar que siempre haya cuatro instancias EC2 disponibles. De esta forma, se garantiza una alta disponibilidad para sus aplicaciones.
+
+##### Automatización con políticas de escalado
+
+Hay tres tipos de políticas de escalado disponibles: escalado simple, de pasos, y de seguimiento de destino.
+
+###### Política de escalado simple
+Utiliza una alarma de CloudWatch y especifica qué hacer cuando se activa. 
+
+###### Política de escalado por pasos
+Las políticas de escalado por pasos responden a las alarmas adicionales incluso mientras se está realizando una actividad de escalado o un reemplazo de comprobaciones de estado. Podría decidir añadir dos instancias más cuando la utilización de la CPU sea del 85 % y cuatro instancias más cuando sea del 95 %.
+
+###### Política de escalado de seguimiento de destino
+Si la aplicación se escala según la utilización promedio de la CPU, la utilización de la red promedio (dentro o fuera) o el recuento de solicitudes, este tipo de política de escalado es el que se debe utilizar. Todo lo que tiene que proporcionar es el valor de destino al que se va a dar seguimiento, y se crean automáticamente las alarmas de CloudWatch necesarias.
