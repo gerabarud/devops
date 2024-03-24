@@ -10,14 +10,17 @@ Table of contents
   - [Control flow and variables](#control-flow-and-variables)
 - [`dd`](#dd)
 - [`diff`](#diff)
+- [`knock`](#knock)
 - [`rsync`](#rsync)
 - [`sed`](#sed)
   - [Search and replace](#search-and-replace)
   - [Delete lines](#delete-lines)
+- [`sort`](#sort)
 - [`tee`](#tee)
   - [Redirect output to a file:](#redirect-output-to-a-file)
   - [Append output to an existing file:](#append-output-to-an-existing-file)
   - [Write output to multiple files:](#write-output-to-multiple-files)
+- [`uniq`](#uniq)
 - [`xargs`](#xargs)
 
 ## `awk`
@@ -200,6 +203,16 @@ diff file1.txt file2.txt
    diff -B file1.txt file2.txt
    ```
 
+## `knock`
+
+The `knock` command is used to send a sequence of packets, typically TCP or UDP, to a destination host in order to trigger a specific action on a service running on that host. This action might include opening a port, closing a port, or executing some other predefined action.
+
+```bash
+knock -v <hostname> <port1> <port2> ... <portN>
+```
+
+After sending the sequence of packets, the target service, usually a firewall or port knocking daemon, will detect the sequence and perform the associated action, such as opening a specific port for a limited period of time.
+
 ## `rsync`
 
 rsync is used for file synchronization and data transfer between systems.
@@ -278,6 +291,49 @@ Deletes lines matching the specified pattern
 sed '/pattern/d' file
 ```
 
+## `sort`
+
+Sort lines of text files alphabetically or numerically, either in ascending or descending order. 
+
+```bash
+sort [OPTIONS] [FILE]
+```
+
+Here are some common options used with the `sort` command:
+
+- `-r`: Sort in reverse order.
+- `-n`: Sort numerically.
+- `-k`: Specify a key for sorting. For example, `-k 2,2` sorts based on the second field.
+- `-u`: Only output unique lines.
+- `-t`: Specify a field separator. For example, `-t ':'` specifies colon (`:`) as the field separator.
+
+Here are some examples:
+
+1. Sort a file in ascending order:
+   ```bash
+   sort file.txt
+   ```
+
+2. Sort a file in descending order:
+   ```bash
+   sort -r file.txt
+   ```
+
+3. Sort a file numerically:
+   ```bash
+   sort -n numbers.txt
+   ```
+
+4. Sort a file based on the second field:
+   ```bash
+   sort -k 2,2 file.txt
+   ```
+
+5. Sort a file based on a custom delimiter (e.g., colon):
+   ```bash
+   sort -t ':' -k 3,3 file.txt
+   ```
+
 ## `tee`
 The `tee` command in Linux is used to read from standard input and write to both standard output and one or more files simultaneously. 
 
@@ -318,6 +374,50 @@ Here are a few examples to illustrate the usage of the `tee` command:
    command | tee file1.txt file2.txt
    ```
    This command saves the output of a command to both `file1.txt` and `file2.txt`, in addition to displaying it on the terminal.
+
+## `uniq`
+
+Filter out adjacent duplicate lines from a sorted file or standard input. It is often used in conjunction with the `sort` command.
+
+```bash
+uniq [OPTIONS] [INPUT_FILE [OUTPUT_FILE]]
+```
+
+Here are some common options used with the `uniq` command:
+
+- `-c`: Prefix lines with the number of occurrences.
+- `-d`: Only print duplicate lines.
+- `-u`: Only print unique lines (exclude duplicates).
+- `-i`: Ignore case distinctions in comparisons.
+- `-f N`: Skip the first N fields before checking for uniqueness.
+- `-s N`: Skip the first N characters before checking for uniqueness.
+
+Here are some examples:
+
+1. Remove adjacent duplicate lines from a sorted file:
+   ```bash
+   uniq sorted_file.txt
+   ```
+
+2. Count the number of occurrences of each line and remove duplicates:
+   ```bash
+   uniq -c sorted_file.txt
+   ```
+
+3. Remove duplicate lines from an unsorted file (requires sorting first):
+   ```bash
+   sort unsorted_file.txt | uniq
+   ```
+
+4. Keep only the duplicate lines from a sorted file:
+   ```bash
+   uniq -d sorted_file.txt
+   ```
+
+5. Keep only the unique lines from a sorted file:
+   ```bash
+   uniq -u sorted_file.txt
+   ```
 
 ## `xargs`
 
