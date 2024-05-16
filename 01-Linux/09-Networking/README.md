@@ -1,20 +1,26 @@
 - [Networking en Linux](#networking-en-linux)
   - [`dig`:  información detallada sobre registros DNS.](#dig--información-detallada-sobre-registros-dns)
+  - [`ip`: administrar y mostrar la configuración de red](#ip-administrar-y-mostrar-la-configuración-de-red)
+    - [Opciones Comunes:](#opciones-comunes)
+    - [Casos de Uso:](#casos-de-uso)
   - [`iptable`: filtrado de paquetes y administración de firewall](#iptable-filtrado-de-paquetes-y-administración-de-firewall)
     - [Ejemplos](#ejemplos)
-  - [`nmap`: escaneo de red](#nmap-escaneo-de-red)
-    - [Opciones Comunes](#opciones-comunes)
-    - [Casos de Uso](#casos-de-uso)
-  - [`nslookup`: info de servidore DNS](#nslookup-info-de-servidore-dns)
-  - [`ping`: envía un `ICMP ECHO_REQUEST` y espera un `ICMP ECHO_REPLY`](#ping-envía-un-icmp-echo_request-y-espera-un-icmp-echo_reply)
+  - [`nmcli`: gestionar y configurar conexiones de red](#nmcli-gestionar-y-configurar-conexiones-de-red)
     - [Opciones Comunes:](#opciones-comunes-1)
     - [Casos de Uso:](#casos-de-uso-1)
-  - [`telnet`: probar conectividad y accesibilidad a un servicio en un puerto](#telnet-probar-conectividad-y-accesibilidad-a-un-servicio-en-un-puerto)
-    - [Opciones Comunes:](#opciones-comunes-2)
-    - [Casos de Uso:](#casos-de-uso-2)
-  - [`traceroute`: rastear rutas que toman los paquetes IP](#traceroute-rastear-rutas-que-toman-los-paquetes-ip)
+  - [`nmap`: escaneo de red](#nmap-escaneo-de-red)
+    - [Opciones Comunes](#opciones-comunes-2)
+    - [Casos de Uso](#casos-de-uso-2)
+  - [`nslookup`: info de servidore DNS](#nslookup-info-de-servidore-dns)
+  - [`ping`: envía un `ICMP ECHO_REQUEST` y espera un `ICMP ECHO_REPLY`](#ping-envía-un-icmp-echo_request-y-espera-un-icmp-echo_reply)
     - [Opciones Comunes:](#opciones-comunes-3)
     - [Casos de Uso:](#casos-de-uso-3)
+  - [`telnet`: probar conectividad y accesibilidad a un servicio en un puerto](#telnet-probar-conectividad-y-accesibilidad-a-un-servicio-en-un-puerto)
+    - [Opciones Comunes:](#opciones-comunes-4)
+    - [Casos de Uso:](#casos-de-uso-4)
+  - [`traceroute`: rastear rutas que toman los paquetes IP](#traceroute-rastear-rutas-que-toman-los-paquetes-ip)
+    - [Opciones Comunes:](#opciones-comunes-5)
+    - [Casos de Uso:](#casos-de-uso-5)
 
 # Networking en Linux
 
@@ -84,6 +90,84 @@ dig [options] domain_name
    dig -p port_number domain_name
    ```
 
+## `ip`: administrar y mostrar la configuración de red
+
+Administrar y mostrar la configuración de red en sistemas Linux. 
+
+### Opciones Comunes:
+
+1. `address`: Administrar direcciones IP y subredes.
+2. `link`: Administrar interfaces de red.
+3. `route`: Administrar tablas de enrutamiento.
+4. `netns`: Administrar espacios de nombres de red.
+5. `rule`: Administrar reglas de política de enrutamiento.
+6. `neighbor`: Mostrar y manipular la tabla ARP.
+7. `maddress`: Administrar direcciones multicast.
+8. `mroute`: Administrar tablas de enrutamiento multicast.
+9. `monitor`: Monitorizar eventos de cambio de configuración de red.
+
+### Casos de Uso:
+
+**Mostrar Información de Interfaces de Red**:
+```bash
+ip addr show
+```
+
+**Mostrar Tabla de Enrutamiento**:
+```bash
+ip route show
+```
+
+**Agregar una Dirección IP a una Interfaz de Red**:
+```bash
+ip addr add 192.168.1.10/24 dev eth0
+```
+
+**Eliminar una Dirección IP de una Interfaz de Red**:
+```bash
+ip addr del 192.168.1.10/24 dev eth0
+```
+
+**Activar una Interfaz de Red**:
+```bash
+ip link set eth0 up
+```
+
+**Desactivar una Interfaz de Red**:
+```bash
+ip link set eth0 down
+```
+
+**Agregar una Ruta Estática**:
+```bash
+ip route add 192.168.2.0/24 via 192.168.1.1 dev eth0
+```
+
+**Eliminar una Ruta Estática**:
+```bash
+ip route del 192.168.2.0/24 via 192.168.1.1 dev eth0
+```
+
+**Crear un Espacio de Nombres de Red**:
+```bash
+ip netns add mynamespace
+```
+
+**Mostrar Vecinos ARP**:
+```bash
+ip neighbor show
+```
+
+**Mostrar Estadísticas de una Interfaz de Red Específica**:
+```bash
+ip -s link show eth0
+```
+
+**Mostrar Estadísticas de una Dirección IP Específica**:
+```bash
+ip -s addr show dev eth0
+```
+
 ## `iptable`: filtrado de paquetes y administración de firewall
 
 Herramienta de filtrado de paquetes y administración de firewall. Permite configurar reglas para controlar cómo los paquetes de red entran, salen y atraviesan el sistema. 
@@ -141,6 +225,78 @@ iptables -A INPUT -s <dirección_IP> -j DROP
 5. **Eliminar una regla específica:**
 ```bash
 iptables -D INPUT <número_de_regla>
+```
+
+## `nmcli`: gestionar y configurar conexiones de red
+
+Interfaz de línea de comandos para NetworkManager, que permite gestionar y configurar conexiones de red en sistemas Linux. 
+
+### Opciones Comunes:
+
+1. `connection`: Administrar conexiones de red.
+2. `device`: Administrar dispositivos de red.
+3. `general`: Mostrar información general de NetworkManager.
+4. `monitor`: Mostrar eventos de NetworkManager en tiempo real.
+5. `radio`: Administrar dispositivos de radio (Wi-Fi, Bluetooth, etc.).
+6. `show`: Mostrar información detallada de una conexión o dispositivo específico.
+7. `status`: Mostrar el estado actual de las conexiones de red.
+
+### Casos de Uso:
+
+**Mostrar dispositivos**:
+```bash
+nmcli dev
+```
+
+**Mostrar todas las Conexiones**:
+```bash
+nmcli connection show
+```
+
+**Conectar a una Red Wi-Fi**:
+```bash
+nmcli device wifi connect SSID password PASSWORD
+```
+
+**Desconectar de una Red Wi-Fi**:
+```bash
+nmcli device disconnect wlan0
+```
+
+**Mostrar Estado de la Red**:
+```bash
+nmcli device status
+```
+
+**Mostrar Detalles de una Conexión Específica**:
+```bash
+nmcli connection show "Wired connection 1"
+```
+
+**Activar y Desactivar Wi-Fi**:
+```bash
+nmcli radio wifi on
+nmcli radio wifi off
+```
+
+**Conectar a una Red Ethernet**:
+```bash
+nmcli connection up "Wired connection 1"
+```
+
+**Desconectar de una Red Ethernet**:
+```bash
+nmcli connection down "Wired connection 1"
+```
+
+**Mostrar Información General de NetworkManager**:
+```bash
+nmcli general status
+```
+
+**Monitorizar Eventos de NetworkManager**:
+```bash
+nmcli monitor
 ```
 
 ## `nmap`: escaneo de red  
@@ -342,31 +498,31 @@ Se utiliza para rastrear la ruta que toman los paquetes IP desde tu computadora 
 ### Casos de Uso:
 
 1. **Verificar la Ruta de Red**: Muestra todos los saltos entre tu máquina y el destino.
-   ```bash
-   traceroute example.com
-   ```
+```bash
+traceroute example.com
+```
 
 2. **Identificar Problemas de Red**: Encuentra dónde se produce la congestión o los retrasos en la red.
-   ```bash
-   traceroute -q 5 example.com
-   ```
+```bash
+traceroute -q 5 example.com
+```
 
 3. **Analizar Calidad de la Conexión**: Observa la latencia entre los saltos y determina la calidad de la conexión.
-   ```bash
-   traceroute -I example.com
-   ```
+```bash
+traceroute -I example.com
+```
 
 4. **Depuración de Conexiones TCP**: Utiliza el traceroute con TCP SYN para depurar problemas en conexiones TCP.
-   ```bash
-   traceroute -T -p 80 example.com
-   ```
+```bash
+traceroute -T -p 80 example.com
+```
 
 5. **Depuración de Conexiones UDP**: Utiliza el traceroute con UDP para depurar problemas en conexiones UDP.
-   ```bash
-   traceroute -U example.com
-   ```
+```bash
+traceroute -U example.com
+```
 
 6. **Resolución de Problemas de Firewall**: Identifica si un firewall bloquea el tráfico en ciertos puertos.
-   ```bash
-   traceroute -p 22 example.com
-   ```
+```bash
+traceroute -p 22 example.com
+```
