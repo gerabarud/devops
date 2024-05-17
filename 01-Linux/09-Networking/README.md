@@ -1,26 +1,65 @@
 - [Networking en Linux](#networking-en-linux)
   - [`dig`:  información detallada sobre registros DNS.](#dig--información-detallada-sobre-registros-dns)
+  - [`ifcongif`: configurar y mostrar la configuración de las interfaces de red](#ifcongif-configurar-y-mostrar-la-configuración-de-las-interfaces-de-red)
+    - [Casos de Uso](#casos-de-uso)
+    - [Ejemplos Prácticos](#ejemplos-prácticos)
   - [`ip`: administrar y mostrar la configuración de red](#ip-administrar-y-mostrar-la-configuración-de-red)
     - [Opciones Comunes:](#opciones-comunes)
-    - [Casos de Uso:](#casos-de-uso)
+    - [Casos de Uso:](#casos-de-uso-1)
+    - [TTL: Time To Live](#ttl-time-to-live)
+      - [En el Comando `ping`](#en-el-comando-ping)
+      - [Interpretación del TTL](#interpretación-del-ttl)
+      - [Configuración Inicial de TTL](#configuración-inicial-de-ttl)
+      - [Ejemplo de Uso del Comando `ping` con TTL](#ejemplo-de-uso-del-comando-ping-con-ttl)
+      - [Consideraciones Adicionales](#consideraciones-adicionales)
   - [`iptable`: filtrado de paquetes y administración de firewall](#iptable-filtrado-de-paquetes-y-administración-de-firewall)
     - [Ejemplos](#ejemplos)
-  - [`nmcli`: gestionar y configurar conexiones de red](#nmcli-gestionar-y-configurar-conexiones-de-red)
-    - [Opciones Comunes:](#opciones-comunes-1)
-    - [Casos de Uso:](#casos-de-uso-1)
-  - [`nmap`: escaneo de red](#nmap-escaneo-de-red)
-    - [Opciones Comunes](#opciones-comunes-2)
+  - [`netcat`: permite leer y escribir datos a través de conexiones de red utilizando el protocolo TCP o UDP](#netcat-permite-leer-y-escribir-datos-a-través-de-conexiones-de-red-utilizando-el-protocolo-tcp-o-udp)
+    - [Sintaxis Básica](#sintaxis-básica)
+    - [Opciones Comunes](#opciones-comunes-1)
+    - [Ejemplos de Uso](#ejemplos-de-uso)
     - [Casos de Uso](#casos-de-uso-2)
+  - [`netstat`: información sobre las conexiones de red, tablas de enrutamiento, interfaces de red y estadísticas de protocolos](#netstat-información-sobre-las-conexiones-de-red-tablas-de-enrutamiento-interfaces-de-red-y-estadísticas-de-protocolos)
+    - [Sintaxis Básica](#sintaxis-básica-1)
+    - [Opciones Comunes](#opciones-comunes-2)
+    - [Ejemplos de Uso](#ejemplos-de-uso-1)
+    - [Ejemplo de Salida](#ejemplo-de-salida)
+    - [Interpretación de la Salida](#interpretación-de-la-salida)
+    - [Casos de Uso](#casos-de-uso-3)
+  - [`nmcli`: gestionar y configurar conexiones de red](#nmcli-gestionar-y-configurar-conexiones-de-red)
+    - [Opciones Comunes:](#opciones-comunes-3)
+    - [Casos de Uso:](#casos-de-uso-4)
+  - [`nmap`: escaneo de red](#nmap-escaneo-de-red)
+    - [Opciones Comunes](#opciones-comunes-4)
+    - [Casos de Uso](#casos-de-uso-5)
   - [`nslookup`: info de servidore DNS](#nslookup-info-de-servidore-dns)
   - [`ping`: envía un `ICMP ECHO_REQUEST` y espera un `ICMP ECHO_REPLY`](#ping-envía-un-icmp-echo_request-y-espera-un-icmp-echo_reply)
-    - [Opciones Comunes:](#opciones-comunes-3)
-    - [Casos de Uso:](#casos-de-uso-3)
-  - [`telnet`: probar conectividad y accesibilidad a un servicio en un puerto](#telnet-probar-conectividad-y-accesibilidad-a-un-servicio-en-un-puerto)
-    - [Opciones Comunes:](#opciones-comunes-4)
-    - [Casos de Uso:](#casos-de-uso-4)
-  - [`traceroute`: rastear rutas que toman los paquetes IP](#traceroute-rastear-rutas-que-toman-los-paquetes-ip)
     - [Opciones Comunes:](#opciones-comunes-5)
-    - [Casos de Uso:](#casos-de-uso-5)
+    - [Casos de Uso:](#casos-de-uso-6)
+  - [`route`: mostrar y manipular la tabla de enrutamiento IP](#route-mostrar-y-manipular-la-tabla-de-enrutamiento-ip)
+    - [Opciones Comunes](#opciones-comunes-6)
+    - [Casos de Uso](#casos-de-uso-7)
+    - [Ejemplos Prácticos](#ejemplos-prácticos-1)
+  - [`ss`: información detallada sobre las conexiones de red, sockets, y estadísticas de protocolos](#ss-información-detallada-sobre-las-conexiones-de-red-sockets-y-estadísticas-de-protocolos)
+    - [Sintaxis Básica](#sintaxis-básica-2)
+    - [Opciones Comunes](#opciones-comunes-7)
+    - [Ejemplos de Uso](#ejemplos-de-uso-2)
+    - [Casos de Uso](#casos-de-uso-8)
+  - [`tcpdump`: capturar y analizar el tráfico de red en un sistema](#tcpdump-capturar-y-analizar-el-tráfico-de-red-en-un-sistema)
+    - [Sintaxis Básica](#sintaxis-básica-3)
+    - [Opciones Comunes](#opciones-comunes-8)
+    - [Ejemplos de Uso](#ejemplos-de-uso-3)
+    - [Casos de Uso](#casos-de-uso-9)
+  - [`telnet`: probar conectividad y accesibilidad a un servicio en un puerto](#telnet-probar-conectividad-y-accesibilidad-a-un-servicio-en-un-puerto)
+    - [Opciones Comunes:](#opciones-comunes-9)
+    - [Casos de Uso:](#casos-de-uso-10)
+  - [`tracepath`: rastrear la ruta que toman los paquetes a través de una red](#tracepath-rastrear-la-ruta-que-toman-los-paquetes-a-través-de-una-red)
+    - [Sintaxis Básica](#sintaxis-básica-4)
+    - [Opciones Comunes](#opciones-comunes-10)
+    - [Ejemplos de Uso](#ejemplos-de-uso-4)
+  - [`traceroute`: rastear rutas que toman los paquetes IP](#traceroute-rastear-rutas-que-toman-los-paquetes-ip)
+    - [Opciones Comunes:](#opciones-comunes-11)
+    - [Casos de Uso:](#casos-de-uso-11)
 
 # Networking en Linux
 
@@ -89,6 +128,68 @@ dig [options] domain_name
    ```bash
    dig -p port_number domain_name
    ```
+
+## `ifcongif`: configurar y mostrar la configuración de las interfaces de red 
+
+Configurar y mostrar la configuración de las interfaces de red. Aunque ha sido reemplazada en gran medida por el comando `ip` del paquete `iproute2` en muchas distribuciones modernas, sigue siendo útil y ampliamente utilizado en algunos entornos.
+
+### Casos de Uso
+
+1. **Mostrar configuración de todas las interfaces de red**:
+```bash
+ifconfig
+```
+
+2. **Mostrar configuración de una interfaz específica**:
+```bash
+ifconfig <interface>
+```
+
+3. **Activar una interfaz de red**:
+```bash
+sudo ifconfig <interface> up
+```
+
+4. **Desactivar una interfaz de red**:
+```bash
+sudo ifconfig <interface> down
+```
+
+5. **Asignar una dirección IP a una interfaz de red**:
+```bash
+sudo ifconfig <interface> <IP address>
+```
+
+6. **Asignar una máscara de subred a una interfaz de red**:
+```bash
+sudo ifconfig <interface> netmask <netmask>
+```
+
+7. **Asignar una dirección de broadcast a una interfaz de red**:
+```bash
+sudo ifconfig <interface> broadcast <broadcast address>
+```
+
+### Ejemplos Prácticos
+
+1. **Configurar una interfaz con una dirección IP, máscara de subred y dirección de broadcast**:
+   Configurar la interfaz `eth0` con la dirección IP `192.168.1.100`, la máscara de subred `255.255.255.0` y la dirección de broadcast `192.168.1.255`:
+```bash
+sudo ifconfig eth0 192.168.1.100 netmask 255.255.255.0 broadcast 192.168.1.255
+```
+
+2. **Configurar una interfaz para obtener una dirección IP automáticamente (DHCP)**:
+   Aunque `ifconfig` no se usa normalmente para configurar DHCP (se utiliza `dhclient` o `dhcpcd`), puede desactivar y activar una interfaz para reiniciar la configuración de red, lo que a veces provoca una nueva solicitud DHCP:
+```bash
+sudo ifconfig eth0 down
+sudo ifconfig eth0 up
+```
+
+3. **Verificar el estado de todas las interfaces de red**:
+   Este comando muestra información sobre todas las interfaces de red, incluyendo el estado, la dirección IP, la máscara de subred y más:
+```bash
+ifconfig -a
+```
 
 ## `ip`: administrar y mostrar la configuración de red
 
@@ -168,6 +269,48 @@ ip -s link show eth0
 ip -s addr show dev eth0
 ```
 
+### TTL: Time To Live
+
+Valor en los paquetes IP que indica el número máximo de saltos (routers o nodos) que el paquete puede atravesar antes de ser descartado. Este valor se decrece en uno por cada salto que realiza el paquete a través de un router. Si el TTL llega a cero antes de alcanzar su destino, el paquete es descartado y no se entregará.
+
+#### En el Comando `ping`
+
+Cuando ejecutas el comando `ping`, verás un valor de TTL en la salida que proporciona información útil sobre la red. Aquí hay un ejemplo de salida de `ping`:
+
+```sh
+$ ping google.com
+PING google.com (142.250.72.238): 56 data bytes
+64 bytes from 142.250.72.238: icmp_seq=0 ttl=117 time=12.876 ms
+64 bytes from 142.250.72.238: icmp_seq=1 ttl=117 time=13.053 ms
+64 bytes from 142.250.72.238: icmp_seq=2 ttl=117 time=12.742 ms
+```
+
+En este ejemplo, `ttl=117` significa que el paquete ICMP (protocolo utilizado por `ping`) ha hecho 117 saltos antes de llegar al destino.
+
+#### Interpretación del TTL
+
+1. **Diagnóstico de Red**: Un TTL alto generalmente significa que el destino está cerca en términos de saltos de red, mientras que un TTL bajo indica que el destino está más lejos. 
+2. **Prevención de Bucles**: El TTL ayuda a prevenir que los paquetes circulen indefinidamente en la red debido a bucles de enrutamiento.
+
+#### Configuración Inicial de TTL
+
+El TTL inicial puede variar dependiendo del sistema operativo:
+- **Linux/Unix**: Usualmente 64.
+- **Windows**: Generalmente 128.
+- **Routers**: A menudo 255.
+
+#### Ejemplo de Uso del Comando `ping` con TTL
+
+**En Linux/Unix**:
+```sh
+ping -t 10 google.com
+```
+
+#### Consideraciones Adicionales
+
+- **Seguridad**: Algunos sistemas y firewalls ajustan el TTL o lo utilizan como una técnica de seguridad para mitigar ataques como el spoofing de IP.
+- **Trazado de Ruta**: La herramienta `traceroute` utiliza el concepto de TTL incrementando el valor de TTL en cada intento de rastrear la ruta tomada por los paquetes para llegar a su destino.
+
 ## `iptable`: filtrado de paquetes y administración de firewall
 
 Herramienta de filtrado de paquetes y administración de firewall. Permite configurar reglas para controlar cómo los paquetes de red entran, salen y atraviesan el sistema. 
@@ -226,6 +369,230 @@ iptables -A INPUT -s <dirección_IP> -j DROP
 ```bash
 iptables -D INPUT <número_de_regla>
 ```
+
+## `netcat`: permite leer y escribir datos a través de conexiones de red utilizando el protocolo TCP o UDP
+
+### Sintaxis Básica
+
+```sh
+nc [opciones] host puerto
+```
+
+### Opciones Comunes
+
+- `-l` : Escuchar para conexiones entrantes.
+- `-p puerto` : Especificar el puerto.
+- `-v` : Modo verbose (verbose output).
+- `-z` : Escanear un rango de puertos.
+- `-u` : Usar el protocolo UDP.
+- `-w segundos` : Tiempo de espera para conexiones.
+- `-q segundos` : Tiempo de espera de inactividad.
+
+### Ejemplos de Uso
+
+1. **Establecer una Conexión TCP a un Servidor Remoto**
+
+```sh
+nc ejemplo.com 80
+```
+
+Este comando establece una conexión TCP al puerto 80 de ejemplo.com.
+
+2. **Establecer una Conexión UDP a un Servidor Remoto**
+
+```sh
+nc -u ejemplo.com 53
+```
+
+Este comando establece una conexión UDP al puerto 53 de ejemplo.com.
+
+3. **Escuchar en un Puerto Específico para Conexiones Entrantes**
+
+```sh
+nc -l 12345
+```
+
+Este comando pone a la escucha en el puerto 12345 para conexiones entrantes.
+
+4. **Escuchar en un Puerto Específico y Guardar la Salida en un Archivo**
+
+```sh
+nc -l 12345 > salida.txt
+```
+
+Este comando pone a la escucha en el puerto 12345 para conexiones entrantes y guarda los datos recibidos en un archivo llamado `salida.txt`.
+
+5. **Enviar Datos a un Puerto Específico**
+
+```sh
+echo "Hola Mundo" | nc ejemplo.com 12345
+```
+
+Este comando envía el mensaje "Hola Mundo" al puerto 12345 de ejemplo.com.
+
+6. **Escanear un Rango de Puertos en un Host Remoto**
+
+```sh
+nc -zv ejemplo.com 1-100
+```
+
+Este comando escanea los puertos del 1 al 100 en ejemplo.com para ver cuáles están abiertos.
+
+7. **Establecer una Conexión y Limitar el Tiempo de Espera**
+
+```sh
+nc -w 5 ejemplo.com 80
+```
+
+Este comando establece una conexión TCP al puerto 80 de ejemplo.com y establece un tiempo de espera de 5 segundos.
+
+8. **Establecer una Conexión y Limitar el Tiempo de Inactividad**
+
+```sh
+nc -q 10 ejemplo.com 80
+```
+
+Este comando establece una conexión TCP al puerto 80 de ejemplo.com y cierra la conexión si no hay actividad durante 10 segundos.
+
+### Casos de Uso
+
+1. **Pruebas de Conectividad**: Verificar si un servidor remoto está disponible y acepta conexiones.
+2. **Depuración de Redes**: Probar la conectividad y el funcionamiento de los puertos en una red.
+3. **Transferencia de Archivos**: Enviar o recibir archivos a través de una conexión de red.
+4. **Escanear Puertos**: Identificar los puertos abiertos en un host remoto.
+5. **Monitorización de Red**: Supervisar el tráfico de red y las conexiones activas.
+
+
+## `netstat`: información sobre las conexiones de red, tablas de enrutamiento, interfaces de red y estadísticas de protocolos
+
+
+### Sintaxis Básica
+
+```bash
+netstat [opciones]
+```
+
+### Opciones Comunes
+
+- `-a` : Muestra todas las conexiones y puertos de escucha.
+- `-t` : Muestra sólo las conexiones TCP.
+- `-u` : Muestra sólo las conexiones UDP.
+- `-n` : Muestra las direcciones y números de puerto en formato numérico.
+- `-l` : Muestra sólo los puertos en escucha.
+- `-p` : Muestra el PID y el nombre del programa de cada conexión.
+- `-r` : Muestra la tabla de enrutamiento.
+- `-i` : Muestra una lista de interfaces de red.
+- `-s` : Muestra estadísticas de los distintos protocolos.
+- `-c` : Actualiza la información continuamente.
+
+### Ejemplos de Uso
+
+1. **Mostrar Todas las Conexiones y Puertos de Escucha**
+
+```sh
+netstat -a
+```
+
+Este comando muestra todas las conexiones de red y los puertos en escucha.
+
+2. **Mostrar Sólo las Conexiones TCP**
+
+```sh
+netstat -t
+```
+
+Este comando muestra sólo las conexiones TCP activas.
+
+3. **Mostrar Sólo las Conexiones UDP**
+
+```sh
+netstat -u
+```
+
+Este comando muestra sólo las conexiones UDP activas.
+
+4. **Mostrar Direcciones y Números de Puerto en Formato Numérico**
+
+```sh
+netstat -n
+```
+
+Este comando muestra las direcciones IP y los números de puerto en formato numérico, en lugar de resolver los nombres de host y servicio.
+
+5. **Mostrar Puertos en Escucha**
+
+```sh
+netstat -l
+```
+
+Este comando muestra sólo los puertos que están en estado de escucha.
+
+6. **Mostrar PID y Nombre del Programa**
+
+```sh
+sudo netstat -p
+```
+
+Este comando muestra el PID y el nombre del programa asociado a cada conexión. Es necesario tener privilegios de superusuario para ver esta información.
+
+7. **Mostrar la Tabla de Enrutamiento**
+
+```sh
+netstat -r
+```
+
+Este comando muestra la tabla de enrutamiento del sistema.
+
+8. **Mostrar Estadísticas de Protocolos**
+
+```sh
+netstat -s
+```
+
+Este comando muestra estadísticas detalladas de los distintos protocolos de red.
+
+9. **Mostrar Información de Interfaces de Red**
+
+```sh
+netstat -i
+```
+
+Este comando muestra una lista de interfaces de red y sus estadísticas.
+
+10. **Actualizar Información Continuamente**
+
+```sh
+netstat -c
+```
+
+Este comando actualiza la información de red continuamente.
+
+### Ejemplo de Salida
+
+```sh
+$ netstat -tuln
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp6       0      0 :::80                   :::*                    LISTEN
+udp        0      0 0.0.0.0:123             0.0.0.0:*
+udp6       0      0 :::123                  :::*
+```
+
+### Interpretación de la Salida
+
+- **Proto**: El protocolo (TCP o UDP).
+- **Recv-Q** y **Send-Q**: Cantidad de datos no leídos en la cola de recepción y envío, respectivamente.
+- **Local Address**: Dirección local y puerto.
+- **Foreign Address**: Dirección remota y puerto.
+- **State**: Estado de la conexión (por ejemplo, LISTEN, ESTABLISHED).
+
+### Casos de Uso
+
+1. **Diagnóstico de Conexiones de Red**: Identificar conexiones activas y servicios en escucha.
+2. **Resolución de Problemas de Red**: Detectar conexiones sospechosas o no autorizadas.
+3. **Monitoreo de Estadísticas de Red**: Obtener estadísticas detalladas de tráfico y rendimiento de la red.
+4. **Verificación de la Tabla de Enrutamiento**: Comprobar y analizar las rutas de red configuradas en el sistema.
 
 ## `nmcli`: gestionar y configurar conexiones de red
 
@@ -436,6 +803,302 @@ ping -t 64 example.com
 ping -q example.com
 ```
 
+## `route`: mostrar y manipular la tabla de enrutamiento IP
+Mostrar y manipular la tabla de enrutamiento IP en sistemas Unix y Linux. Aunque el comando `ip route` del paquete `iproute2` es el método preferido y más moderno para manejar la tabla de enrutamiento, `route` sigue siendo una herramienta útil y ampliamente utilizada en algunos contextos.
+
+### Opciones Comunes
+
+1. `add`: Agregar una nueva ruta.
+2. `del`: Eliminar una ruta existente.
+3. `-n`: Mostrar direcciones numéricas en lugar de resolver nombres de host.
+4. `-C`: Mostrar la caché de rutas.
+
+### Casos de Uso
+
+**Mostrar la Tabla de Enrutamiento**:
+```bash
+route
+```
+
+**Mostrar la tabla de enrutamiento sin resolver nombres de host**
+```bash
+route -n
+```
+
+**Agregar una Ruta Estática**:
+Agregar una ruta estática a una red específica a través de una puerta de enlace:
+```bash
+sudo route add -net 192.168.1.0/24 gw 192.168.0.1
+```
+
+**Agregar una ruta predeterminada (gateway por defecto)**:
+```bash
+sudo route add default gw 192.168.0.1
+```
+
+**Eliminar una Ruta Estática**:
+Eliminar una ruta estática específica:
+```bash
+sudo route del -net 192.168.1.0/24 gw 192.168.0.1
+```
+
+**Eliminar la ruta predeterminada**:
+```bash
+sudo route del default gw 192.168.0.1
+```
+
+**Mostrar la Caché de Rutas**:
+Mostrar la caché de rutas (usado principalmente para debugging):
+```bash
+route -C
+```
+
+### Ejemplos Prácticos
+
+1. **Agregar una Ruta Específica a una Red**:
+Supongamos que quieres enrutar el tráfico destinado a la red `10.0.0.0/8` a través de la puerta de enlace `192.168.1.1`:
+```bash
+sudo route add -net 10.0.0.0/8 gw 192.168.1.1
+```
+
+2. **Eliminar una Ruta a una Red Específica**:
+Para eliminar la ruta anterior:
+```bash
+sudo route del -net 10.0.0.0/8 gw 192.168.1.1
+```
+
+3. **Agregar una Ruta a una Dirección IP Específica**:
+Si necesitas enrutar el tráfico a una IP específica `172.16.0.5` a través de una puerta de enlace `192.168.0.1`:
+```bash
+sudo route add -host 172.16.0.5 gw 192.168.0.1
+```
+
+4. **Eliminar una Ruta a una Dirección IP Específica**:
+Para eliminar la ruta anterior:
+```bash
+sudo route del -host 172.16.0.5 gw 192.168.0.1
+```
+
+## `ss`: información detallada sobre las conexiones de red, sockets, y estadísticas de protocolos
+
+El comando `ss` (Socket Statistics) es una herramienta utilizada para mostrar información detallada sobre las conexiones de red, sockets, y estadísticas de protocolos.
+
+### Sintaxis Básica
+
+```sh
+ss [opciones]
+```
+
+### Opciones Comunes
+
+- `-t` : Muestra sólo las conexiones TCP.
+- `-u` : Muestra sólo las conexiones UDP.
+- `-a` : Muestra todas las conexiones.
+- `-l` : Muestra sólo las conexiones locales (puertos en escucha).
+- `-n` : Muestra las direcciones y números de puerto en formato numérico.
+- `-p` : Muestra el PID y el nombre del programa de cada conexión.
+- `-i` : Muestra información de las interfaces de red.
+- `-s` : Muestra estadísticas de los distintos protocolos.
+- `-o` : Muestra más detalles sobre cada conexión.
+- `-H` : Muestra las columnas de encabezado.
+- `-4` : Muestra sólo las conexiones IPv4.
+- `-6` : Muestra sólo las conexiones IPv6.
+
+### Ejemplos de Uso
+
+1. **Mostrar Todas las Conexiones TCP**
+
+```sh
+ss -t
+```
+
+Este comando muestra sólo las conexiones TCP activas.
+
+2. **Mostrar Todas las Conexiones UDP**
+
+```sh
+ss -u
+```
+
+Este comando muestra sólo las conexiones UDP activas.
+
+3. **Mostrar Todas las Conexiones y Puertos de Escucha**
+
+```sh
+ss -a
+```
+
+Este comando muestra todas las conexiones de red y los puertos en escucha.
+
+4. **Mostrar Sólo los Puertos en Escucha**
+
+```sh
+ss -l
+```
+
+Este comando muestra sólo los puertos en estado de escucha (conexiones locales).
+
+5. **Mostrar PID y Nombre del Programa**
+
+```sh
+sudo ss -p
+```
+
+Este comando muestra el PID y el nombre del programa asociado a cada conexión. Es necesario tener privilegios de superusuario para ver esta información.
+
+6. **Mostrar Estadísticas de Protocolos**
+
+```sh
+ss -s
+```
+
+Este comando muestra estadísticas detalladas de los distintos protocolos de red.
+
+7. **Mostrar Información de Interfaces de Red**
+
+```sh
+ss -i
+```
+
+Este comando muestra una lista de interfaces de red y sus estadísticas.
+
+8. **Mostrar Detalles de Conexiones**
+
+```sh
+ss -o
+```
+
+Este comando muestra más detalles sobre cada conexión, incluyendo el estado de la conexión.
+
+9. **Mostrar Encabezados de Columnas**
+
+```sh
+ss -H
+```
+
+Este comando muestra las columnas de encabezado en la salida, lo que facilita la interpretación de los resultados.
+
+10. **Mostrar Sólo Conexiones IPv4**
+
+```sh
+ss -4
+```
+
+Este comando muestra sólo las conexiones IPv4 activas.
+
+11. **Mostrar Sólo Conexiones IPv6**
+
+```sh
+ss -6
+```
+
+Este comando muestra sólo las conexiones IPv6 activas.
+
+### Casos de Uso
+
+1. **Diagnóstico de Conexiones de Red**: Identificar conexiones activas y servicios en escucha.
+2. **Resolución de Problemas de Red**: Detectar conexiones sospechosas o no autorizadas.
+3. **Monitoreo de Estadísticas de Red**: Obtener estadísticas detalladas de tráfico y rendimiento de la red.
+4. **Verificación de Conexiones por Protocolo**: Obtener información específica sobre conexiones TCP o UDP.
+5. **Inspección de Interfaces de Red**: Analizar el estado y la actividad de las interfaces de red del sistema.
+
+## `tcpdump`: capturar y analizar el tráfico de red en un sistema
+
+Herramienta de captura de paquetes en línea de comandos que permite a los usuarios capturar y analizar el tráfico de red en un sistema. 
+
+### Sintaxis Básica
+
+```sh
+tcpdump [opciones] [filtro]
+```
+
+### Opciones Comunes
+
+- `-i interfaz` : Especifica la interfaz de red para capturar paquetes.
+- `-n` : No resuelve direcciones IP ni nombres de host a nombres de dominio.
+- `-c cantidad` : Limita el número de paquetes a capturar.
+- `-w archivo` : Guarda la salida de tcpdump en un archivo.
+- `-r archivo` : Lee paquetes de un archivo previamente guardado.
+- `-v` : Modo verbose (verbose output).
+- `-vv` : Modo verbose más detallado.
+- `-X` : Muestra el contenido hexadecimal y ASCII de los paquetes.
+- `-s bytes` : Limita la cantidad de bytes a capturar por paquete.
+- `-A` : Muestra el contenido ASCII completo de los paquetes capturados.
+
+### Ejemplos de Uso
+
+1. **Capturar Paquetes en una Interfaz Específica**
+
+```sh
+tcpdump -i eth0
+```
+
+Este comando captura paquetes en la interfaz `eth0`.
+
+2. **Guardar Paquetes Capturados en un Archivo**
+
+```sh
+tcpdump -i eth0 -w captura.pcap
+```
+
+Este comando captura paquetes en la interfaz `eth0` y los guarda en el archivo `captura.pcap`.
+
+3. **Leer Paquetes desde un Archivo Capturado**
+
+```sh
+tcpdump -r captura.pcap
+```
+
+Este comando lee y muestra los paquetes capturados previamente en el archivo `captura.pcap`.
+
+4. **Capturar Paquetes con Filtro por Dirección IP**
+
+```sh
+tcpdump -i eth0 src 192.168.1.100
+```
+
+Este comando captura paquetes en la interfaz `eth0` que tienen como origen la dirección IP `192.168.1.100`.
+
+5. **Mostrar el Contenido de los Paquetes Capturados en Modo Verbose**
+
+```sh
+tcpdump -i eth0 -v
+```
+
+Este comando captura paquetes en la interfaz `eth0` y muestra información detallada sobre cada paquete.
+
+6. **Mostrar el Contenido ASCII de los Paquetes Capturados**
+
+```sh
+tcpdump -i eth0 -A
+```
+
+Este comando captura paquetes en la interfaz `eth0` y muestra el contenido ASCII completo de cada paquete.
+
+7. **Capturar Paquetes UDP en un Puerto Específico**
+
+```sh
+tcpdump -i eth0 udp port 53
+```
+
+Este comando captura paquetes UDP en la interfaz `eth0` que están destinados al puerto `53` (DNS).
+
+8. **Mostrar el Contenido Hexadecimal y ASCII de los Paquetes Capturados**
+
+```sh
+tcpdump -i eth0 -X
+```
+
+Este comando captura paquetes en la interfaz `eth0` y muestra tanto el contenido hexadecimal como ASCII de cada paquete.
+
+### Casos de Uso
+
+1. **Depuración de Redes**: Analizar el tráfico de red para resolver problemas de conectividad.
+2. **Monitoreo de Red**: Observar el tráfico de red para detectar anomalías o comportamientos inusuales.
+3. **Análisis de Seguridad**: Identificar posibles amenazas o actividades maliciosas en la red.
+4. **Resolución de Problemas de Protocolo**: Investigar problemas relacionados con protocolos de red específicos.
+5. **Auditoría de Red**: Registrar y analizar el tráfico de red para fines de auditoría y cumplimiento.
+
 ## `telnet`: probar conectividad y accesibilidad a un servicio en un puerto
 
 Se utiliza para establecer una conexión de texto sin cifrar a un servidor remoto. Puede ser útil para probar la conectividad y la accesibilidad de un servicio en un host remoto.
@@ -479,6 +1142,69 @@ echo "GET / HTTP/1.0" | telnet example.com 80
 ```bash
 telnet example.com 22
 ```
+
+## `tracepath`: rastrear la ruta que toman los paquetes a través de una red
+
+Se utiliza para rastrear la ruta que toman los paquetes a través de una red hacia un destino específico. A diferencia de `traceroute`, `tracepath` no requiere privilegios de superusuario y es más fácil de usar en ciertos sistemas.
+
+### Sintaxis Básica
+
+```sh
+tracepath [opciones] <destino>
+```
+
+### Opciones Comunes
+
+- `-n`: No resuelve las direcciones IP en nombres de host.
+- `-b`: Intenta resolver nombres de host.
+- `-p <puerto>`: Especifica el puerto a utilizar.
+- `-m <saltos>`: Establece el TTL máximo.
+- `-l <tamaño>`: Establece el tamaño del paquete en bytes.
+- `-4`: Utiliza sólo IPv4.
+- `-6`: Utiliza sólo IPv6.
+
+### Ejemplos de Uso
+
+1. **Rastrear la Ruta a un Destino**
+
+```sh
+tracepath google.com
+```
+
+Este comando rastrea la ruta que toman los paquetes desde tu computadora hasta `google.com`.
+
+2. **No Resolver Direcciones IP**
+
+```sh
+tracepath -n google.com
+```
+
+Este comando rastrea la ruta pero no intenta resolver las direcciones IP a nombres de host, lo que puede hacer que el comando se ejecute más rápido.
+
+3. **Establecer el TTL Máximo**
+
+```sh
+tracepath -m 10 google.com
+```
+
+Este comando establece el TTL máximo a 10, limitando el número de saltos que se rastrean.
+
+4. **Especificar el Tamaño del Paquete**
+
+```sh
+tracepath -l 60 google.com
+```
+
+Este comando establece el tamaño del paquete en 60 bytes.
+
+5. **Utilizar IPv4 o IPv6**
+
+```sh
+tracepath -4 google.com
+tracepath -6 google.com
+```
+
+Estos comandos fuerzan a `tracepath` a utilizar IPv4 o IPv6 respectivamente.
 
 ## `traceroute`: rastear rutas que toman los paquetes IP
 
