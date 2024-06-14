@@ -1,26 +1,4 @@
-
-Table of Contents
-- [Backup](#backup)
-- [Command-Line:](#command-line)
-  - [VM: `qm` command](#vm-qm-command)
-    - [Basics](#basics)
-    - [Configuring VM options](#configuring-vm-options)
-  - [Containers: `pct` command](#containers-pct-command)
-    - [Basics](#basics-1)
-    - [Configuring Containtes options](#configuring-containtes-options)
-- [Integrated Firewall](#integrated-firewall)
-  - [Add a Firewall to allow Access to the web console at Datacenter Level](#add-a-firewall-to-allow-access-to-the-web-console-at-datacenter-level)
-  - [Add a Firewall to allow Access to PING at Datacenter Level](#add-a-firewall-to-allow-access-to-ping-at-datacenter-level)
-  - [Add a Firewall to allow Access to SSH at Datacenter Level](#add-a-firewall-to-allow-access-to-ssh-at-datacenter-level)
-- [Resizing the VM Disk](#resizing-the-vm-disk)
-- [Cloning a VM Template in Proxmox](#cloning-a-vm-template-in-proxmox)
-- [Creating a VM Template in Proxmox](#creating-a-vm-template-in-proxmox)
-  - [Initial Steps](#initial-steps)
-    - [Create a VM](#create-a-vm)
-    - [CloudInit Drive](#cloudinit-drive)
-    - [Command Line Configuration](#command-line-configuration)
-    - [Adding the QEMU Agent](#adding-the-qemu-agent)
-    - [Converting to a Template](#converting-to-a-template)
+[[_TOC_]]
 
 ## Backup
 Go to `Datacenter->Backup`, hit on `Add` and confiugure:
@@ -349,3 +327,23 @@ shutdown -h now
 #### Converting to a Template
 
 ![Converting to a Template](images/template.png)
+
+## TODO
+
+### Estudiar Storages sportados por Proxmox
+
+### HA
+
+### Proxmox BKP y BKP PC
+
+### Migrar de VMWare a Proxmox
+
+#### Probar Herramienta nueva
+
+#### Desde consola
+
+https://docs.brconsulting.info/es/docs/infrastructure/proxmoxve/mig/02-pve-esxi-migration/
+
+https://pve.proxmox.com/wiki/Migrate_to_Proxmox_VE#Manual_Migration
+
+### Estudiar VLAN Tags
